@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import CarouselComponent from "../../components/carousel";
+import SplitText from "../../components/SplitText.tsx"; 
 
 import icl2 from "../../assets/images/icl2.jpg"
 import cloneitup from "../../assets/images/cloneitup.jpg"
@@ -116,7 +117,20 @@ function EventComponent() {
     <section id="events" className="px-4 py-8 md:px-24 flex flex-col">
       <div className="grid grid-cols-1 sm:grid-cols-2 pb-8">
         <div className="flex flex-col col-span-1 pb-4 sm:pb-0">
-          <div className="text-5xl font-semibold text-white">EVENTS</div>
+         <SplitText
+            text="EVENTS"
+            className="text-6xl text-[40px] font-[550] mb-8 text-white"
+            delay={100}
+            duration={0.8}
+            ease="power3.out"
+            splitType="chars" 
+            from={{ opacity: 0, y: 40 }}
+            to={{ opacity: 1, y: 0 }}
+            threshold={0.1}
+            rootMargin="-100px"
+            textAlign="left"
+        />
+
           <div className="text-2xl text-[#DB9EE5] font-semibold">
             Our Current and Upcoming Events
           </div>
