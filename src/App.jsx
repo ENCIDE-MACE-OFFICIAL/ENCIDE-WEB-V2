@@ -13,6 +13,7 @@ import LoginForm from "./Pages/login/Login.jsx";
 import SignUpForm from "./Pages/signup/SignUp.jsx";
 import RegistrationForm from "./Pages/Execom/execom.jsx";
 import Dashboard from "./Pages/dashboard/Dashboard.jsx";
+import ContactSection from "./Pages/contact-us/ContactSection.jsx";
 
 function App() {
   const [load, setLoad] = useState(true);
@@ -32,7 +33,8 @@ function App() {
               <EventComponent />
               <Teams />
               <Practice />
-              <Faqnews />
+              {/* <Faqnews /> */}
+              <ContactSection/>
             </>
           }
         />
