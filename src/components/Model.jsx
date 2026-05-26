@@ -48,7 +48,7 @@ function Model({
         animate={{ opacity: 1, scale: 1 }}
         exit={{ opacity: 0, scale: 0.97 }}
         transition={{ duration: 0.2 }}
-        className="relative bg-neutral-900 border border-violet-500/20 rounded-2xl p-8 w-full max-w-md lg:max-w-2xl shadow-2xl max-h-[85vh] overflow-y-auto"
+        className="relative bg-neutral-900 border border-red-500/20 rounded-2xl p-8 w-full max-w-md lg:max-w-2xl shadow-2xl max-h-[85vh] overflow-y-auto"
         style={{
           scrollbarWidth: "thin",
           scrollbarColor: "#404040 #171717",
@@ -82,15 +82,15 @@ function Model({
           <div className="space-y-6">
             {isChecking && (
               <div className="flex flex-col items-center gap-4 text-neutral-400 py-12">
-                <Loader2 className="w-8 h-8 animate-spin text-violet-400" />
+                <Loader2 className="w-8 h-8 animate-spin text-red-400" />
                 <p>Checking registration...</p>
               </div>
             )}
 
             {(isReady || isSubmitting) && (
               <>
-                <div className="w-12 h-12 rounded-xl bg-violet-500/10 border border-violet-500/20 flex items-center justify-center">
-                  <Calendar className="w-6 h-6 text-violet-400" />
+                <div className="w-12 h-12 rounded-xl bg-red-500/10 border border-red-500/20 flex items-center justify-center">
+                  <Calendar className="w-6 h-6 text-red-400" />
                 </div>
 
                 <h3 className="text-2xl font-bold text-white">
@@ -99,7 +99,7 @@ function Model({
 
                 <p className="text-neutral-400">
                   Register for{" "}
-                  <span className="text-violet-300 font-medium">
+                  <span className="text-red-300 font-medium">
                     {event.title}
                   </span>
                 </p>
@@ -224,7 +224,7 @@ function Model({
                   <button
                     onClick={onConfirm}
                     disabled={isSubmitting || !isFormValid}
-                    className="flex-1 px-4 py-2.5 rounded-lg bg-violet-600 hover:bg-violet-700 disabled:opacity-50 text-white font-medium flex items-center justify-center gap-2"
+                    className="flex-1 px-4 py-2.5 rounded-lg bg-red-600 hover:bg-red-700 disabled:opacity-50 text-white font-medium flex items-center justify-center gap-2"
                   >
                     {isSubmitting ? (
                       <>

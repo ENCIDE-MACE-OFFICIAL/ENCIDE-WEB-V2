@@ -63,8 +63,8 @@ const Dashboard = ({ onLoad }) => {
             animate={{ opacity: 1, x: 0 }}
             className="flex items-center gap-2"
           >
-            <div className="p-2 rounded-lg bg-violet-500/10 border border-violet-500/20">
-              <LayoutDashboard className="w-5 h-5 text-violet-400" />
+            <div className="p-2 rounded-lg bg-red-500/10 border border-red-500/20">
+              <LayoutDashboard className="w-5 h-5 text-red-400" />
             </div>
             <h1 className="text-xl font-bold text-white">Dashboard</h1>
           </motion.div>

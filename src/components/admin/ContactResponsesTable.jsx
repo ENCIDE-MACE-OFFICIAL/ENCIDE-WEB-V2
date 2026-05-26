@@ -64,8 +64,8 @@ const ContactResponsesTable = ({ responses }) => {
     <>
       <div className="bg-neutral-900/50 backdrop-blur-sm border border-neutral-800 rounded-xl overflow-hidden">
         <div className="p-6 border-b border-neutral-800 flex items-center gap-3">
-          <div className="p-2 rounded-lg bg-violet-500/10">
-            <Mail className="w-5 h-5 text-violet-400" />
+          <div className="p-2 rounded-lg bg-red-500/10">
+            <Mail className="w-5 h-5 text-red-400" />
           </div>
           <h2 className="text-lg font-bold text-white">
             Contact Form Responses
@@ -108,7 +108,7 @@ const ContactResponsesTable = ({ responses }) => {
                     <div className="flex items-center justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
                       <button
                         onClick={() => handleOpenResponse(response)}
-                        className="p-2 rounded-lg hover:bg-violet-500/10 text-neutral-400 hover:text-violet-400 transition-colors"
+                        className="p-2 rounded-lg hover:bg-red-500/10 text-neutral-400 hover:text-red-400 transition-colors"
                         title="View Details"
                       >
                         <Eye className="w-4 h-4" />
@@ -172,14 +172,14 @@ const ContactResponsesTable = ({ responses }) => {
                       className="space-y-4 pt-4 border-t border-neutral-800"
                     >
                       <div className="flex items-center gap-2 text-sm text-white font-medium">
-                        <Reply className="w-4 h-4 text-violet-400" />
+                        <Reply className="w-4 h-4 text-red-400" />
                         Reply to {selectedResponse.name}
                       </div>
                       <textarea
                         value={replyMessage}
                         onChange={(e) => setReplyMessage(e.target.value)}
                         placeholder="Type your reply message here..."
-                        className="w-full bg-neutral-950 border border-neutral-800 rounded-xl p-4 text-sm text-white placeholder-neutral-500 focus:outline-none focus:border-violet-500/50 focus:ring-1 focus:ring-violet-500/50 min-h-[120px] resize-none transition-all"
+                        className="w-full bg-neutral-950 border border-neutral-800 rounded-xl p-4 text-sm text-white placeholder-neutral-500 focus:outline-none focus:border-red-500/50 focus:ring-1 focus:ring-red-500/50 min-h-[120px] resize-none transition-all"
                       />
                       <div className="flex justify-end gap-3">
                         <button
@@ -191,7 +191,7 @@ const ContactResponsesTable = ({ responses }) => {
                         <button
                           onClick={handleSendReply}
                           disabled={!replyMessage.trim()}
-                          className="flex items-center gap-2 px-4 py-2 rounded-lg bg-violet-600 hover:bg-violet-700 disabled:opacity-50 disabled:cursor-not-allowed text-white text-sm font-medium transition-all shadow-lg shadow-violet-600/20"
+                          className="flex items-center gap-2 px-4 py-2 rounded-lg bg-red-600 hover:bg-red-700 disabled:opacity-50 disabled:cursor-not-allowed text-white text-sm font-medium transition-all shadow-lg shadow-red-600/20"
                         >
                           <Send className="w-4 h-4" />
                           Send Email

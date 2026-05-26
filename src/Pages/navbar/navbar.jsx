@@ -247,7 +247,7 @@ function NavComponent() {
         <nav className="p-4 px-4 navbar sm:px-16 bg-transparent">
           <div className="text-2xl font-bold logo">
             <Link to="/#home">
-              ENCIDE <span className="text-[#9a00b3] font-extrabold">MACE</span>
+              ENCIDE <span className="text-[#7a2020] font-extrabold">MACE</span>
             </Link>
           </div>
           <ul className="flex text-sm nav_main gap-x-7">

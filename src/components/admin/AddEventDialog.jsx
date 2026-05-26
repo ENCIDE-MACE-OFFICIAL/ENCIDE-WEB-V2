@@ -157,7 +157,7 @@ const AddEventDialog = ({
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                   <div className="space-y-2">
                     <label className="text-sm font-medium text-neutral-300 flex items-center gap-2">
-                      <Calendar className="w-4 h-4 text-violet-400" />
+                      <Calendar className="w-4 h-4 text-red-400" />
                       Date
                     </label>
                     <input
@@ -170,7 +170,7 @@ const AddEventDialog = ({
                   </div>
                   <div className="space-y-2">
                     <label className="text-sm font-medium text-neutral-300 flex items-center gap-2">
-                      <Clock className="w-4 h-4 text-violet-400" />
+                      <Clock className="w-4 h-4 text-red-400" />
                       Time
                     </label>
                     <input
@@ -185,14 +185,14 @@ const AddEventDialog = ({
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                   <div className="space-y-2">
                     <label className="text-sm font-medium text-neutral-300 flex items-center gap-2">
-                      <MapPin className="w-4 h-4 text-violet-400" />
+                      <MapPin className="w-4 h-4 text-red-400" />
                       Location
                     </label>
                     <input
                       value={formData.location}
                       onChange={(e) => handleChange("location", e.target.value)}
                       placeholder="Enter event location"
-                      className="w-full bg-neutral-950/30 border border-neutral-700 rounded-lg px-4 py-3 text-white placeholder-neutral-600 focus:outline-none focus:border-violet-500/50 focus:ring-1 focus:ring-violet-500/50 transition-all text-sm"
+                      className="w-full bg-neutral-950/30 border border-neutral-700 rounded-lg px-4 py-3 text-white placeholder-neutral-600 focus:outline-none focus:border-red-500/50 focus:ring-1 focus:ring-red-500/50 transition-all text-sm"
                       required
                     />
                   </div>
@@ -204,7 +204,7 @@ const AddEventDialog = ({
                       <select
                         value={formData.status}
                         onChange={(e) => handleChange("status", e.target.value)}
-                        className="w-full bg-neutral-950/30 border border-neutral-700 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-violet-500/50 focus:ring-1 focus:ring-violet-500/50 transition-all appearance-none text-sm cursor-pointer"
+                        className="w-full bg-neutral-950/30 border border-neutral-700 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-red-500/50 focus:ring-1 focus:ring-red-500/50 transition-all appearance-none text-sm cursor-pointer"
                       >
                         <option value="upcoming">Upcoming</option>
                         <option value="completed">Completed</option>
@@ -226,7 +226,7 @@ const AddEventDialog = ({
                 </div>
                 <div className="space-y-2">
                   <label className="text-sm font-medium text-neutral-300 flex items-center gap-2">
-                    <FileText className="w-4 h-4 text-violet-400" />
+                    <FileText className="w-4 h-4 text-red-400" />
                     Description
                   </label>
                   <textarea

@@ -148,8 +148,8 @@ const EventsManager = ({ events, onEdit, onDelete }) => {
   }) => (
     <div className="bg-neutral-900/50 backdrop-blur-sm border border-neutral-800 rounded-xl overflow-hidden mb-8">
       <div className="p-6 border-b border-neutral-800 flex items-center gap-3">
-        <div className="p-2 rounded-lg bg-violet-500/10">
-          <Calendar className="w-5 h-5 text-violet-400" />
+        <div className="p-2 rounded-lg bg-red-500/10">
+          <Calendar className="w-5 h-5 text-red-400" />
         </div>
         <h2 className="text-lg font-bold text-white flex items-center gap-3">
           {title}
@@ -214,7 +214,7 @@ const EventsManager = ({ events, onEdit, onDelete }) => {
                   </td>
                   <td className="px-6 py-4">
                     <span className="flex items-center gap-1.5 text-white font-medium">
-                      <Users className="w-4 h-4 text-violet-400" />
+                      <Users className="w-4 h-4 text-red-400" />
                       {event.registrations}
                     </span>
                   </td>
@@ -322,7 +322,7 @@ const EventsManager = ({ events, onEdit, onDelete }) => {
                 <div>
                   <h2 className="text-xl font-bold text-white flex items-center gap-3">
                     Registrations
-                    <span className="bg-violet-500/10 text-violet-400 text-sm font-medium px-2.5 py-0.5 rounded-full border border-violet-500/20">
+                    <span className="bg-red-500/10 text-red-400 text-sm font-medium px-2.5 py-0.5 rounded-full border border-red-500/20">
                       {currentRegistrations.length}
                     </span>
                   </h2>
@@ -349,7 +349,7 @@ const EventsManager = ({ events, onEdit, onDelete }) => {
                     placeholder="Search by name, email, ID..."
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
-                    className="w-full bg-neutral-950 border border-neutral-800 rounded-lg pl-10 pr-4 py-2 text-sm text-white placeholder-neutral-600 focus:outline-none focus:border-violet-500/50 focus:ring-1 focus:ring-violet-500/50 transition-all"
+                    className="w-full bg-neutral-950 border border-neutral-800 rounded-lg pl-10 pr-4 py-2 text-sm text-white placeholder-neutral-600 focus:outline-none focus:border-red-500/50 focus:ring-1 focus:ring-red-500/50 transition-all"
                   />
                 </div>
                 <button className="flex items-center gap-2 px-3 py-2 rounded-lg bg-neutral-800 hover:bg-neutral-700 text-white text-sm font-medium transition-colors border border-neutral-700">
