@@ -1,6 +1,6 @@
 import { motion, useInView } from "framer-motion";
 import { useRef } from "react";
-import { Eye, Rocket } from "lucide-react";
+import { ChartNoAxesCombined, Eye, Rocket } from "lucide-react";
 const VisionMission = () => {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: "-100px" });
@@ -25,7 +25,7 @@ const VisionMission = () => {
             <div className="relative bg-neutral-900/50 backdrop-blur-sm rounded-xl p-6 lg:p-8 border border-neutral-800 hover:border-red-500/30 shadow-lg hover:shadow-[0_0_30px_-10px_rgba(220, 38, 38,0.1)] transition-all duration-300 h-full">
               <div className="flex flex-col sm:flex-row items-start gap-4">
                 <div className="w-12 h-12 rounded-xl bg-red-500/10 flex items-center justify-center shrink-0 group-hover:bg-red-500/20 transition-colors duration-500">
-                  <Rocket className="w-6 h-6 text-red-400 group-hover:scale-110 transition-transform duration-500" />
+                  <ChartNoAxesCombined className="w-6 h-6 text-red-400 group-hover:scale-110 transition-transform duration-500" />
                 </div>
                 <div>
                   <h3 className="font-display text-xl lg:text-2xl font-bold text-white mb-2 group-hover:text-red-200 transition-colors">

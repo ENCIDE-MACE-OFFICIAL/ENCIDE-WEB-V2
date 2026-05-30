@@ -10,7 +10,8 @@ import {
   LayoutDashboard, 
   LogOut, 
   LogIn,
-  User
+  User,
+  ShieldUser
 } from "lucide-react";
 import "./navbar.css";
 
@@ -19,13 +20,30 @@ function NavComponent() {
   const [isScrolling, setIsScrolling] = useState(false);
   const [activeSection, setActiveSection] = useState("home");
   const [isAtTop, setIsAtTop] = useState(true);
+  const [isAdminDropdownOpen, setIsAdminDropdownOpen] = useState(false);
   const lastScrollTop = useRef(0);
   const scrollTimeout = useRef(null);
 
-  const { user, logout } = useContext(AuthContext);
+  const { user, isAdmin, logout } = useContext(AuthContext);
 
   const navigate = useNavigate();
   const location = useLocation();
+
+  const adminDropdownRef = useRef(null);
+  const mobileAdminDropdownRef = useRef(null);
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (
+        (adminDropdownRef.current && !adminDropdownRef.current.contains(event.target)) &&
+        (mobileAdminDropdownRef.current && !mobileAdminDropdownRef.current.contains(event.target))
+      ) {
+        setIsAdminDropdownOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
 
   useEffect(() => {
     if (location.hash) {
@@ -39,6 +57,8 @@ function NavComponent() {
       setActiveSection("login");
     } else if (location.pathname === "/dashboard") {
       setActiveSection("dashboard");
+    } else if (location.pathname === "/admin-dashboard") {
+      setActiveSection("admin-dashboard");
     } else if (location.pathname === "/") {
       const sections = document.querySelectorAll("section");
       const observerOptions = {
@@ -147,17 +167,41 @@ function NavComponent() {
             <Users className="icons" />
             <p className="icontext">Team</p>
           </Link>
-          <Link
-            to="/#contact"
-            className={`mob nav_link ${
-              activeSection === "contact" ? "active" : ""
-            }`}
-          >
-            <Phone className="icons" />
-            <p className="icontext">Contact</p>
-          </Link>
+          {!isAdmin && (
+            <Link
+              to="/#contact"
+              className={`mob nav_link ${
+                activeSection === "contact" ? "active" : ""
+              }`}
+            >
+              <Phone className="icons" />
+              <p className="icontext">Contact</p>
+            </Link>
+          )}
 
-          {user ? (
+          {isAdmin ? (
+            <div className="mob-dropdown-container" ref={mobileAdminDropdownRef}>
+              <button
+                onClick={() => setIsAdminDropdownOpen(!isAdminDropdownOpen)}
+                className={`mob nav_link ${
+                  isAdminDropdownOpen ? "active" : ""
+                }`}
+              >
+                <ShieldUser className="icons" />
+                <p className="icontext">Admin</p>
+              </button>
+              {isAdminDropdownOpen && (
+                <div className="mobile-admin-dropdown">
+                  <Link to="/admin-dashboard" onClick={() => setIsAdminDropdownOpen(false)}>
+                    Admin Panel
+                  </Link>
+                  <Link to="/dashboard" onClick={() => setIsAdminDropdownOpen(false)}>
+                    Dashboard
+                  </Link>
+                </div>
+              )}
+            </div>
+          ) : user ? (
             <Link
               to="/dashboard"
               className={`mob nav_link ${
@@ -191,8 +235,8 @@ function NavComponent() {
       >
         <nav className="p-4 px-4 navbar sm:px-16 bg-transparent">
           <div className="text-2xl font-bold logo">
-            <Link to="/#home" className="transition-all duration-300 hover:opacity-90">
-              ENCIDE <span className="bg-gradient-to-r from-red-500 to-rose-600 bg-clip-text text-transparent font-extrabold tracking-wide">MACE</span>
+            <Link to="/#home" className="transition-all duration-300 hover:opacity-90 font-light">
+              ENCIDE <span className="bg-gradient-to-r from-red-500 to-rose-600 bg-clip-text text-transparent font-normal tracking-wide">MACE</span>
             </Link>
           </div>
           <ul className="nav_main">
@@ -205,9 +249,11 @@ function NavComponent() {
             <li className={activeSection === "team" ? "active" : ""}>
               <Link to="/#team">TEAM</Link>
             </li>
-            <li className={activeSection === "contact" ? "active" : ""}>
-              <Link to="/#contact">CONTACT</Link>
-            </li>
+            {!isAdmin && (
+              <li className={activeSection === "contact" ? "active" : ""}>
+                <Link to="/#contact">CONTACT</Link>
+              </li>
+            )}
             <li className="nav_btn_item">
               <Link
                 to="/#events"
@@ -219,7 +265,27 @@ function NavComponent() {
               </Link>
             </li>
             <li className="nav_btn_item">
-              {user ? (
+              {isAdmin ? (
+                <div className="desktop-dropdown-container" ref={adminDropdownRef}>
+                  <button
+                    onClick={() => setIsAdminDropdownOpen(!isAdminDropdownOpen)}
+                    className={`navbar_profile_btn ${isAdminDropdownOpen ? "active-btn" : ""}`}
+                    title="Admin Options"
+                  >
+                    <ShieldUser className="w-5 h-5" />
+                  </button>
+                  {isAdminDropdownOpen && (
+                    <div className="desktop-admin-dropdown">
+                      <Link to="/admin-dashboard" onClick={() => setIsAdminDropdownOpen(false)}>
+                        Admin Panel
+                      </Link>
+                      <Link to="/dashboard" onClick={() => setIsAdminDropdownOpen(false)}>
+                        Dashboard
+                      </Link>
+                    </div>
+                  )}
+                </div>
+              ) : user ? (
                 <Link to="/dashboard" className="navbar_profile_btn" title="Dashboard">
                   <User className="w-5 h-5" />
                 </Link>

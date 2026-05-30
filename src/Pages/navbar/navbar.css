@@ -304,6 +304,7 @@ button.nav_link {
     position: fixed;
     z-index: 900;
     transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    overflow: visible;
   }
 
   .scrolled-up .MobileNav {
@@ -314,3 +315,91 @@ button.nav_link {
     transform: translateY(100vh);
   }
 }
+
+/* Admin Dropdown CSS Styles */
+.desktop-dropdown-container {
+  position: relative;
+  display: inline-block;
+}
+
+.desktop-admin-dropdown {
+  position: absolute;
+  top: 48px;
+  right: 0;
+  background: rgba(12, 12, 12, 0.95);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 8px;
+  padding: 6px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 140px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+}
+
+.desktop-admin-dropdown a {
+  color: rgba(255, 255, 255, 0.8) !important;
+  text-decoration: none;
+  font-size: 0.82rem;
+  font-weight: 550;
+  padding: 8px 16px;
+  border-radius: 6px;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.desktop-admin-dropdown a:hover {
+  background: rgba(239, 68, 68, 0.08);
+  color: #ef4444 !important;
+}
+
+.navbar_profile_btn.active-btn {
+  border-color: #ef4444;
+  color: #ef4444;
+  background: rgba(239, 68, 68, 0.04);
+}
+
+.mob-dropdown-container {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.mobile-admin-dropdown {
+  position: absolute;
+  bottom: 75px;
+  right: 0;
+  background: rgba(12, 12, 12, 0.95);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 8px;
+  padding: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 130px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+}
+
+.mobile-admin-dropdown a {
+  color: rgba(255, 255, 255, 0.8) !important;
+  text-decoration: none;
+  font-size: 0.85rem;
+  font-weight: 550;
+  padding: 8px 12px;
+  border-radius: 6px;
+  transition: all 0.2s ease;
+  text-align: center;
+}
+
+.mobile-admin-dropdown a:hover {
+  background: rgba(239, 68, 68, 0.1);
+  color: #ef4444 !important;
+}
+
