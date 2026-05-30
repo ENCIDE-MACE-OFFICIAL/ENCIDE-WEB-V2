@@ -282,7 +282,7 @@ const HeroSection = ({ loading }) => {
             >
               <div className="absolute -left-4 top-0 w-1 h-12 bg-gradient-to-b from-red-500 to-transparent rounded-full opacity-60" />
               <p className="text-xl md:text-2xl lg:text-3xl font-display font-medium text-neutral-200">
-                Code what you can't
+                Code What You Can't
               </p>
             </motion.div>
             {/* Description */}
