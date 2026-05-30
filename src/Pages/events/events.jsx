@@ -155,7 +155,7 @@ const EventsSection = () => {
           }),
           updateDoc(eventRef, {
             participants: arrayUnion(teamObject),
-            participants_count: increment(1),
+            participants_count: increment(memberCount),
           }),
         ]);
 

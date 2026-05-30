@@ -136,6 +136,9 @@ const EventsManager = ({
                 const pendingCount = (event.participants || []).filter(
                   (p) => typeof p === "object" && p.status === "pending"
                 ).length;
+                
+                // Dynamically calculate actual member count instead of relying on event.participants_count
+                const actualTotalMembers = (event.participants || []).reduce((acc, p) => acc + (p.count || 1), 0);
 
                 return (
                   <motion.tr
@@ -193,7 +196,7 @@ const EventsManager = ({
                       <div className="flex items-center gap-2">
                         <span className="flex items-center gap-1.5 text-white font-medium">
                           <Users className="w-4 h-4 text-red-400" />
-                          {event.participants_count || 0}
+                          {actualTotalMembers}
                         </span>
                         {pendingCount > 0 && (
                           <span
@@ -368,7 +371,7 @@ const EventsManager = ({
                   <h2 className="text-xl font-bold text-white flex items-center gap-3">
                     Registrations
                     <span className="bg-red-500/10 text-red-400 text-sm font-medium px-2.5 py-0.5 rounded-full border border-red-500/20">
-                      {selectedEventForRegistrations.participants_count || 0}{" "}
+                      {currentParticipants.reduce((acc, p) => acc + (p.count || 1), 0)}{" "}
                       registered
                     </span>
                   </h2>
