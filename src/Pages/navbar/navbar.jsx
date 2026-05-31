@@ -166,9 +166,12 @@ function NavComponent() {
                   EVENTS
                 </Link>
               </li>
-              <li className={`md:hidden ${activeSection === "dashboard" ? "active" : ""}`}>
-                <Link to="/dashboard" onClick={() => setIsMobileMenuOpen(false)}>DASHBOARD</Link>
-              </li>
+
+              {user && (
+                <li className={`md:hidden ${activeSection === "dashboard" ? "active" : ""}`}>
+                  <Link to="/dashboard" onClick={() => setIsMobileMenuOpen(false)}>DASHBOARD</Link>
+                </li>
+              )}
             </ul>
 
             <div className="navbar-profile">
