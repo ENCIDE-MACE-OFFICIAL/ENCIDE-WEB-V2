@@ -1,4 +1,4 @@
-import hlogo from "./assets/hackerrank logo.png";
+import hlogo from "./assets/hackerrank logo.webp";
 
 export const datas = [
   {

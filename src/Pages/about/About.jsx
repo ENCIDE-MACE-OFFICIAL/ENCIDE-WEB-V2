@@ -2,7 +2,8 @@ import { motion, useInView } from "framer-motion";
 import { useRef } from "react";
 import { Lightbulb, Target, Heart } from "lucide-react";
 import VisionMission from "../VisionMission/VisionMission";
-import heroImage from "./d1.jpg";
+import heroImage from "./d1.webp";
+import LazyImage from "../../components/LazyImage";
 
 const AboutSection = () => {
   const ref = useRef(null);
@@ -48,10 +49,10 @@ const AboutSection = () => {
               className="relative"
             >
               <div className="relative rounded-2xl overflow-hidden shadow-2xl border border-neutral-800 group hover:border-red-500/30 transition-colors duration-500">
-                <img
+                <LazyImage
                   src={heroImage}
                   alt="About Nexus Club"
-                  className="w-full h-[400px] object-cover transition-transform duration-700"
+                  containerClassName="w-full h-[400px]"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-neutral-950/90 via-neutral-950/20 to-transparent" />
                 <div className="absolute bottom-6 left-6 right-6">

@@ -1,4 +1,4 @@
-import link from "../../assets/link.png";
+import link from "../../assets/link.webp";
 import { datas } from "../../data";
 
 const Card = () => {

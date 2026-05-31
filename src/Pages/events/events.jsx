@@ -19,6 +19,7 @@ import { useQuery } from "@tanstack/react-query";
 import { fetchEvents, fetchFeaturedEvent } from "../../lib/getEvents";
 import { getUserDetails } from "../../lib/getUserDetails";
 import { uploadToCloudinary, getEventFolder } from "../../lib/cloudinary";
+import LazyImage from "../../components/LazyImage";
 
 const EventsSection = () => {
   const ref = useRef(null);
@@ -249,10 +250,10 @@ const EventsSection = () => {
               <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-red-500/5 via-transparent to-red-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
               <div className="grid lg:grid-cols-[42%_58%] gap-0">
                 <div className="relative h-64 lg:h-auto min-h-[300px] overflow-hidden">
-                  <img
+                  <LazyImage
                     src={featuredEvent.image}
                     alt={featuredEvent.title}
-                    className="w-full h-full object-cover transition-transform duration-700"
+                    containerClassName="w-full h-full"
                   />
                   <div className="absolute inset-0 bg-gradient-to-r from-transparent via-transparent to-neutral-900/80 lg:block hidden" />
                   <div className="absolute inset-0 bg-gradient-to-t from-neutral-900 via-neutral-900/50 to-transparent lg:hidden" />
@@ -318,10 +319,10 @@ const EventsSection = () => {
                 {/* Image */}
 
                 <div className="relative w-full h-48 sm:w-72 sm:h-auto lg:w-full lg:h-48 xl:w-72 xl:h-auto shrink-0 overflow-hidden">
-                  <img
+                  <LazyImage
                     src={event.image}
                     alt={event.title}
-                    className="absolute inset-0 w-full h-full object-cover transition-transform duration-500"
+                    containerClassName="absolute inset-0 w-full h-full"
                   />
 
                   <div className="absolute inset-0 bg-gradient-to-r from-transparent to-neutral-900/80 hidden sm:block lg:hidden xl:block" />

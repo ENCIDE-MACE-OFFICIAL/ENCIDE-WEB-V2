@@ -7,8 +7,8 @@ import {
   ChevronDown,
 } from "lucide-react";
 import { useEffect, useState } from "react";
-import planetHorizon from "../../assets/planet-horizon.png";
-import encideLogo from "../../assets/encideLogo.png";
+import planetHorizon from "../../assets/planet-horizon.webp";
+import encideLogo from "../../assets/encideLogo.webp";
 import LiquidEther from "../../components/LiquidEther";
 
 const codeSnippets = [
@@ -182,9 +182,18 @@ const OrbitingElement = ({ icon: Icon, delay, radius, duration }) => (
   </motion.div>
 );
 const HeroSection = ({ loading }) => {
+  const [isMobile, setIsMobile] = useState(false);
+
   useEffect(() => {
     loading();
   }, [loading]);
+
+  useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth < 768);
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
+    return () => window.removeEventListener("resize", checkMobile);
+  }, []);
 
   const particles = Array.from({ length: 8 }, (_, i) => ({
     delay: i * 2,
@@ -223,9 +232,9 @@ const HeroSection = ({ loading }) => {
           cursorSize={100}
           isViscous={true}
           viscous={30}
-          iterationsViscous={32}
-          iterationsPoisson={32}
-          resolution={0.5}
+          iterationsViscous={isMobile ? 4 : 32}
+          iterationsPoisson={isMobile ? 4 : 32}
+          resolution={isMobile ? 0.2 : 0.5}
           isBounce={false}
           autoDemo={true}
           autoSpeed={0.5}
@@ -252,11 +261,13 @@ const HeroSection = ({ loading }) => {
         }}
       />
       {/* Floating code particles */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        {particles.map((particle, i) => (
-          <CodeParticle key={i} {...particle} />
-        ))}
-      </div>
+      {!isMobile && (
+        <div className="absolute inset-0 overflow-hidden pointer-events-none">
+          {particles.map((particle, i) => (
+            <CodeParticle key={i} {...particle} />
+          ))}
+        </div>
+      )}
       {/* Central radial glow */}
       <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full bg-red-600/5 blur-[100px] pointer-events-none" />
       {/* Main content */}
