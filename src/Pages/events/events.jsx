@@ -213,7 +213,7 @@ const EventsSection = () => {
       {/* Background Effects */}
       <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-red-500/20 to-transparent" />
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,rgba(220,38,38,0.05),transparent_25%)] pointer-events-none" />
-      <div className="absolute top-1/4 right-0 w-96 h-96 bg-red-600/5 rounded-full blur-[120px] pointer-events-none" />
+      <div className="hidden md:block absolute top-1/4 right-0 w-96 h-96 bg-red-600/5 rounded-full blur-[120px] pointer-events-none" />
       <div className="container mx-auto px-4 md:px-8 lg:px-16 xl:px-28 relative z-10">
         {/* Section Header */}
         <motion.div
@@ -246,7 +246,7 @@ const EventsSection = () => {
             transition={{ duration: 0.6, delay: 0.1 }}
             className="mb-8"
           >
-            <div className="relative rounded-2xl overflow-hidden border border-neutral-800  backdrop-blur-sm group hover:border-red-500/30 transition-all duration-500">
+            <div className="relative rounded-2xl overflow-hidden border border-neutral-800 md:backdrop-blur-sm group hover:border-red-500/30 transition-all duration-500">
               <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-red-500/5 via-transparent to-red-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
               <div className="grid lg:grid-cols-[42%_58%] gap-0">
                 <div className="relative h-64 lg:h-auto min-h-[300px] overflow-hidden">
@@ -313,7 +313,7 @@ const EventsSection = () => {
               initial={{ opacity: 0, y: 30 }}
               animate={isInView ? { opacity: 1, y: 0 } : {}}
               transition={{ duration: 0.5, delay: 0.2 + index * 0.1 }}
-              className="group relative backdrop-blur-sm rounded-xl overflow-hidden border border-neutral-800 hover:border-red-500/30 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl"
+              className="group relative md:backdrop-blur-sm rounded-xl overflow-hidden border border-neutral-800 hover:border-red-500/30 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl bg-neutral-900/40 md:bg-transparent"
             >
               <div className="flex flex-col sm:flex-row lg:flex-col xl:flex-row h-full">
                 {/* Image */}

@@ -10,6 +10,7 @@ import {
 } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 import { fetchPastEvents } from "../../lib/getEvents";
+import LazyImage from "../../components/LazyImage";
 const PastEventsSection = () => {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: "-100px" });
@@ -55,7 +56,7 @@ const PastEventsSection = () => {
       {/* Background Effects */}
       <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-red-500/20 to-transparent" />
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,rgba(220,38,38,0.05),transparent_15%)] pointer-events-none" />
-      <div className="absolute bottom-0 right-0 w-96 h-96 bg-red-600/5 rounded-full blur-[100px] pointer-events-none" />
+      <div className="hidden md:block absolute bottom-0 right-0 w-96 h-96 bg-red-600/5 rounded-full blur-[100px] pointer-events-none" />
       <div className="container mx-auto px-4 relative">
         {isLoading ? (
           <div className="flex flex-col items-center justify-center min-h-[400px]">
@@ -159,21 +160,21 @@ const PastEventsSection = () => {
                   className={`group relative rounded-2xl overflow-hidden transition-all duration-500`}
                 >
                   {/* Card with dynamic height */}
-                  <div className="relative bg-neutral-900/50 backdrop-blur-sm border border-neutral-800 hover:border-red-500/30 rounded-2xl overflow-hidden transition-all duration-300 hover:shadow-xl h-full flex flex-col">
+                  <div className="relative bg-neutral-900/80 md:bg-neutral-900/50 md:backdrop-blur-sm border border-neutral-800 hover:border-red-500/30 rounded-2xl overflow-hidden transition-all duration-300 hover:shadow-xl h-full flex flex-col">
                     {/* Image Container */}
                     <div className="relative h-48 overflow-hidden shrink-0">
-                      <img
+                      <LazyImage
                         src={event.image}
                         alt={event.title}
-                        className="w-full h-full object-cover transition-transform duration-700"
+                        containerClassName="w-full h-full"
                       />
                       <div className="absolute inset-0 bg-gradient-to-t from-neutral-900 via-neutral-900/20 to-transparent" />
                       {/* Category Badge */}
-                      <div className="absolute top-4 left-4 px-3 py-1 rounded-full bg-neutral-900/90 border border-neutral-800 text-xs font-medium text-white backdrop-blur-md">
+                      <div className="absolute top-4 left-4 px-3 py-1 rounded-full bg-neutral-900/95 md:bg-neutral-900/90 border border-neutral-800 text-xs font-medium text-white md:backdrop-blur-md">
                         {event.tag}
                       </div>
                       {/* Date Badge */}
-                      <div className="absolute top-4 right-4 flex items-center gap-1.5 text-xs text-neutral-300 bg-neutral-900/90 px-2.5 py-1 rounded-full border border-neutral-800 backdrop-blur-md">
+                      <div className="absolute top-4 right-4 flex items-center gap-1.5 text-xs text-neutral-300 bg-neutral-900/95 md:bg-neutral-900/90 px-2.5 py-1 rounded-full border border-neutral-800 md:backdrop-blur-md">
                         <Calendar className="w-3.5 h-3.5 text-red-400" />
                         {event.date.toDateString()}
                       </div>
