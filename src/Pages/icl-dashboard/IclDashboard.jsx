@@ -20,125 +20,14 @@ const EVENTS = [
 ];
 
 const SAMPLE_DEPARTMENT_SCORES = [
-  { name: "CSE", value: 850 },
-  { name: "ECE", value: 720 },
-  { name: "MECH", value: 680 },
-  { name: "CIVIL", value: 590 },
-  { name: "EEE", value: 710 },
-  { name: "DS", value: 750 },
-  { name: "AIML", value: 800 },
+  { name: "CSE", value: 0 },
+  { name: "ECE", value: 0 },
+  { name: "MECH", value: 0 },
+  { name: "CIVIL", value: 0 },
+  { name: "EEE", value: 0 },
+  { name: "DS", value: 0 },
+  { name: "AIML", value: 0 },
 ];
-
-const SAMPLE_EVENT_SCORES = {
-  "AI or Not AI?": [
-    { name: "CSE", value: 95 },
-    { name: "ECE", value: 78 },
-    { name: "MECH", value: 65 },
-    { name: "CIVIL", value: 55 },
-    { name: "EEE", value: 72 },
-    { name: "DS", value: 88 },
-    { name: "AIML", value: 92 },
-  ],
-  "GEOGUESSR: CAMPUS & TECH EDITION": [
-    { name: "CSE", value: 80 },
-    { name: "ECE", value: 88 },
-    { name: "MECH", value: 72 },
-    { name: "CIVIL", value: 65 },
-    { name: "EEE", value: 75 },
-    { name: "DS", value: 82 },
-    { name: "AIML", value: 78 },
-  ],
-  "Photo and Caption Contest": [
-    { name: "CSE", value: 75 },
-    { name: "ECE", value: 82 },
-    { name: "MECH", value: 78 },
-    { name: "CIVIL", value: 70 },
-    { name: "EEE", value: 68 },
-    { name: "DS", value: 76 },
-    { name: "AIML", value: 72 },
-  ],
-  "Prompt Golf": [
-    { name: "CSE", value: 90 },
-    { name: "ECE", value: 70 },
-    { name: "MECH", value: 68 },
-    { name: "CIVIL", value: 60 },
-    { name: "EEE", value: 65 },
-    { name: "DS", value: 80 },
-    { name: "AIML", value: 85 },
-  ],
-  "WIKIPEDIA SPEEDRUN": [
-    { name: "CSE", value: 85 },
-    { name: "ECE", value: 80 },
-    { name: "MECH", value: 75 },
-    { name: "CIVIL", value: 70 },
-    { name: "EEE", value: 78 },
-    { name: "DS", value: 82 },
-    { name: "AIML", value: 80 },
-  ],
-  "Typing Competition": [
-    { name: "CSE", value: 92 },
-    { name: "ECE", value: 88 },
-    { name: "MECH", value: 84 },
-    { name: "CIVIL", value: 79 },
-    { name: "EEE", value: 86 },
-    { name: "DS", value: 90 },
-    { name: "AIML", value: 88 },
-  ],
-  "AI Story Generator": [
-    { name: "CSE", value: 88 },
-    { name: "ECE", value: 75 },
-    { name: "MECH", value: 70 },
-    { name: "CIVIL", value: 62 },
-    { name: "EEE", value: 68 },
-    { name: "DS", value: 80 },
-    { name: "AIML", value: 86 },
-  ],
-  "Poster Designing": [
-    { name: "CSE", value: 82 },
-    { name: "ECE", value: 79 },
-    { name: "MECH", value: 85 },
-    { name: "CIVIL", value: 72 },
-    { name: "EEE", value: 70 },
-    { name: "DS", value: 78 },
-    { name: "AIML", value: 75 },
-  ],
-  "Reel Making": [
-    { name: "CSE", value: 78 },
-    { name: "ECE", value: 85 },
-    { name: "MECH", value: 88 },
-    { name: "CIVIL", value: 75 },
-    { name: "EEE", value: 80 },
-    { name: "DS", value: 76 },
-    { name: "AIML", value: 74 },
-  ],
-  "Debugging": [
-    { name: "CSE", value: 94 },
-    { name: "ECE", value: 76 },
-    { name: "MECH", value: 60 },
-    { name: "CIVIL", value: 52 },
-    { name: "EEE", value: 70 },
-    { name: "DS", value: 85 },
-    { name: "AIML", value: 92 },
-  ],
-  "Digital Marketing Challenge": [
-    { name: "CSE", value: 80 },
-    { name: "ECE", value: 77 },
-    { name: "MECH", value: 73 },
-    { name: "CIVIL", value: 68 },
-    { name: "EEE", value: 72 },
-    { name: "DS", value: 78 },
-    { name: "AIML", value: 76 },
-  ],
-  "Treasure Hunt": [
-    { name: "CSE", value: 86 },
-    { name: "ECE", value: 82 },
-    { name: "MECH", value: 78 },
-    { name: "CIVIL", value: 74 },
-    { name: "EEE", value: 80 },
-    { name: "DS", value: 84 },
-    { name: "AIML", value: 82 },
-  ],
-};
 
 const DEPARTMENT_COLORS = {
   CSE: { bg: "from-blue-900/60 to-blue-800/60", border: "border-blue-500/60", text: "text-blue-300", accent: "text-blue-400", icon: "bg-blue-600/30" },
@@ -322,3 +211,4 @@ const IclDashboard = ({ onLoad }) => {
 };
 
 export default IclDashboard;
+
