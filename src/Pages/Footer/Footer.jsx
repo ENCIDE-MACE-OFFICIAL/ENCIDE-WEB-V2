@@ -33,8 +33,8 @@ const Footer = () => {
     { icon: Youtube, href: "#", label: "YouTube" },
   ];
   return (
-    <footer className="bg-neutral-950/70 border-t border-neutral-800 pt-16 pb-8 relative overflow-hidden">
-      <div className="container mx-auto md:px-6 lg:px-16 relative z-10">
+    <footer className="bg-neutral-950/70 border-t border-neutral-800 pt-16 pb-32 md:pb-8 relative overflow-hidden">
+      <div className="container mx-auto px-6 md:px-6 lg:px-16 relative z-10">
         <div className="grid md:grid-cols-2 lg:grid-cols-5 gap-12 mb-16">
           {/* Brand */}
           <div className="lg:col-span-2">
@@ -120,7 +120,7 @@ const Footer = () => {
           </div>
         </div>
         {/* Bottom */}
-        <div className="pt-8 border-t border-neutral-800">
+        <div className="pt-8 pb-8 md:pb-0 border-t border-neutral-800">
           <div className="flex flex-col md:flex-row justify-between items-center gap-4">
             <p className="text-neutral-500 text-sm">
               © {currentYear} Encide club. All rights reserved.
