@@ -11,7 +11,8 @@ import {
   LogOut, 
   LogIn,
   User,
-  ShieldUser
+  ShieldUser,
+  Trophy
 } from "lucide-react";
 import "./navbar.css";
 
@@ -59,6 +60,8 @@ function NavComponent() {
       setActiveSection("dashboard");
     } else if (location.pathname === "/admin-dashboard") {
       setActiveSection("admin-dashboard");
+    } else if (location.pathname.startsWith("/icl-dashboard")) {
+      setActiveSection("icl-dashboard");
     } else if (location.pathname === "/") {
       const sections = document.querySelectorAll("section");
       const observerOptions = {
@@ -157,6 +160,15 @@ function NavComponent() {
           >
             <Calendar className="icons" />
             <p className="icontext">Events</p>
+          </Link>
+          <Link
+            to="/icl-dashboard"
+            className={`mob nav_link nav_icl_link ${
+              activeSection === "icl-dashboard" ? "active" : ""
+            }`}
+          >
+            <Trophy className="icons" />
+            <p className="icontext">ICL</p>
           </Link>
           <Link
             to="/#team"
@@ -262,6 +274,16 @@ function NavComponent() {
                 }`}
               >
                 EVENTS
+              </Link>
+            </li>
+            <li className="nav_btn_item">
+              <Link
+                to="/icl-dashboard"
+                className={`nav_events_btn nav_icl_btn ${
+                  activeSection === "icl-dashboard" ? "active" : ""
+                }`}
+              >
+                ICL
               </Link>
             </li>
             <li className="nav_btn_item">

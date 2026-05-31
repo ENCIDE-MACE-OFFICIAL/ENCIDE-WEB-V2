@@ -176,7 +176,7 @@ const IclDashboard = ({ onLoad }) => {
           <div className="flex items-center justify-center gap-6 mb-3 w-full">
             <div className="flex-1 h-px bg-gradient-to-r from-transparent to-[#cf30a1]/40" />
             <div className="flex items-center justify-center gap-3">
-              <Trophy className="w-10 h-10" style={{ color: "#cf30a1" }} />
+              <Trophy className="w-10 h-10" style={{ color: "#ffa1d2" }} />
               <SplitText
                 text="ICL Tournament"
                 tag="h1"
@@ -187,13 +187,13 @@ const IclDashboard = ({ onLoad }) => {
                 splitType="chars"
                 from={{ opacity: 0, y: 40 }}
                 to={{ opacity: 1, y: 0 }}
-                style={{ color: "#cf30a1" }}
+                style={{ color: "#ffa1d2" }}
               />
-              <Trophy className="w-10 h-10" style={{ color: "#cf30a1" }} />
+              <Trophy className="w-10 h-10" style={{ color: "#ffa1d2" }} />
             </div>
             <div className="flex-1 h-px bg-gradient-to-l from-transparent to-[#cf30a1]/40" />
           </div>
-          <p className="text-[#cf30a1]/60 text-base">Live Results & Rankings</p>
+          <p className="text-[#ffa1d2]/60 text-base">Live Results & Rankings</p>
         </motion.div>
 
         {/* Overall Scoreboard & Leaderboard Grid */}

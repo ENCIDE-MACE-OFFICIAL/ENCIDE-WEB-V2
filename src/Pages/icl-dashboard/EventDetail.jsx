@@ -283,9 +283,9 @@ const EventDetail = ({ onLoad }) => {
             splitType="chars"
             from={{ opacity: 0, y: 40 }}
             to={{ opacity: 1, y: 0 }}
-            style={{ color: "#cf30a1" }}
+            style={{ color: "#ffa1d2" }}
           />
-          <p className="text-center text-[#cf30a1]/70 text-sm max-w-3xl mx-auto leading-relaxed">
+          <p className="text-center text-[#ffa1d2]/70 text-sm max-w-3xl mx-auto leading-relaxed">
             {EVENT_DESCRIPTIONS[decodedEventName]}
           </p>
         </motion.div>

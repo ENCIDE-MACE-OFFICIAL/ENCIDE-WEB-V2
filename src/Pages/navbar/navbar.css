@@ -146,6 +146,38 @@
   transform: translateY(1px);
 }
 
+.nav_icl_btn {
+  border-color: rgba(255, 161, 210, 0.45);
+  color: #ffa1d2 !important;
+  background: rgba(255, 161, 210, 0.08);
+  box-shadow: 0 0 18px rgba(255, 161, 210, 0.18), inset 0 0 0 1px rgba(255, 161, 210, 0.12);
+  text-shadow: 0 0 10px rgba(255, 161, 210, 0.45);
+}
+
+.nav_icl_btn:hover {
+  border-color: #ffa1d2;
+  color: #ffffff !important;
+  background: rgba(255, 161, 210, 0.16);
+  box-shadow: 0 0 22px rgba(255, 161, 210, 0.28), 0 0 42px rgba(255, 161, 210, 0.12);
+}
+
+.nav_icl_link .icons,
+.nav_icl_link .icontext {
+  color: #ffa1d2;
+  text-shadow: 0 0 10px rgba(255, 161, 210, 0.45);
+}
+
+.nav_icl_link:hover .icons,
+.nav_icl_link.active .icons,
+.nav_icl_link:hover .icontext,
+.nav_icl_link.active .icontext {
+  color: #ffffff !important;
+}
+
+.nav_icl_link.active {
+  filter: drop-shadow(0 0 8px rgba(255, 161, 210, 0.45));
+}
+
 /* Minimalist Desktop Login Button */
 .navbar_login_btn {
   background: #ffffff;
