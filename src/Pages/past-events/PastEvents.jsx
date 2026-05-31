@@ -213,32 +213,6 @@ const PastEventsSection = () => {
                 </motion.article>
               ))}
             </div>
-            {/* Bottom Stats Banner */}
-            <motion.div
-              initial={{ opacity: 0, y: 30 }}
-              animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
-              transition={{ duration: 0.6, delay: 0.4 }}
-              className="mt-12 grid grid-cols-2 md:grid-cols-4 gap-4 pb-20"
-            >
-              {[
-                { value: "50+", label: "Events Organized" },
-                { value: "5000+", label: "Total Participants" },
-                { value: "200+", label: "Projects Built" },
-                { value: "₹5L+", label: "Prizes Awarded" },
-              ].map((stat, index) => (
-                <div
-                  key={index}
-                  className="text-center p-4 rounded-xl bg-neutral-900/15 border border-neutral-800 hover:border-red-500/20 transition-colors"
-                >
-                  <p className="font-display text-2xl md:text-3xl font-bold bg-gradient-to-r from-red-400 to-red-500 bg-clip-text text-transparent">
-                    {stat.value}
-                  </p>
-                  <p className="text-sm text-neutral-500 mt-1 uppercase tracking-wider font-medium">
-                    {stat.label}
-                  </p>
-                </div>
-              ))}
-            </motion.div>
           </>
         )}
       </div>

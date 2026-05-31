@@ -14,6 +14,8 @@ import Footer from "./Pages/Footer/Footer.jsx";
 import EventsSection from "./Pages/events/events.jsx";
 import PastEventsSection from "./Pages/past-events/PastEvents.jsx";
 import Dashboard from "./Pages/dashboard/Dashboard.jsx";
+import IclDashboard from "./Pages/icl-dashboard/IclDashboard.jsx";
+import EventDetail from "./Pages/icl-dashboard/EventDetail.jsx";
 
 import { AuthContext } from "./contexts/AuthContext.jsx";
 import HeroSection from "./Pages/hero/HeroSection.jsx";
@@ -65,6 +67,16 @@ function App() {
           <Route
             path="/admin-dashboard"
             element={isAdmin ? <Admin onLoad={() => setLoad(false)} /> : <Navigate to="/" />}
+          />
+
+          <Route
+            path="/icl-dashboard"
+            element={<IclDashboard onLoad={() => setLoad(false)} />}
+          />
+
+          <Route
+            path="/icl-dashboard/event/:eventName"
+            element={<EventDetail onLoad={() => setLoad(false)} />}
           />
 
       </Routes>
