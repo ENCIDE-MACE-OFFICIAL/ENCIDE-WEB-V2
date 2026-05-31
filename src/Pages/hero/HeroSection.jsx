@@ -6,10 +6,11 @@ import {
   Sparkles,
   ChevronDown,
 } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useEffect, useState, lazy, Suspense } from "react";
 import planetHorizon from "../../assets/planet-horizon.webp";
 import encideLogo from "../../assets/encideLogo.webp";
-import LiquidEther from "../../components/LiquidEther";
+
+const LiquidEther = lazy(() => import("../../components/LiquidEther"));
 
 const codeSnippets = [
   "const future = await dream.build();",
@@ -226,28 +227,30 @@ const HeroSection = ({ loading }) => {
       </motion.div>
       {/* LiquidEther WebGL fluid simulation background */}
       <div className="absolute inset-0 pointer-events-auto z-5">
-        <LiquidEther
-          colors={['#dc2626', '#ef4444', '#991b1b']}
-          mouseForce={20}
-          cursorSize={100}
-          isViscous={true}
-          viscous={30}
-          iterationsViscous={isMobile ? 4 : 32}
-          iterationsPoisson={isMobile ? 4 : 32}
-          resolution={isMobile ? 0.2 : 0.5}
-          isBounce={false}
-          autoDemo={true}
-          autoSpeed={0.5}
-          autoIntensity={2.2}
-          takeoverDuration={0.25}
-          autoResumeDelay={3000}
-          autoRampDuration={0.6}
-          style={{
-            width: '100%',
-            height: '100%',
-            opacity: 0.6,
-          }}
-        />
+        <Suspense fallback={null}>
+          <LiquidEther
+            colors={['#dc2626', '#ef4444', '#991b1b']}
+            mouseForce={20}
+            cursorSize={100}
+            isViscous={true}
+            viscous={30}
+            iterationsViscous={isMobile ? 4 : 32}
+            iterationsPoisson={isMobile ? 4 : 32}
+            resolution={isMobile ? 0.2 : 0.5}
+            isBounce={false}
+            autoDemo={true}
+            autoSpeed={0.5}
+            autoIntensity={2.2}
+            takeoverDuration={0.25}
+            autoResumeDelay={3000}
+            autoRampDuration={0.6}
+            style={{
+              width: '100%',
+              height: '100%',
+              opacity: 0.6,
+            }}
+          />
+        </Suspense>
       </div>
       {/* Atmospheric glow overlay */}
       <div className="absolute inset-0 bg-gradient-to-t from-red-900/10 via-transparent to-transparent pointer-events-none" />
