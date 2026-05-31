@@ -20,6 +20,7 @@ import {
   CheckCircle2,
   XCircle,
   ImageIcon,
+  Download,
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
@@ -290,6 +291,34 @@ const EventsManager = ({
     status: team.status || "approved", // fallback default approved for older entries
     payment_proof: team.payment_proof || "",
   }));
+
+  const handleExportCSV = () => {
+    if (!selectedEventForRegistrations || allTeamsWithMembers.length === 0) return;
+
+    const rows = allTeamsWithMembers.flatMap((team) =>
+      team.members.map((m) => ({ team_name: team.team_name, status: team.status, ...m }))
+    );
+
+    const headers = [...new Set(rows.flatMap(Object.keys))];
+
+    const csv = [
+      headers.join(","),
+      ...rows.map((r) =>
+        headers.map((h) => `"${String(r[h] ?? "").replace(/"/g, '""')}"`)
+        .join(",")
+      ),
+    ].join("\n");
+
+    const blob = new Blob([csv], { type: "text/csv" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    document.body.appendChild(a);
+    a.href = url;
+    a.download = `${selectedEventForRegistrations.title.replace(/\s+/g, "_")}_registrations.csv`;
+    a.click();
+    document.body.removeChild(a);
+    setTimeout(() => URL.revokeObjectURL(url), 1000);
+  };
 
   const filteredTeams = allTeamsWithMembers.filter((team) => {
     // 1. Status Filter
@@ -600,7 +629,16 @@ const EventsManager = ({
                 )}
               </div>
 
-              <div className="p-4 border-t border-neutral-800 bg-neutral-900 flex justify-end">
+              <div className="p-4 border-t border-neutral-800 bg-neutral-900 flex justify-end gap-3">
+                {allTeamsWithMembers.length > 0 && (
+                  <button
+                    onClick={handleExportCSV}
+                    className="flex items-center gap-2 px-4 py-2 rounded-lg bg-red-600 hover:bg-red-700 text-white text-sm font-medium transition-all shadow-lg shadow-red-600/20"
+                  >
+                    <Download className="w-4 h-4" />
+                    Download CSV
+                  </button>
+                )}
                 <button
                   onClick={closeRegistrationsModal}
                   className="px-4 py-2 rounded-lg border border-neutral-700 hover:bg-neutral-800 text-neutral-300 text-sm font-medium transition-colors"
