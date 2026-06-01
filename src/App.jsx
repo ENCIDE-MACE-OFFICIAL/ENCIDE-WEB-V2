@@ -5,6 +5,7 @@ import Loader from "./Pages/loader/page";
 import NavComponent from "./Pages/navbar/navbar";
 import HeroSection from "./Pages/hero/HeroSection.jsx";
 import { AuthContext } from "./contexts/AuthContext.jsx";
+import { Loader2 } from "lucide-react";
 
 const LoginForm = lazy(() => import("./Pages/login/Login.jsx"));
 const SignUpForm = lazy(() => import("./Pages/signup/SignUp.jsx"));
@@ -20,6 +21,12 @@ const Admin = lazy(() => import("./Pages/admin/Admin.jsx"));
 const IclDashboard = lazy(() => import("./Pages/icl-dashboard/IclDashboard.jsx"));
 const EventDetail = lazy(() => import("./Pages/icl-dashboard/EventDetail.jsx"));
 
+const SuspenseFallback = () => (
+  <div className="w-screen h-screen flex justify-center items-center bg-[#121212] fixed top-0 left-0 z-[9999]">
+    <Loader2 className="w-28 h-28 text-red-600 animate-spin" />
+  </div>
+);
+
 function App() {
   const [load, setLoad] = useState(true);
 
@@ -29,7 +36,7 @@ function App() {
     <Router>
       {load && <Loader />}
 
-      <Suspense fallback={null}>
+      <Suspense fallback={<SuspenseFallback />}>
         <Routes>
           <Route
             path="/"

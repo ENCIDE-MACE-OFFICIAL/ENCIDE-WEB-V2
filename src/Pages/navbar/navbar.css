@@ -90,7 +90,8 @@
 
 .nav_main li:not(.nav_btn_item) a:hover,
 .nav_main li.active:not(.nav_btn_item) a {
-  color: #ef4444; /* Red color theme to blend */
+  color: #ef4444;
+  /* Red color theme to blend */
 }
 
 /* Minimalist Flat Slide Indicator */
@@ -180,9 +181,10 @@
 
 /* Minimalist Desktop Login Button */
 .navbar_login_btn {
-  background: #ffffff;
-  color: #000000 !important;
+  background: transparent;
+  color: #ffffff !important;
   border: 1px solid #ffffff;
+  border-color: rgba(255, 255, 255, 0.3);
   font-weight: 700;
   border-radius: 6px;
   padding: 0.5rem 1.2rem;
@@ -197,9 +199,8 @@
 }
 
 .navbar_login_btn:hover {
-  background: transparent;
-  color: #ffffff !important;
-  border-color: rgba(255, 255, 255, 0.3);
+  background: #ffffff;
+  color: #000000 !important;
 }
 
 .navbar_login_btn:active {
@@ -217,7 +218,8 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 0; /* Reset browser default padding */
+  padding: 0;
+  /* Reset browser default padding */
   box-sizing: border-box;
   transition: all 0.2s ease;
   cursor: pointer;
@@ -230,7 +232,8 @@
   display: block;
   margin: 0;
   padding: 0;
-  flex-shrink: 0; /* Prevent visual distortion */
+  flex-shrink: 0;
+  /* Prevent visual distortion */
 }
 
 .navbar_profile_btn:hover {
@@ -248,6 +251,7 @@
   .navbar {
     padding: 1.2rem 2rem;
   }
+
   .scrolled .navbar {
     padding: 0.95rem 2rem;
   }
@@ -386,4 +390,3 @@
   background: rgba(239, 68, 68, 0.1);
   color: #ef4444 !important;
 }
-
