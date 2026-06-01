@@ -255,8 +255,6 @@ const EventsSection = () => {
                     alt={featuredEvent.title}
                     containerClassName="w-full h-full"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-r from-transparent via-transparent to-neutral-900/80 lg:block hidden" />
-                  <div className="absolute inset-0 bg-gradient-to-t from-neutral-900 via-neutral-900/50 to-transparent lg:hidden" />
                   <div className="absolute top-4 left-4 px-3 py-1.5 rounded-full bg-red-600 text-white text-xs font-bold uppercase tracking-wider flex items-center gap-1.5 shadow-lg shadow-red-600/20">
                     <span className="w-1.5 h-1.5 rounded-full bg-white animate-pulse" />
                     {featuredEvent.tag}
