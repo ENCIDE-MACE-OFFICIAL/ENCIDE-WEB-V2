@@ -13,6 +13,8 @@ import {
   Loader2,
   QrCode,
   Trash2,
+  MessageCircle,
+  Link as LinkIcon,
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { uploadToCloudinary, getEventFolder } from "../../lib/cloudinary";
@@ -194,6 +196,7 @@ const AddEventDialog = ({
     tag: "",
     highlighted: false,
     is_over: false,
+    whatsappRedirectUrl: "",
   });
 
   const [posterFile, setPosterFile] = useState(null);
@@ -203,9 +206,11 @@ const AddEventDialog = ({
     qr: null,
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [whatsappEnabled, setWhatsappEnabled] = useState(false);
 
   useEffect(() => {
     if (initialData) {
+      setWhatsappEnabled(!!initialData.whatsappRedirectUrl);
       setFormData({
         title: initialData.title || "",
         date: timestampToDateString(initialData.date),
@@ -217,8 +222,10 @@ const AddEventDialog = ({
         tag: initialData.tag || "",
         highlighted: initialData.highlighted || false,
         is_over: initialData.is_over || false,
+        whatsappRedirectUrl: initialData.whatsappRedirectUrl || "",
       });
     } else {
+      setWhatsappEnabled(false);
       setFormData({
         title: "",
         date: "",
@@ -230,6 +237,7 @@ const AddEventDialog = ({
         tag: "",
         highlighted: false,
         is_over: false,
+        whatsappRedirectUrl: "",
       });
     }
     // Reset file selections when dialog opens/closes
@@ -284,6 +292,7 @@ const AddEventDialog = ({
         tag: "",
         highlighted: false,
         is_over: false,
+        whatsappRedirectUrl: "",
       });
       setPosterFile(null);
       setQrFile(null);
@@ -538,6 +547,56 @@ const AddEventDialog = ({
                       <div className="w-11 h-6 bg-neutral-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-neutral-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-emerald-500 transition-colors"></div>
                     </div>
                   </label>
+                </div>
+
+                {/* WhatsApp Redirect Toggle + URL */}
+                <div className="space-y-3">
+                  <label className="flex items-center justify-between p-4 rounded-xl border border-neutral-700 bg-neutral-950/30 cursor-pointer hover:border-red-500/30 transition-colors group">
+                    <div className="flex items-center gap-3">
+                      <div className={`p-2 rounded-lg ${whatsappEnabled ? 'bg-green-500/10' : 'bg-neutral-800'} transition-colors`}>
+                        <MessageCircle className={`w-4 h-4 ${whatsappEnabled ? 'text-green-400' : 'text-neutral-500'} transition-colors`} />
+                      </div>
+                      <div>
+                        <p className="text-sm font-medium text-white">WhatsApp Redirect</p>
+                        <p className="text-xs text-neutral-500">Redirect users after registration</p>
+                      </div>
+                    </div>
+                    <div className="relative">
+                      <input
+                        type="checkbox"
+                        checked={whatsappEnabled}
+                        onChange={(e) => {
+                          setWhatsappEnabled(e.target.checked);
+                          if (!e.target.checked) handleChange("whatsappRedirectUrl", "");
+                        }}
+                        className="sr-only peer"
+                      />
+                      <div className="w-11 h-6 bg-neutral-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-neutral-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-green-500 transition-colors"></div>
+                    </div>
+                  </label>
+
+                  {/* URL Input — only shown when toggle is on */}
+                  <AnimatePresence>
+                    {whatsappEnabled && (
+                      <motion.div
+                        initial={{ opacity: 0, height: 0 }}
+                        animate={{ opacity: 1, height: "auto" }}
+                        exit={{ opacity: 0, height: 0 }}
+                        transition={{ duration: 0.2 }}
+                        className="overflow-hidden"
+                      >
+                        <div className="relative">
+                          <LinkIcon className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-green-400" />
+                          <input
+                            value={formData.whatsappRedirectUrl}
+                            onChange={(e) => handleChange("whatsappRedirectUrl", e.target.value)}
+                            placeholder="https://chat.whatsapp.com/..."
+                            className="w-full bg-neutral-950/30 border border-neutral-700 rounded-lg pl-10 pr-4 py-3 text-white placeholder-neutral-600 focus:outline-none focus:border-green-500/50 focus:ring-1 focus:ring-green-500/50 transition-all text-sm"
+                          />
+                        </div>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
                 </div>
               </form>
             </div>
