@@ -83,14 +83,14 @@ function NavComponent() {
 
   const handleScroll = () => {
     const currentScroll = window.scrollY;
+    
     setIsScrolling(true);
+    
     setIsAtTop(currentScroll < 20);
 
-    if (currentScroll > lastScrollTop.current) {
-      setScrollDirection("down");
-    } else {
-      setScrollDirection("up");
-    }
+    const newDirection = currentScroll > lastScrollTop.current ? "down" : "up";
+    setScrollDirection(newDirection);
+    
     lastScrollTop.current = currentScroll <= 0 ? 0 : currentScroll;
 
     if (scrollTimeout.current) {
@@ -98,7 +98,7 @@ function NavComponent() {
     }
     scrollTimeout.current = setTimeout(() => {
       setIsScrolling(false);
-    }, 200);
+    }, 150);
   };
 
   useEffect(() => {

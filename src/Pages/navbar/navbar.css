@@ -47,8 +47,11 @@
 }
 
 .at-top .navbar {
-  background: rgba(10, 10, 10, 0.5);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+  background: transparent !important;
+  border-bottom: 1px solid transparent !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  box-shadow: none !important;
 }
 
 /* Logo styling */
@@ -301,6 +304,15 @@
 
   .navbar {
     padding: 1rem 1.5rem;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    background: rgba(10, 10, 10, 0.95);
+  }
+
+  .at-top .navbar {
+    background: transparent !important;
+    border-color: transparent !important;
+    box-shadow: none !important;
   }
 }
 

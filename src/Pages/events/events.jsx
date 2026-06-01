@@ -311,8 +311,9 @@ const EventsSection = () => {
             <motion.article
               key={event.id}
               initial={{ opacity: 0, y: 30 }}
-              animate={isInView ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 0.5, delay: 0.2 + index * 0.1 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-50px" }}
+              transition={{ duration: 0.4 }}
               className="group relative md:backdrop-blur-sm rounded-xl overflow-hidden border border-neutral-800 hover:border-red-500/30 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl bg-neutral-900/40 md:bg-transparent"
             >
               <div className="flex flex-col sm:flex-row lg:flex-col xl:flex-row h-full">

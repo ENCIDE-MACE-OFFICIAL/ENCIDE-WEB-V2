@@ -17,7 +17,7 @@ const AboutSection = () => {
       >
         {/* Background Effects */}
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_0%_0%,rgba(220,38,38,0.05),transparent_50%)] pointer-events-none" />
-        <div className="absolute top-1/4 right-0 w-96 h-96 bg-fuchsia-600/5 rounded-full blur-[100px] pointer-events-none" />
+        <div className="hidden md:block absolute top-1/4 right-0 w-96 h-96 bg-fuchsia-600/5 rounded-full blur-[100px] pointer-events-none" />
         <div className="container mx-auto px-4 lg:px-16 relative z-10">
           {/* Section Header */}
           <motion.div
