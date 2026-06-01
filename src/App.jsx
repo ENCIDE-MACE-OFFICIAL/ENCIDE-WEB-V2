@@ -15,7 +15,7 @@ const TeamSection = lazy(() => import("./Pages/Teams/TeamSection.jsx"));
 const AboutComponent = lazy(() => import("./Pages/about/About.jsx"));
 const Footer = lazy(() => import("./Pages/Footer/Footer.jsx"));
 const EventsSection = lazy(() => import("./Pages/events/events.jsx"));
-const PastEventsSection = lazy(() => import("./Pages/past-events/PastEvents.jsx"));
+// const PastEventsSection = lazy(() => import("./Pages/past-events/PastEvents.jsx"));
 const Dashboard = lazy(() => import("./Pages/dashboard/Dashboard.jsx"));
 const Admin = lazy(() => import("./Pages/admin/Admin.jsx"));
 const IclDashboard = lazy(() => import("./Pages/icl-dashboard/IclDashboard.jsx"));
@@ -46,7 +46,7 @@ function App() {
                 <HeroSection loading={() => setLoad(false)}/>
                 <AboutComponent />
                 <EventsSection />
-                <PastEventsSection />
+                {/* <PastEventsSection /> */}
                 <TeamSection />
                 <ContactSection />
                 <Footer />
