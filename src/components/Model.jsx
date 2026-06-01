@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { motion } from "framer-motion";
 import {
   Calendar,
@@ -11,6 +11,8 @@ import {
   Clock,
   ImageIcon,
   Trash2,
+  MessageCircle,
+  ExternalLink,
 } from "lucide-react";
 
 function Model({
@@ -447,41 +449,11 @@ function Model({
             )}
 
             {isSuccess && (
-              <div className="text-center space-y-6 py-6">
-                <div
-                  className={`w-16 h-16 mx-auto rounded-full flex items-center justify-center ${
-                    isPaidEvent
-                      ? "bg-amber-500/10 border border-amber-500/20"
-                      : "bg-green-500/10 border border-green-500/20"
-                  }`}
-                >
-                  {isPaidEvent ? (
-                    <Clock className="w-8 h-8 text-amber-400" />
-                  ) : (
-                    <CheckCircle2 className="w-8 h-8 text-green-400" />
-                  )}
-                </div>
-
-                <h3 className="text-2xl font-bold text-white">
-                  {isPaidEvent
-                    ? "Registration Submitted!"
-                    : "Registration Successful!"}
-                </h3>
-
-                {isPaidEvent && (
-                  <p className="text-neutral-400 text-sm">
-                    Your payment proof has been submitted. An admin will review
-                    and approve your registration shortly.
-                  </p>
-                )}
-
-                <button
-                  onClick={onClose}
-                  className="w-full px-4 py-2.5 rounded-lg bg-neutral-800 hover:bg-neutral-700 text-white font-medium"
-                >
-                  Close
-                </button>
-              </div>
+              <SuccessScreen
+                isPaidEvent={isPaidEvent}
+                whatsappRedirectUrl={event.whatsappRedirectUrl}
+                onClose={onClose}
+              />
             )}
 
             {status === "error" && (
@@ -493,6 +465,93 @@ function Model({
         </div>
       </motion.div>
     </motion.div>
+  );
+}
+
+function SuccessScreen({ isPaidEvent, whatsappRedirectUrl, onClose }) {
+  const trimmedUrl = (whatsappRedirectUrl || "").trim();
+  const hasWhatsapp = !!trimmedUrl;
+  const [countdown, setCountdown] = useState(5);
+
+  useEffect(() => {
+    if (!hasWhatsapp) return;
+
+    const timer = setInterval(() => {
+      setCountdown((prev) => {
+        if (prev <= 1) {
+          clearInterval(timer);
+          window.location.href = trimmedUrl;
+          return 0;
+        }
+        return prev - 1;
+      });
+    }, 1000);
+
+    return () => clearInterval(timer);
+  }, [hasWhatsapp, trimmedUrl]);
+
+  return (
+    <div className="text-center space-y-6 py-6">
+      <div
+        className={`w-16 h-16 mx-auto rounded-full flex items-center justify-center ${
+          isPaidEvent
+            ? "bg-amber-500/10 border border-amber-500/20"
+            : "bg-green-500/10 border border-green-500/20"
+        }`}
+      >
+        {isPaidEvent ? (
+          <Clock className="w-8 h-8 text-amber-400" />
+        ) : (
+          <CheckCircle2 className="w-8 h-8 text-green-400" />
+        )}
+      </div>
+
+      <h3 className="text-2xl font-bold text-white">
+        {isPaidEvent
+          ? "Registration Submitted!"
+          : "Registration Successful!"}
+      </h3>
+
+      {isPaidEvent && (
+        <p className="text-neutral-400 text-sm">
+          Your payment proof has been submitted. An admin will review
+          and approve your registration shortly.
+        </p>
+      )}
+
+      {/* WhatsApp Redirect Section */}
+      {hasWhatsapp && (
+        <div className="space-y-4">
+          <div className="flex items-center justify-center gap-2 text-green-400">
+            <MessageCircle className="w-5 h-5" />
+            <p className="text-sm font-medium">
+              You will be redirected to join the WhatsApp group in{" "}
+              <span className="inline-flex items-center justify-center w-7 h-7 rounded-full bg-green-500/10 border border-green-500/20 text-green-300 font-bold text-base">
+                {countdown}
+              </span>{" "}
+              seconds
+            </p>
+          </div>
+
+          <a
+            href={whatsappRedirectUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-green-600 hover:bg-green-700 text-white font-medium text-sm transition-all shadow-lg shadow-green-600/20 hover:shadow-green-600/40"
+          >
+            <ExternalLink className="w-4 h-4" />
+            Join WhatsApp Group
+          </a>
+        </div>
+      )}
+
+      <button
+        onClick={onClose}
+        className="w-full px-4 py-2.5 rounded-lg bg-neutral-800 hover:bg-neutral-700 text-white font-medium"
+      >
+        Close
+      </button>
+    </div>
   );
 }
 

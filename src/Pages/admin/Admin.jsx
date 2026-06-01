@@ -103,6 +103,7 @@ const Admin = ({ onLoad }) => {
           tag: data.tag || "",
           highlighted: data.highlighted || false,
           is_over: data.is_over || false,
+          whatsappRedirectUrl: data.whatsappRedirectUrl || "",
           participants: data.participants || [],
           participants_count: data.participants_count || 0,
           // Keep raw Timestamps for Firestore operations, convert for display
@@ -182,6 +183,7 @@ const Admin = ({ onLoad }) => {
         tag: formData.tag,
         highlighted: formData.highlighted,
         is_over: formData.is_over,
+        whatsappRedirectUrl: (formData.whatsappRedirectUrl || "").trim(),
         date: eventDate,
         deadline: eventDeadline,
         participants: [],
@@ -219,6 +221,7 @@ const Admin = ({ onLoad }) => {
         tag: formData.tag,
         highlighted: formData.highlighted,
         is_over: formData.is_over,
+        whatsappRedirectUrl: (formData.whatsappRedirectUrl || "").trim(),
         date: eventDate,
         deadline: eventDeadline,
       });
