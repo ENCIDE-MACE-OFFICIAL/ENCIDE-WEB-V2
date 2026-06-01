@@ -10,27 +10,17 @@ const Footer = () => {
     about: [
       { label: "Our Story", href: "#about" },
       { label: "Team", href: "#team" },
-      { label: "Vision & Mission", href: "#about" },
-      { label: "Join Us", href: "#contact" },
     ],
     resources: [
       { label: "Events", href: "#events" },
-      { label: "Blog", href: "#" },
-      { label: "Newsletter", href: "#" },
-      { label: "FAQs", href: "#" },
     ],
     connect: [
       { label: "Contact", href: "#contact" },
-      { label: "Support", href: "#" },
-      { label: "Feedback", href: "#" },
-      { label: "Partners", href: "#" },
     ],
   };
   const socialLinks = [
-    { icon: Instagram, href: "#", label: "Instagram" },
-    { icon: Twitter, href: "#", label: "Twitter" },
-    { icon: Linkedin, href: "#", label: "LinkedIn" },
-    { icon: Youtube, href: "#", label: "YouTube" },
+    { icon: Instagram, href: "https://www.instagram.com/encide_official/", label: "Instagram" },
+    { icon: Linkedin, href: "https://www.linkedin.com/company/encide-mace/", label: "LinkedIn" },
   ];
   return (
     <footer className="bg-neutral-950/70 border-t border-neutral-800 pt-16 pb-32 md:pb-8 relative overflow-hidden">
@@ -126,7 +116,7 @@ const Footer = () => {
               © {currentYear} Encide club. All rights reserved.
             </p>
             <p className="text-neutral-500 text-sm flex items-center gap-1.5 group">
-              Made by encide web team
+              Made by the Encide Web Team
             </p>
           </div>
         </div>
