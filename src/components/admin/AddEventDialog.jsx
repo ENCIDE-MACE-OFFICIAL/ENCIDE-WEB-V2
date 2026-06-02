@@ -15,6 +15,7 @@ import {
   Trash2,
   MessageCircle,
   Link as LinkIcon,
+  Users,
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { uploadToCloudinary, getEventFolder } from "../../lib/cloudinary";
@@ -198,6 +199,7 @@ const AddEventDialog = ({
     tag: "",
     highlighted: false,
     is_over: false,
+    isIndividualEvent: false,
     whatsappRedirectUrl: "",
   });
 
@@ -224,6 +226,7 @@ const AddEventDialog = ({
         tag: initialData.tag || "",
         highlighted: initialData.highlighted || false,
         is_over: initialData.is_over || false,
+        isIndividualEvent: initialData.isIndividualEvent || false,
         whatsappRedirectUrl: initialData.whatsappRedirectUrl || "",
       });
     } else {
@@ -239,6 +242,7 @@ const AddEventDialog = ({
         tag: "",
         highlighted: false,
         is_over: false,
+        isIndividualEvent: false,
         whatsappRedirectUrl: "",
       });
     }
@@ -294,6 +298,7 @@ const AddEventDialog = ({
         tag: "",
         highlighted: false,
         is_over: false,
+        isIndividualEvent: false,
         whatsappRedirectUrl: "",
       });
       setPosterFile(null);
@@ -547,6 +552,28 @@ const AddEventDialog = ({
                         className="sr-only peer"
                       />
                       <div className="w-11 h-6 bg-neutral-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-neutral-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-emerald-500 transition-colors"></div>
+                    </div>
+                  </label>
+
+                  {/* Individual Event toggle */}
+                  <label className="flex items-center justify-between p-4 rounded-xl border border-neutral-700 bg-neutral-950/30 cursor-pointer hover:border-red-500/30 transition-colors group">
+                    <div className="flex items-center gap-3">
+                      <div className={`p-2 rounded-lg ${formData.isIndividualEvent ? 'bg-blue-500/10' : 'bg-neutral-800'} transition-colors`}>
+                        <Users className={`w-4 h-4 ${formData.isIndividualEvent ? 'text-blue-400' : 'text-neutral-500'} transition-colors`} />
+                      </div>
+                      <div>
+                        <p className="text-sm font-medium text-white">Individual Event</p>
+                        <p className="text-xs text-neutral-500">No teams allowed</p>
+                      </div>
+                    </div>
+                    <div className="relative">
+                      <input
+                        type="checkbox"
+                        checked={formData.isIndividualEvent}
+                        onChange={(e) => handleChange("isIndividualEvent", e.target.checked)}
+                        className="sr-only peer"
+                      />
+                      <div className="w-11 h-6 bg-neutral-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-neutral-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-500 transition-colors"></div>
                     </div>
                   </label>
                 </div>

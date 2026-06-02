@@ -165,7 +165,17 @@ function Model({
                 <div className="bg-neutral-800/50 rounded-xl p-4 border border-neutral-800 space-y-3 text-sm text-neutral-300">
                   <div className="flex items-center gap-3">
                     <Calendar className="w-4 h-4 text-red-400" />
-                    {event.date.toString()}
+                    {(() => {
+                      const d = event.date;
+                      if (!d) return "";
+                      const dateObj = typeof d.toDate === 'function' ? d.toDate() : new Date(d);
+                      const month = dateObj.toLocaleString("en-US", { month: "short" });
+                      const day = dateObj.toLocaleString("en-US", { day: "2-digit" });
+                      const weekday = dateObj.toLocaleString("en-US", { weekday: "short" });
+                      const time = dateObj.toLocaleString("en-US", { hour: "2-digit", minute: "2-digit", hour12: true }).replace(":", ".");
+                      const year = dateObj.getFullYear();
+                      return `${month} ${day} ${weekday} ${time} ${year}`;
+                    })()}
                   </div>
                   <div className="flex items-center gap-3">
                     <MapPin className="w-4 h-4 text-red-400" />
@@ -202,23 +212,25 @@ function Model({
                 {!isRegistered && (
                   <div className="space-y-5">
                     {/* Team Size */}
-                    <div>
-                      <label className="text-sm text-neutral-400 block mb-2">
-                        Team Size (Max 4)
-                      </label>
-                      <select
-                        value={memberCount}
-                        disabled={isSubmitting}
-                        onChange={(e) => setMemberCount(Number(e.target.value))}
-                        className="w-full bg-neutral-800 border border-neutral-700 rounded-lg px-3 py-2 text-white focus:outline-none focus:border-red-500"
-                      >
-                        {[1, 2, 3, 4].map((num) => (
-                          <option key={num} value={num}>
-                            {num}
-                          </option>
-                        ))}
-                      </select>
-                    </div>
+                    {!event.isIndividualEvent && (
+                      <div>
+                        <label className="text-sm text-neutral-400 block mb-2">
+                          Team Size (Max 4)
+                        </label>
+                        <select
+                          value={memberCount}
+                          disabled={isSubmitting}
+                          onChange={(e) => setMemberCount(Number(e.target.value))}
+                          className="w-full bg-neutral-800 border border-neutral-700 rounded-lg px-3 py-2 text-white focus:outline-none focus:border-red-500"
+                        >
+                          {[1, 2, 3, 4].map((num) => (
+                            <option key={num} value={num}>
+                              {num}
+                            </option>
+                          ))}
+                        </select>
+                      </div>
+                    )}
 
                     {/* Team Name */}
                     {memberCount > 1 && (
