@@ -30,7 +30,7 @@ const EventsSection = () => {
 
   const handleRegisterClick = (eventToRegister) => {
     if (!user) {
-      navigate("/login");
+      navigate("/signup");
     } else {
       setSelectedEvent(eventToRegister);
     }
