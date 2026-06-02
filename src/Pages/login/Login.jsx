@@ -2,7 +2,7 @@ import { useState, useEffect, useContext } from "react";
 import { Link, Navigate, useNavigate } from "react-router-dom";
 import { AuthContext } from "../../contexts/AuthContext";
 import { motion } from "framer-motion";
-import { Mail, Lock, ArrowRight } from "lucide-react";
+import { Mail, Lock, ArrowRight, Eye, EyeOff } from "lucide-react";
 import { toast, Toaster } from "react-hot-toast";
 
 function LoginForm({ onLoad }) {
@@ -13,6 +13,7 @@ function LoginForm({ onLoad }) {
   const navigate = useNavigate();
 
   const [isLoading, setIsLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -128,13 +129,20 @@ function LoginForm({ onLoad }) {
                 <input
                   id="password"
                   name="password"
-                  type="password"
+                  type={showPassword ? "text" : "password"}
                   placeholder="••••••••"
                   value={formData.password}
                   onChange={handleChange}
-                  className="w-full h-12 pr-4 text-white transition-all duration-300 border rounded-lg pl-11 bg-neutral-950/50 border-neutral-800 placeholder:text-neutral-600 focus:outline-none focus:ring-2 focus:ring-red-500/50 focus:border-red-500/50 hover:border-neutral-700"
+                  className="w-full h-12 pr-12 text-white transition-all duration-300 border rounded-lg pl-11 bg-neutral-950/50 border-neutral-800 placeholder:text-neutral-600 focus:outline-none focus:ring-2 focus:ring-red-500/50 focus:border-red-500/50 hover:border-neutral-700"
                   required
                 />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-3.5 top-1/2 -translate-y-1/2 text-neutral-500 hover:text-neutral-300 focus:outline-none"
+                >
+                  {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+                </button>
               </div>
             </div>
             <button
