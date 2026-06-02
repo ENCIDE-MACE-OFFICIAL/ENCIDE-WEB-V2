@@ -19,8 +19,6 @@ const EventsSection = lazy(() => import("./Pages/events/events.jsx"));
 const Dashboard = lazy(() => import("./Pages/dashboard/Dashboard.jsx"));
 const Admin = lazy(() => import("./Pages/admin/Admin.jsx"));
 const IclDashboard = lazy(() => import("./Pages/icl-dashboard/IclDashboard.jsx"));
-const EventDetail = lazy(() => import("./Pages/icl-dashboard/EventDetail.jsx"));
-
 const SuspenseFallback = () => (
   <div className="w-screen h-screen flex justify-center items-center bg-[#121212] fixed top-0 left-0 z-[9999]">
     <Loader2 className="w-28 h-28 text-red-600 animate-spin" />
@@ -78,11 +76,6 @@ function App() {
           <Route
             path="/icl-dashboard"
             element={<IclDashboard onLoad={() => setLoad(false)} />}
-          />
-
-          <Route
-            path="/icl-dashboard/event/:eventName"
-            element={<EventDetail onLoad={() => setLoad(false)} />}
           />
 
       </Routes>

@@ -4,6 +4,21 @@ import { motion } from 'framer-motion';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import { scoreboardData } from './scoreData';
 
+const CustomTooltip = ({ active, payload, label }) => {
+  if (active && payload && payload.length) {
+    return (
+      <div style={{ backgroundColor: '#121212', border: '1px solid #27272a', borderRadius: '8px', padding: '8px 12px', boxShadow: '0 10px 30px -5px rgba(0,0,0,0.5)', fontFamily: 'Outfit' }}>
+        <p style={{ color: '#71717a', marginBottom: '2px', fontSize: '10px' }}>{label}</p>
+        <p style={{ fontSize: '13px', fontWeight: 'bold' }}>
+          <span style={{ color: '#ffffff' }}>score : </span>
+          <span style={{ color: '#ff0000' }}>{payload[0].value}</span>
+        </p>
+      </div>
+    );
+  }
+  return null;
+};
+
 const IclDashboard = ({ onLoad }) => {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
@@ -19,6 +34,7 @@ const IclDashboard = ({ onLoad }) => {
   let chartData = scoreboardData.overall;
   let isOverall = true;
   let activeEventId = 'overall';
+  let eventWinners = null;
 
   if (eventParam && eventParam !== 'overall') {
     const foundEvent = scoreboardData.events.find(e => e.id === eventParam);
@@ -27,8 +43,11 @@ const IclDashboard = ({ onLoad }) => {
       chartData = foundEvent.scores;
       isOverall = false;
       activeEventId = eventParam;
+      eventWinners = foundEvent.winners;
     }
   }
+
+  const top3 = [...chartData].sort((a, b) => b.score - a.score).slice(0, 3);
 
   // Smooth scroll active tab into view on mobile
   useEffect(() => {
@@ -79,7 +98,7 @@ const IclDashboard = ({ onLoad }) => {
               ICL 4.0 CHAMPIONSHIP
             </h1>
           </div>
-          <div className="flex flex-col text-left md:text-right border-l-2 md:border-l-0 md:border-r-2 border-[#ff0000] pl-4 md:pl-0 md:pr-4 py-1">
+          <div className="hidden md:flex flex-col text-left md:text-right border-l-2 md:border-l-0 md:border-r-2 border-[#ff0000] pl-4 md:pl-0 md:pr-4 py-1">
             <span className="text-[11px] font-bold tracking-widest text-zinc-300 uppercase">
               CODE WHAT YOU CAN'T
             </span>
@@ -182,6 +201,34 @@ const IclDashboard = ({ onLoad }) => {
               </div>
             </div>
 
+            {/* Top 3 Winners Cards */}
+            <div className="relative z-10 grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
+              {(isOverall ? top3 : (eventWinners || top3)).map((winner, idx) => {
+                const title = isOverall ? winner.department : winner.name;
+                const subtitle = isOverall ? "Department" : winner.department;
+                const score = isOverall ? winner.score : (chartData.find(d => d.department === winner.department)?.score || 0);
+
+                return (
+                  <div key={idx} className={`flex flex-col p-4 rounded-xl border ${idx === 0 ? 'border-[#ff0000] bg-[#ff0000]/10' : 'border-zinc-800 bg-[#1e1e1e]/50'} relative overflow-hidden transition-transform duration-300 hover:scale-[1.02]`}>
+                    {idx === 0 && <div className="absolute top-0 right-0 w-16 h-16 bg-[#ff0000] blur-[30px] rounded-full opacity-50" />}
+                    <span className={`text-[10px] font-mono font-bold tracking-widest ${idx === 0 ? 'text-[#ff0000]' : 'text-zinc-500'} mb-1`}>
+                      {idx === 0 ? "1ST PLACE" : idx === 1 ? "2ND PLACE" : "3RD PLACE"}
+                    </span>
+                    <div className="flex items-end justify-between mt-1 z-10">
+                      <div>
+                        <h4 className="text-xl font-bold text-white uppercase">{title}</h4>
+                        <p className="text-[10px] text-zinc-400 uppercase tracking-wide">{subtitle}</p>
+                      </div>
+                      <div className="text-right">
+                        <span className="text-2xl font-black text-white leading-none block">{score}</span>
+                        <span className="text-[9px] font-mono text-zinc-500 block leading-none mt-1">PTS</span>
+                      </div>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+
             {/* Recharts Bar Graph */}
             <div className="relative z-10 w-full h-[320px] md:h-[480px]">
               <ResponsiveContainer width="100%" height="100%">
@@ -210,18 +257,7 @@ const IclDashboard = ({ onLoad }) => {
                   
                   <Tooltip 
                     cursor={{ fill: 'rgba(255, 0, 0, 0.02)' }}
-                    contentStyle={{ 
-                      backgroundColor: '#121212', 
-                      border: '1px solid #27272a',
-                      borderRadius: '8px',
-                      color: '#ffffff',
-                      fontSize: '13px',
-                      fontFamily: 'Outfit',
-                      boxShadow: '0 10px 30px -5px rgba(0, 0, 0, 0.5)',
-                      padding: '8px 12px'
-                    }}
-                    itemStyle={{ color: '#ff0000', fontWeight: 'bold' }}
-                    labelStyle={{ color: '#71717a', marginBottom: '2px', fontSize: '10px' }}
+                    content={<CustomTooltip />}
                   />
                   
                   {/* Clean flat solid pure high-voltage Red color block matching the exact registration color theme (#ff0000) */}
