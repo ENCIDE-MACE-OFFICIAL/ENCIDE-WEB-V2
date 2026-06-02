@@ -168,10 +168,10 @@ const Admin = ({ onLoad }) => {
     try {
       // Convert date strings to Firestore Timestamps
       const eventDate = formData.date
-        ? Timestamp.fromDate(new Date(formData.date + "T00:00:00"))
+        ? Timestamp.fromDate(new Date(formData.date))
         : null;
       const eventDeadline = formData.deadline
-        ? Timestamp.fromDate(new Date(formData.deadline + "T00:00:00"))
+        ? Timestamp.fromDate(new Date(formData.deadline))
         : null;
 
       await addDoc(collection(db, "events"), {
@@ -206,10 +206,10 @@ const Admin = ({ onLoad }) => {
 
       // Convert date strings to Firestore Timestamps
       const eventDate = formData.date
-        ? Timestamp.fromDate(new Date(formData.date + "T00:00:00"))
+        ? Timestamp.fromDate(new Date(formData.date))
         : null;
       const eventDeadline = formData.deadline
-        ? Timestamp.fromDate(new Date(formData.deadline + "T00:00:00"))
+        ? Timestamp.fromDate(new Date(formData.deadline))
         : null;
 
       await updateDoc(eventRef, {

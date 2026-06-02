@@ -19,15 +19,17 @@ import {
 import { motion, AnimatePresence } from "framer-motion";
 import { uploadToCloudinary, getEventFolder } from "../../lib/cloudinary";
 
-// Helper: convert a Firestore Timestamp (or Date) to "YYYY-MM-DD" for <input type="date">
-const timestampToDateString = (ts) => {
+// Helper: convert a Firestore Timestamp (or Date) to "YYYY-MM-DDTHH:MM" for <input type="datetime-local">
+const timestampToDateTimeString = (ts) => {
   if (!ts) return "";
   const d = typeof ts.toDate === "function" ? ts.toDate() : new Date(ts);
   if (isNaN(d.getTime())) return "";
   const year = d.getFullYear();
   const month = String(d.getMonth() + 1).padStart(2, "0");
   const day = String(d.getDate()).padStart(2, "0");
-  return `${year}-${month}-${day}`;
+  const hours = String(d.getHours()).padStart(2, "0");
+  const minutes = String(d.getMinutes()).padStart(2, "0");
+  return `${year}-${month}-${day}T${hours}:${minutes}`;
 };
 
 // Reusable file-drop zone
@@ -213,8 +215,8 @@ const AddEventDialog = ({
       setWhatsappEnabled(!!initialData.whatsappRedirectUrl);
       setFormData({
         title: initialData.title || "",
-        date: timestampToDateString(initialData.date),
-        deadline: timestampToDateString(initialData.deadline),
+        date: timestampToDateTimeString(initialData.date),
+        deadline: timestampToDateTimeString(initialData.deadline),
         location: initialData.location || "",
         description: initialData.description || "",
         image: initialData.image || "",
@@ -379,7 +381,7 @@ const AddEventDialog = ({
                       Event Date
                     </label>
                     <input
-                      type="date"
+                      type="datetime-local"
                       value={formData.date}
                       onChange={(e) => handleChange("date", e.target.value)}
                       className="w-full bg-neutral-950/30 border border-neutral-700 rounded-lg px-4 py-3 text-white placeholder-neutral-600 focus:outline-none focus:border-red-500/50 focus:ring-1 focus:ring-red-500/50 transition-all text-sm [color-scheme:dark]"
@@ -392,7 +394,7 @@ const AddEventDialog = ({
                       Registration Deadline
                     </label>
                     <input
-                      type="date"
+                      type="datetime-local"
                       value={formData.deadline}
                       onChange={(e) => handleChange("deadline", e.target.value)}
                       className="w-full bg-neutral-950/30 border border-neutral-700 rounded-lg px-4 py-3 text-white placeholder-neutral-600 focus:outline-none focus:border-red-500/50 focus:ring-1 focus:ring-red-500/50 transition-all text-sm [color-scheme:dark]"
