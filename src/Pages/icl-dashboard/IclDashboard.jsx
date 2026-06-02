@@ -241,10 +241,11 @@ const IclDashboard = ({ onLoad }) => {
                   <XAxis 
                     dataKey="department" 
                     stroke="#27272a" 
-                    tick={{ fill: '#a1a1aa', fontSize: 13, fontWeight: 600, fontFamily: 'Outfit' }}
+                    tick={{ fill: '#a1a1aa', fontSize: 10, fontWeight: 600, fontFamily: 'Outfit' }}
                     tickMargin={12}
                     axisLine={{ stroke: '#27272a' }}
                     tickLine={false}
+                    interval={0}
                   />
                   
                   <YAxis 
