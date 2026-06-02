@@ -43,7 +43,7 @@ const Dashboard = ({ onLoad }) => {
   });
 
   return (
-    <div className="min-h-screen bg-neutral-950 relative overflow-hidden font-sans selection:bg-red-500/30 font-display">
+    <div className="min-h-screen bg-neutral-950 relative overflow-x-hidden font-sans selection:bg-red-500/30 font-display">
       <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-red-500/20 to-transparent pointer-events-none" />
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,rgba(220, 38, 38,0.05),transparent_50%)] pointer-events-none" />
       <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-red-600/10 rounded-full blur-[100px] pointer-events-none" />
