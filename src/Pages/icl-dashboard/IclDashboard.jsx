@@ -145,7 +145,6 @@ const IclDashboard = ({ onLoad }) => {
                   />
                 )}
                 <div className="relative z-10 flex items-center w-full">
-                  <span className={`text-[9px] font-mono mr-3 ${isOverall ? 'text-[#030303] font-bold' : 'text-zinc-600'}`}>00 //</span>
                   <span className="font-semibold uppercase tracking-wider text-white">Overall Standings</span>
                 </div>
               </button>
@@ -172,7 +171,6 @@ const IclDashboard = ({ onLoad }) => {
                       />
                     )}
                     <div className="relative z-10 flex items-center w-full truncate">
-                      <span className={`text-[9px] font-mono mr-3 ${isActive ? 'text-[#030303] font-bold' : 'text-zinc-600'}`}>{paddedIndex} //</span>
                       <span className={`truncate font-semibold uppercase tracking-wider`}>{evt.name}</span>
                     </div>
                   </button>

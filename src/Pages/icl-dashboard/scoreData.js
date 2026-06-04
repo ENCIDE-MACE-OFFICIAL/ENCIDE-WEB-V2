@@ -9,9 +9,9 @@ export const eventsData = [
     name: "Ai or Not Ai?",
     scores: { CS: 100, AIML: 34, "DS(A)": 53, "DS(B)": 80,"EEE":46, "ECE":71 ,CIVIL: 20, MECH: 40 },
     winners: [
-      { name: "Alex Mercer", department: "CS" },
-      { name: "Sophia Chen", department: "DS(B)" },
-      { name: "Marcus Johnson", department: "DS(A)" }
+      { name: "Aromal Sanil", department: "CS" },
+      { name: "Sai Madhav", department: "DS(B)" },
+      { name: "Affan Ahamed", department: "DS(A)" }
     ]
   },
   {

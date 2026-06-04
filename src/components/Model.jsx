@@ -50,7 +50,9 @@ function Model({
     return (
       m.name?.trim().length > 0 &&
       m.email?.trim().length > 0 &&
-      m.phone?.trim().length > 0
+      m.phone?.trim().length > 0 &&
+      m.department?.trim().length > 0 &&
+      m.semester?.trim().length > 0
     );
   });
 
@@ -186,13 +188,12 @@ function Model({
                 {/* Registration status badge for already-registered users */}
                 {isRegistered && registrationStatus && (
                   <div
-                    className={`flex items-center gap-2 px-4 py-3 rounded-xl border text-sm font-medium ${
-                      registrationStatus === "pending"
+                    className={`flex items-center gap-2 px-4 py-3 rounded-xl border text-sm font-medium ${registrationStatus === "pending"
                         ? "bg-amber-500/5 border-amber-500/20 text-amber-400"
                         : registrationStatus === "rejected"
-                        ? "bg-red-500/5 border-red-500/20 text-red-400"
-                        : "bg-emerald-500/5 border-emerald-500/20 text-emerald-400"
-                    }`}
+                          ? "bg-red-500/5 border-red-500/20 text-red-400"
+                          : "bg-emerald-500/5 border-emerald-500/20 text-emerald-400"
+                      }`}
                   >
                     {registrationStatus === "pending" && (
                       <Clock className="w-4 h-4" />
@@ -261,7 +262,9 @@ function Model({
                         className="space-y-3 border border-neutral-800 p-4 rounded-lg"
                       >
                         <p className="text-sm text-neutral-400">
-                          {index === 0 ? "Team Lead" : `Member ${index + 1}`}
+                          {index === 0 ? <>
+                            {event.isIndividualEvent ? "your details (can be changed in you profile)" : "Team Lead"}
+                          </> : `Member ${index + 1}`}
                         </p>
 
                         <input
@@ -302,6 +305,40 @@ function Model({
                           }}
                           className="w-full bg-neutral-800 border border-neutral-700 rounded-lg px-3 py-2 text-white focus:outline-none focus:border-red-500"
                         />
+
+                        <div className="flex gap-3">
+                          <select
+                            value={member.department || ""}
+                            disabled={index === 0 || isSubmitting}
+                            onChange={(e) => {
+                              const updated = [...members];
+                              updated[index].department = e.target.value;
+                              setMembers(updated);
+                            }}
+                            className="flex-1 bg-neutral-800 border border-neutral-700 rounded-lg px-3 py-2 text-white focus:outline-none focus:border-red-500"
+                          >
+                            <option value="" disabled>Department</option>
+                            {["CS", "AIML", "DS", "EEE", "ECE", "CIVIL", "MECH"].map((dept) => (
+                              <option key={dept} value={dept}>{dept}</option>
+                            ))}
+                          </select>
+
+                          <select
+                            value={member.semester || ""}
+                            disabled={index === 0 || isSubmitting}
+                            onChange={(e) => {
+                              const updated = [...members];
+                              updated[index].semester = e.target.value;
+                              setMembers(updated);
+                            }}
+                            className="flex-1 bg-neutral-800 border border-neutral-700 rounded-lg px-3 py-2 text-white focus:outline-none focus:border-red-500"
+                          >
+                            <option value="" disabled>Semester</option>
+                            {[1, 2, 3, 4, 5, 6, 7, 8].map((sem) => (
+                              <option key={sem} value={sem}>{sem}</option>
+                            ))}
+                          </select>
+                        </div>
                       </div>
                     ))}
 
@@ -378,25 +415,22 @@ function Model({
                               onClick={() =>
                                 paymentInputRef.current?.click()
                               }
-                              className={`rounded-xl border-2 border-dashed cursor-pointer transition-all duration-200 flex flex-col items-center justify-center gap-2 py-6 ${
-                                isDragOver
+                              className={`rounded-xl border-2 border-dashed cursor-pointer transition-all duration-200 flex flex-col items-center justify-center gap-2 py-6 ${isDragOver
                                   ? "border-amber-500 bg-amber-500/5"
                                   : "border-neutral-700 bg-neutral-950/30 hover:border-neutral-600 hover:bg-neutral-950/50"
-                              }`}
+                                }`}
                             >
                               <div
-                                className={`p-2 rounded-xl ${
-                                  isDragOver
+                                className={`p-2 rounded-xl ${isDragOver
                                     ? "bg-amber-500/10"
                                     : "bg-neutral-800"
-                                } transition-colors`}
+                                  } transition-colors`}
                               >
                                 <Upload
-                                  className={`w-5 h-5 ${
-                                    isDragOver
+                                  className={`w-5 h-5 ${isDragOver
                                       ? "text-amber-400"
                                       : "text-neutral-500"
-                                  } transition-colors`}
+                                    } transition-colors`}
                                 />
                               </div>
                               <div className="text-center">
@@ -505,11 +539,10 @@ function SuccessScreen({ isPaidEvent, whatsappRedirectUrl, onClose }) {
   return (
     <div className="text-center space-y-6 py-6">
       <div
-        className={`w-16 h-16 mx-auto rounded-full flex items-center justify-center ${
-          isPaidEvent
+        className={`w-16 h-16 mx-auto rounded-full flex items-center justify-center ${isPaidEvent
             ? "bg-amber-500/10 border border-amber-500/20"
             : "bg-green-500/10 border border-green-500/20"
-        }`}
+          }`}
       >
         {isPaidEvent ? (
           <Clock className="w-8 h-8 text-amber-400" />

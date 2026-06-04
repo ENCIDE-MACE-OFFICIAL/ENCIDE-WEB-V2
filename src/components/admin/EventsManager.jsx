@@ -295,9 +295,19 @@ const EventsManager = ({
   const handleExportCSV = () => {
     if (!selectedEventForRegistrations || allTeamsWithMembers.length === 0) return;
 
-    const rows = allTeamsWithMembers.flatMap((team) =>
-      team.members.map((m) => ({ team_name: team.team_name, status: team.status, ...m }))
-    );
+    const rows = allTeamsWithMembers.flatMap((team) => {
+      const lead = team.members[0] || {};
+      const leadDepartment = lead.department || "";
+      const leadSemester = lead.semester || "";
+
+      return team.members.map((m) => ({
+        team_name: team.team_name,
+        status: team.status,
+        ...m,
+        department: m.department || leadDepartment,
+        semester: m.semester || leadSemester,
+      }));
+    });
 
     const headers = [...new Set(rows.flatMap(Object.keys))];
 
