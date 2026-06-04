@@ -135,7 +135,7 @@ function SignUpForm({ onLoad }) {
         {/* Logo/Brand */}
         <div className="mb-4 text-center">
           <h1 className="mt-6 mb-4 text-5xl font-bold text-white">
-            Register Here
+            Get Started
           </h1>
           <p className="text-sm text-neutral-400">
             Create your account and start your journey
