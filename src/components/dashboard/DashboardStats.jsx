@@ -43,9 +43,10 @@ const DashboardStats = ({ upcomingCount, completedCount, totalEvents }) => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.4, delay: index * 0.1 }}
+          className="h-full"
         >
-          <div className="bg-neutral-900/50 backdrop-blur-sm border border-neutral-800 hover:border-red-500/30 transition-all duration-300 rounded-xl p-4">
-            <div className="flex items-center gap-3">
+          <div className="bg-neutral-900/50 backdrop-blur-sm border border-neutral-800 hover:border-red-500/30 transition-all duration-300 rounded-xl p-4 h-full flex flex-col justify-center">
+            <div className="flex items-center gap-2 sm:gap-3">
               <div className={`p-2.5 rounded-xl ${stat.bgColor}`}>
                 <stat.icon className={`w-5 h-5 ${stat.color}`} />
               </div>

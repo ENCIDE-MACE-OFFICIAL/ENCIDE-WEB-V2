@@ -6,10 +6,11 @@ import {
   Sparkles,
   ChevronDown,
 } from "lucide-react";
-import { useEffect, useState } from "react";
-import planetHorizon from "../../assets/planet-horizon.png";
-import encideLogo from "../../assets/encideLogo.png";
-import LiquidEther from "../../components/LiquidEther";
+import { useEffect, useState, lazy, Suspense } from "react";
+import planetHorizon from "../../assets/planet-horizon.webp";
+import encideLogo from "../../assets/encideLogo.webp";
+
+const LiquidEther = lazy(() => import("../../components/LiquidEther"));
 
 const codeSnippets = [
   "const future = await dream.build();",
@@ -182,9 +183,18 @@ const OrbitingElement = ({ icon: Icon, delay, radius, duration }) => (
   </motion.div>
 );
 const HeroSection = ({ loading }) => {
+  const [isMobile, setIsMobile] = useState(false);
+
   useEffect(() => {
     loading();
   }, [loading]);
+
+  useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth < 768);
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
+    return () => window.removeEventListener("resize", checkMobile);
+  }, []);
 
   const particles = Array.from({ length: 8 }, (_, i) => ({
     delay: i * 2,
@@ -217,28 +227,30 @@ const HeroSection = ({ loading }) => {
       </motion.div>
       {/* LiquidEther WebGL fluid simulation background */}
       <div className="absolute inset-0 pointer-events-auto z-5">
-        <LiquidEther
-          colors={['#dc2626', '#ef4444', '#991b1b']}
-          mouseForce={20}
-          cursorSize={100}
-          isViscous={true}
-          viscous={30}
-          iterationsViscous={32}
-          iterationsPoisson={32}
-          resolution={0.5}
-          isBounce={false}
-          autoDemo={true}
-          autoSpeed={0.5}
-          autoIntensity={2.2}
-          takeoverDuration={0.25}
-          autoResumeDelay={3000}
-          autoRampDuration={0.6}
-          style={{
-            width: '100%',
-            height: '100%',
-            opacity: 0.6,
-          }}
-        />
+        <Suspense fallback={null}>
+          <LiquidEther
+            colors={['#dc2626', '#ef4444', '#991b1b']}
+            mouseForce={20}
+            cursorSize={100}
+            isViscous={true}
+            viscous={30}
+            iterationsViscous={isMobile ? 4 : 32}
+            iterationsPoisson={isMobile ? 4 : 32}
+            resolution={isMobile ? 0.2 : 0.5}
+            isBounce={false}
+            autoDemo={true}
+            autoSpeed={0.5}
+            autoIntensity={2.2}
+            takeoverDuration={0.25}
+            autoResumeDelay={3000}
+            autoRampDuration={0.6}
+            style={{
+              width: '100%',
+              height: '100%',
+              opacity: 0.6,
+            }}
+          />
+        </Suspense>
       </div>
       {/* Atmospheric glow overlay */}
       <div className="absolute inset-0 bg-gradient-to-t from-red-900/10 via-transparent to-transparent pointer-events-none" />
@@ -252,13 +264,15 @@ const HeroSection = ({ loading }) => {
         }}
       />
       {/* Floating code particles */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        {particles.map((particle, i) => (
-          <CodeParticle key={i} {...particle} />
-        ))}
-      </div>
+      {!isMobile && (
+        <div className="absolute inset-0 overflow-hidden pointer-events-none">
+          {particles.map((particle, i) => (
+            <CodeParticle key={i} {...particle} />
+          ))}
+        </div>
+      )}
       {/* Central radial glow */}
-      <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full bg-red-600/5 blur-[100px] pointer-events-none" />
+      <div className="hidden md:block absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full bg-red-600/5 blur-[100px] pointer-events-none" />
       {/* Main content */}
       <div className="container mx-auto px-4 lg:px-16 relative z-10">
         <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">

@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { motion } from "framer-motion";
 import {
   Calendar,
@@ -11,6 +11,8 @@ import {
   Clock,
   ImageIcon,
   Trash2,
+  MessageCircle,
+  ExternalLink,
 } from "lucide-react";
 
 function Model({
@@ -48,7 +50,9 @@ function Model({
     return (
       m.name?.trim().length > 0 &&
       m.email?.trim().length > 0 &&
-      m.phone?.trim().length > 0
+      m.phone?.trim().length > 0 &&
+      m.department?.trim().length > 0 &&
+      m.semester?.trim().length > 0
     );
   });
 
@@ -163,7 +167,17 @@ function Model({
                 <div className="bg-neutral-800/50 rounded-xl p-4 border border-neutral-800 space-y-3 text-sm text-neutral-300">
                   <div className="flex items-center gap-3">
                     <Calendar className="w-4 h-4 text-red-400" />
-                    {event.date.toString()}
+                    {(() => {
+                      const d = event.date;
+                      if (!d) return "";
+                      const dateObj = typeof d.toDate === 'function' ? d.toDate() : new Date(d);
+                      const month = dateObj.toLocaleString("en-US", { month: "short" });
+                      const day = dateObj.toLocaleString("en-US", { day: "2-digit" });
+                      const weekday = dateObj.toLocaleString("en-US", { weekday: "short" });
+                      const time = dateObj.toLocaleString("en-US", { hour: "2-digit", minute: "2-digit", hour12: true }).replace(":", ".");
+                      const year = dateObj.getFullYear();
+                      return `${month} ${day} ${weekday} ${time} ${year}`;
+                    })()}
                   </div>
                   <div className="flex items-center gap-3">
                     <MapPin className="w-4 h-4 text-red-400" />
@@ -174,13 +188,12 @@ function Model({
                 {/* Registration status badge for already-registered users */}
                 {isRegistered && registrationStatus && (
                   <div
-                    className={`flex items-center gap-2 px-4 py-3 rounded-xl border text-sm font-medium ${
-                      registrationStatus === "pending"
+                    className={`flex items-center gap-2 px-4 py-3 rounded-xl border text-sm font-medium ${registrationStatus === "pending"
                         ? "bg-amber-500/5 border-amber-500/20 text-amber-400"
                         : registrationStatus === "rejected"
-                        ? "bg-red-500/5 border-red-500/20 text-red-400"
-                        : "bg-emerald-500/5 border-emerald-500/20 text-emerald-400"
-                    }`}
+                          ? "bg-red-500/5 border-red-500/20 text-red-400"
+                          : "bg-emerald-500/5 border-emerald-500/20 text-emerald-400"
+                      }`}
                   >
                     {registrationStatus === "pending" && (
                       <Clock className="w-4 h-4" />
@@ -200,23 +213,25 @@ function Model({
                 {!isRegistered && (
                   <div className="space-y-5">
                     {/* Team Size */}
-                    <div>
-                      <label className="text-sm text-neutral-400 block mb-2">
-                        Team Size (Max 4)
-                      </label>
-                      <select
-                        value={memberCount}
-                        disabled={isSubmitting}
-                        onChange={(e) => setMemberCount(Number(e.target.value))}
-                        className="w-full bg-neutral-800 border border-neutral-700 rounded-lg px-3 py-2 text-white focus:outline-none focus:border-red-500"
-                      >
-                        {[1, 2, 3, 4].map((num) => (
-                          <option key={num} value={num}>
-                            {num}
-                          </option>
-                        ))}
-                      </select>
-                    </div>
+                    {!event.isIndividualEvent && (
+                      <div>
+                        <label className="text-sm text-neutral-400 block mb-2">
+                          Team Size (Max 4)
+                        </label>
+                        <select
+                          value={memberCount}
+                          disabled={isSubmitting}
+                          onChange={(e) => setMemberCount(Number(e.target.value))}
+                          className="w-full bg-neutral-800 border border-neutral-700 rounded-lg px-3 py-2 text-white focus:outline-none focus:border-red-500"
+                        >
+                          {[1, 2, 3, 4].map((num) => (
+                            <option key={num} value={num}>
+                              {num}
+                            </option>
+                          ))}
+                        </select>
+                      </div>
+                    )}
 
                     {/* Team Name */}
                     {memberCount > 1 && (
@@ -247,7 +262,9 @@ function Model({
                         className="space-y-3 border border-neutral-800 p-4 rounded-lg"
                       >
                         <p className="text-sm text-neutral-400">
-                          {index === 0 ? "Team Lead" : `Member ${index + 1}`}
+                          {index === 0 ? <>
+                            {event.isIndividualEvent ? "your details (can be changed in you profile)" : "Team Lead"}
+                          </> : `Member ${index + 1}`}
                         </p>
 
                         <input
@@ -288,6 +305,40 @@ function Model({
                           }}
                           className="w-full bg-neutral-800 border border-neutral-700 rounded-lg px-3 py-2 text-white focus:outline-none focus:border-red-500"
                         />
+
+                        <div className="flex gap-3">
+                          <select
+                            value={member.department || ""}
+                            disabled={index === 0 || isSubmitting}
+                            onChange={(e) => {
+                              const updated = [...members];
+                              updated[index].department = e.target.value;
+                              setMembers(updated);
+                            }}
+                            className="flex-1 bg-neutral-800 border border-neutral-700 rounded-lg px-3 py-2 text-white focus:outline-none focus:border-red-500"
+                          >
+                            <option value="" disabled>Department</option>
+                            {["CS", "AIML", "DS", "EEE", "ECE", "CIVIL", "MECH"].map((dept) => (
+                              <option key={dept} value={dept}>{dept}</option>
+                            ))}
+                          </select>
+
+                          <select
+                            value={member.semester || ""}
+                            disabled={index === 0 || isSubmitting}
+                            onChange={(e) => {
+                              const updated = [...members];
+                              updated[index].semester = e.target.value;
+                              setMembers(updated);
+                            }}
+                            className="flex-1 bg-neutral-800 border border-neutral-700 rounded-lg px-3 py-2 text-white focus:outline-none focus:border-red-500"
+                          >
+                            <option value="" disabled>Semester</option>
+                            {[1, 2, 3, 4, 5, 6, 7, 8].map((sem) => (
+                              <option key={sem} value={sem}>{sem}</option>
+                            ))}
+                          </select>
+                        </div>
                       </div>
                     ))}
 
@@ -364,25 +415,22 @@ function Model({
                               onClick={() =>
                                 paymentInputRef.current?.click()
                               }
-                              className={`rounded-xl border-2 border-dashed cursor-pointer transition-all duration-200 flex flex-col items-center justify-center gap-2 py-6 ${
-                                isDragOver
+                              className={`rounded-xl border-2 border-dashed cursor-pointer transition-all duration-200 flex flex-col items-center justify-center gap-2 py-6 ${isDragOver
                                   ? "border-amber-500 bg-amber-500/5"
                                   : "border-neutral-700 bg-neutral-950/30 hover:border-neutral-600 hover:bg-neutral-950/50"
-                              }`}
+                                }`}
                             >
                               <div
-                                className={`p-2 rounded-xl ${
-                                  isDragOver
+                                className={`p-2 rounded-xl ${isDragOver
                                     ? "bg-amber-500/10"
                                     : "bg-neutral-800"
-                                } transition-colors`}
+                                  } transition-colors`}
                               >
                                 <Upload
-                                  className={`w-5 h-5 ${
-                                    isDragOver
+                                  className={`w-5 h-5 ${isDragOver
                                       ? "text-amber-400"
                                       : "text-neutral-500"
-                                  } transition-colors`}
+                                    } transition-colors`}
                                 />
                               </div>
                               <div className="text-center">
@@ -447,41 +495,11 @@ function Model({
             )}
 
             {isSuccess && (
-              <div className="text-center space-y-6 py-6">
-                <div
-                  className={`w-16 h-16 mx-auto rounded-full flex items-center justify-center ${
-                    isPaidEvent
-                      ? "bg-amber-500/10 border border-amber-500/20"
-                      : "bg-green-500/10 border border-green-500/20"
-                  }`}
-                >
-                  {isPaidEvent ? (
-                    <Clock className="w-8 h-8 text-amber-400" />
-                  ) : (
-                    <CheckCircle2 className="w-8 h-8 text-green-400" />
-                  )}
-                </div>
-
-                <h3 className="text-2xl font-bold text-white">
-                  {isPaidEvent
-                    ? "Registration Submitted!"
-                    : "Registration Successful!"}
-                </h3>
-
-                {isPaidEvent && (
-                  <p className="text-neutral-400 text-sm">
-                    Your payment proof has been submitted. An admin will review
-                    and approve your registration shortly.
-                  </p>
-                )}
-
-                <button
-                  onClick={onClose}
-                  className="w-full px-4 py-2.5 rounded-lg bg-neutral-800 hover:bg-neutral-700 text-white font-medium"
-                >
-                  Close
-                </button>
-              </div>
+              <SuccessScreen
+                isPaidEvent={isPaidEvent}
+                whatsappRedirectUrl={event.whatsappRedirectUrl}
+                onClose={onClose}
+              />
             )}
 
             {status === "error" && (
@@ -493,6 +511,92 @@ function Model({
         </div>
       </motion.div>
     </motion.div>
+  );
+}
+
+function SuccessScreen({ isPaidEvent, whatsappRedirectUrl, onClose }) {
+  const trimmedUrl = (whatsappRedirectUrl || "").trim();
+  const hasWhatsapp = !!trimmedUrl;
+  const [countdown, setCountdown] = useState(5);
+
+  useEffect(() => {
+    if (!hasWhatsapp) return;
+
+    const timer = setInterval(() => {
+      setCountdown((prev) => {
+        if (prev <= 1) {
+          clearInterval(timer);
+          window.location.href = trimmedUrl;
+          return 0;
+        }
+        return prev - 1;
+      });
+    }, 1000);
+
+    return () => clearInterval(timer);
+  }, [hasWhatsapp, trimmedUrl]);
+
+  return (
+    <div className="text-center space-y-6 py-6">
+      <div
+        className={`w-16 h-16 mx-auto rounded-full flex items-center justify-center ${isPaidEvent
+            ? "bg-amber-500/10 border border-amber-500/20"
+            : "bg-green-500/10 border border-green-500/20"
+          }`}
+      >
+        {isPaidEvent ? (
+          <Clock className="w-8 h-8 text-amber-400" />
+        ) : (
+          <CheckCircle2 className="w-8 h-8 text-green-400" />
+        )}
+      </div>
+
+      <h3 className="text-2xl font-bold text-white">
+        {isPaidEvent
+          ? "Registration Submitted!"
+          : "Registration Successful!"}
+      </h3>
+
+      {isPaidEvent && (
+        <p className="text-neutral-400 text-sm">
+          Your payment proof has been submitted. An admin will review
+          and approve your registration shortly.
+        </p>
+      )}
+
+      {/* WhatsApp Redirect Section */}
+      {hasWhatsapp && (
+        <div className="space-y-4">
+          <div className="flex items-center justify-center gap-2 text-green-400">
+            <MessageCircle className="w-5 h-5" />
+            <p className="text-sm font-medium">
+              You will be redirected to join the WhatsApp group in{" "}
+              <span className="inline-flex items-center justify-center w-7 h-7 rounded-full bg-green-500/10 border border-green-500/20 text-green-300 font-bold text-base">
+                {countdown}
+              </span>{" "}
+              seconds
+            </p>
+          </div>
+
+          <a
+            href={whatsappRedirectUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-green-600 hover:bg-green-700 text-white font-medium text-sm transition-all shadow-lg shadow-green-600/20 hover:shadow-green-600/40"
+          >
+            <ExternalLink className="w-4 h-4" />
+            Join WhatsApp Group
+          </a>
+        </div>
+      )}
+
+      <button
+        onClick={onClose}
+        className="w-full px-4 py-2.5 rounded-lg bg-neutral-800 hover:bg-neutral-700 text-white font-medium"
+      >
+        Close
+      </button>
+    </div>
   );
 }
 

@@ -19,6 +19,7 @@ import { useQuery } from "@tanstack/react-query";
 import { fetchEvents, fetchFeaturedEvent } from "../../lib/getEvents";
 import { getUserDetails } from "../../lib/getUserDetails";
 import { uploadToCloudinary, getEventFolder } from "../../lib/cloudinary";
+import LazyImage from "../../components/LazyImage";
 
 const EventsSection = () => {
   const ref = useRef(null);
@@ -63,6 +64,8 @@ const EventsSection = () => {
             name: userData.name || "",
             email: userData.email || "",
             phone: userData.phone || "",
+            department: userData.department || "",
+            semester: userData.semester || "",
           },
         ]);
       }
@@ -76,7 +79,7 @@ const EventsSection = () => {
         const updated = [...prev];
 
         while (updated.length < memberCount) {
-          updated.push({ name: "", email: "", phone: "" });
+          updated.push({ name: "", email: "", phone: "", department: "", semester: "" });
         }
 
         return updated.slice(0, memberCount);
@@ -212,7 +215,7 @@ const EventsSection = () => {
       {/* Background Effects */}
       <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-red-500/20 to-transparent" />
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,rgba(220,38,38,0.05),transparent_25%)] pointer-events-none" />
-      <div className="absolute top-1/4 right-0 w-96 h-96 bg-red-600/5 rounded-full blur-[120px] pointer-events-none" />
+      <div className="hidden md:block absolute top-1/4 right-0 w-96 h-96 bg-red-600/5 rounded-full blur-[120px] pointer-events-none" />
       <div className="container mx-auto px-4 md:px-8 lg:px-16 xl:px-28 relative z-10">
         {/* Section Header */}
         <motion.div
@@ -245,17 +248,15 @@ const EventsSection = () => {
             transition={{ duration: 0.6, delay: 0.1 }}
             className="mb-8"
           >
-            <div className="relative rounded-2xl overflow-hidden border border-neutral-800  backdrop-blur-sm group hover:border-red-500/30 transition-all duration-500">
+            <div className="relative rounded-2xl overflow-hidden border border-neutral-800 md:backdrop-blur-sm group hover:border-red-500/30 transition-all duration-500">
               <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-red-500/5 via-transparent to-red-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
               <div className="grid lg:grid-cols-[42%_58%] gap-0">
                 <div className="relative h-64 lg:h-auto min-h-[300px] overflow-hidden">
-                  <img
+                  <LazyImage
                     src={featuredEvent.image}
                     alt={featuredEvent.title}
-                    className="w-full h-full object-cover transition-transform duration-700"
+                    containerClassName="w-full h-full"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-r from-transparent via-transparent to-neutral-900/80 lg:block hidden" />
-                  <div className="absolute inset-0 bg-gradient-to-t from-neutral-900 via-neutral-900/50 to-transparent lg:hidden" />
                   <div className="absolute top-4 left-4 px-3 py-1.5 rounded-full bg-red-600 text-white text-xs font-bold uppercase tracking-wider flex items-center gap-1.5 shadow-lg shadow-red-600/20">
                     <span className="w-1.5 h-1.5 rounded-full bg-white animate-pulse" />
                     {featuredEvent.tag}
@@ -310,18 +311,19 @@ const EventsSection = () => {
             <motion.article
               key={event.id}
               initial={{ opacity: 0, y: 30 }}
-              animate={isInView ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 0.5, delay: 0.2 + index * 0.1 }}
-              className="group relative backdrop-blur-sm rounded-xl overflow-hidden border border-neutral-800 hover:border-red-500/30 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl"
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-50px" }}
+              transition={{ duration: 0.4 }}
+              className="group relative md:backdrop-blur-sm rounded-xl overflow-hidden border border-neutral-800 hover:border-red-500/30 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl bg-neutral-900/40 md:bg-transparent"
             >
               <div className="flex flex-col sm:flex-row lg:flex-col xl:flex-row h-full">
                 {/* Image */}
 
                 <div className="relative w-full h-48 sm:w-72 sm:h-auto lg:w-full lg:h-48 xl:w-72 xl:h-auto shrink-0 overflow-hidden">
-                  <img
+                  <LazyImage
                     src={event.image}
                     alt={event.title}
-                    className="absolute inset-0 w-full h-full object-cover transition-transform duration-500"
+                    containerClassName="absolute inset-0 w-full h-full"
                   />
 
                   <div className="absolute inset-0 bg-gradient-to-r from-transparent to-neutral-900/80 hidden sm:block lg:hidden xl:block" />

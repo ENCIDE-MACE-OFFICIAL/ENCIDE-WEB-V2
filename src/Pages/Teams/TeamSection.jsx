@@ -1,13 +1,14 @@
 import { motion, useInView } from "framer-motion";
 import { useRef } from "react";
 import { Linkedin } from "lucide-react";
+import LazyImage from "../../components/LazyImage";
 
 const teamMembers = [
   {
     id: 1,
     name: "Prof. Eldo P Elias",
     role: "Faculty Advisor",
-    image: "/team/EldoSir.png",
+    image: "/team/EldoSir.webp",
     bio: "A dedicated educator whose guidance keeps the club grounded and always moving in the right direction.",
     socials: { linkedin: "https://www.linkedin.com/in/eldo-elias-7a094941" },
   },
@@ -15,7 +16,7 @@ const teamMembers = [
     id: 2,
     name: "Amrita Suresh",
     role: "Director",
-    image: "/team/Amritha Suresh_Director.jpg",
+    image: "/team/Amritha Suresh_Director.webp",
     bio: "A CSE(DS) student who leads with vision, bringing structure and purpose to everything ENCIDE does.",
     socials: { linkedin: "https://www.linkedin.com/in/amritha-suresh-0831a5284" },
   },
@@ -23,7 +24,7 @@ const teamMembers = [
     id: 3,
     name: "Jassim Mohammed Salim",
     role: "Secretary",
-    image: "/team/Jassim-Secretary.jpg",
+    image: "/team/Jassim-Secretary.webp",
     bio: "An ECE student who keeps the gears turning behind the scenes — organized, reliable, and detail-oriented.",
     socials: { linkedin: "https://www.linkedin.com/in/jassim-mohammed-salim" },
   },
@@ -39,7 +40,7 @@ const teamMembers = [
     id: 5,
     name: "Dhia Shams",
     role: "Co-Director",
-    image: "/team/Dhia Shams_ Codirector.jpg",
+    image: "/team/Dhia Shams_ Codirector.webp",
     bio: "A CSE student who blends creativity with execution, helping shape the culture and direction of the club.",
     socials: { linkedin: "https://www.linkedin.com/in/dhia-shams" },
   },
@@ -47,7 +48,7 @@ const teamMembers = [
     id: 6,
     name: "Ryan Nelson",
     role: "Treasurer",
-    image: "/team/RyanNelson.png",
+    image: "/team/RyanNelson.webp",
     bio: "An ECE student who manages the club's finances with care, ensuring every rupee goes toward meaningful impact.",
     socials: { linkedin: "https://www.linkedin.com/in/ryan-nelson-340006330" },
   },
@@ -66,8 +67,8 @@ const TeamSection = () => {
       {/* Background Effects */}
       <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-red-500/20 to-transparent" />
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,rgba(220,38,38,0.05),transparent_40%)] pointer-events-none" />
-      <div className="absolute bottom-0 right-0 w-96 h-96 bg-red-600/5 rounded-full blur-[100px] pointer-events-none" />
-      <div className="absolute top-1/4 left-0 w-64 h-64 bg-fuchsia-600/5 rounded-full blur-[80px] pointer-events-none" />
+      <div className="absolute bottom-0 right-0 w-96 h-96 bg-red-600/5 rounded-full blur-[100px] pointer-events-none hidden md:block" />
+      <div className="absolute top-1/4 left-0 w-64 h-64 bg-fuchsia-600/5 rounded-full blur-[80px] pointer-events-none hidden md:block" />
 
       <div className="container mx-auto px-4 lg:px-12 relative z-10">
         {/* Section Header */}
@@ -103,10 +104,10 @@ const TeamSection = () => {
               <div className="relative mb-6 mx-auto w-48 h-48">
                 <div className="absolute inset-0 bg-red-500/20 rounded-full blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
                 <div className="relative w-full h-full rounded-full overflow-hidden border-2 border-neutral-800 group-hover:border-red-500/50 transition-all duration-300 shadow-xl">
-                  <img
+                  <LazyImage
                     src={member.image}
                     alt={member.name}
-                    className="w-full h-full object-cover cursor-pointer transition-transform duration-700"
+                    containerClassName="w-full h-full"
                   />
                 </div>
               </div>

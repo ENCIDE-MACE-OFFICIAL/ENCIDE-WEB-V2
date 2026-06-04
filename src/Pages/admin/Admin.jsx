@@ -103,6 +103,8 @@ const Admin = ({ onLoad }) => {
           tag: data.tag || "",
           highlighted: data.highlighted || false,
           is_over: data.is_over || false,
+          isIndividualEvent: data.isIndividualEvent || false,
+          whatsappRedirectUrl: data.whatsappRedirectUrl || "",
           participants: data.participants || [],
           participants_count: data.participants_count || 0,
           // Keep raw Timestamps for Firestore operations, convert for display
@@ -167,10 +169,10 @@ const Admin = ({ onLoad }) => {
     try {
       // Convert date strings to Firestore Timestamps
       const eventDate = formData.date
-        ? Timestamp.fromDate(new Date(formData.date + "T00:00:00"))
+        ? Timestamp.fromDate(new Date(formData.date))
         : null;
       const eventDeadline = formData.deadline
-        ? Timestamp.fromDate(new Date(formData.deadline + "T00:00:00"))
+        ? Timestamp.fromDate(new Date(formData.deadline))
         : null;
 
       await addDoc(collection(db, "events"), {
@@ -182,6 +184,8 @@ const Admin = ({ onLoad }) => {
         tag: formData.tag,
         highlighted: formData.highlighted,
         is_over: formData.is_over,
+        isIndividualEvent: formData.isIndividualEvent,
+        whatsappRedirectUrl: (formData.whatsappRedirectUrl || "").trim(),
         date: eventDate,
         deadline: eventDeadline,
         participants: [],
@@ -204,10 +208,10 @@ const Admin = ({ onLoad }) => {
 
       // Convert date strings to Firestore Timestamps
       const eventDate = formData.date
-        ? Timestamp.fromDate(new Date(formData.date + "T00:00:00"))
+        ? Timestamp.fromDate(new Date(formData.date))
         : null;
       const eventDeadline = formData.deadline
-        ? Timestamp.fromDate(new Date(formData.deadline + "T00:00:00"))
+        ? Timestamp.fromDate(new Date(formData.deadline))
         : null;
 
       await updateDoc(eventRef, {
@@ -219,6 +223,8 @@ const Admin = ({ onLoad }) => {
         tag: formData.tag,
         highlighted: formData.highlighted,
         is_over: formData.is_over,
+        isIndividualEvent: formData.isIndividualEvent,
+        whatsappRedirectUrl: (formData.whatsappRedirectUrl || "").trim(),
         date: eventDate,
         deadline: eventDeadline,
       });

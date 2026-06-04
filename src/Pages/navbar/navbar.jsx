@@ -2,17 +2,10 @@ import { useState, useEffect, useContext, useRef } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { AuthContext } from "../../contexts/AuthContext";
 import { 
-  Home, 
-  Info, 
-  Calendar, 
-  Users, 
-  Phone, 
-  LayoutDashboard, 
-  LogOut, 
-  LogIn,
-  User,
   ShieldUser,
-  Trophy
+  User,
+  Menu,
+  X
 } from "lucide-react";
 import "./navbar.css";
 
@@ -22,6 +15,7 @@ function NavComponent() {
   const [activeSection, setActiveSection] = useState("home");
   const [isAtTop, setIsAtTop] = useState(true);
   const [isAdminDropdownOpen, setIsAdminDropdownOpen] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const lastScrollTop = useRef(0);
   const scrollTimeout = useRef(null);
 
@@ -31,13 +25,11 @@ function NavComponent() {
   const location = useLocation();
 
   const adminDropdownRef = useRef(null);
-  const mobileAdminDropdownRef = useRef(null);
 
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (
-        (adminDropdownRef.current && !adminDropdownRef.current.contains(event.target)) &&
-        (mobileAdminDropdownRef.current && !mobileAdminDropdownRef.current.contains(event.target))
+        (adminDropdownRef.current && !adminDropdownRef.current.contains(event.target))
       ) {
         setIsAdminDropdownOpen(false);
       }
@@ -91,14 +83,14 @@ function NavComponent() {
 
   const handleScroll = () => {
     const currentScroll = window.scrollY;
+    
     setIsScrolling(true);
+    
     setIsAtTop(currentScroll < 20);
 
-    if (currentScroll > lastScrollTop.current) {
-      setScrollDirection("down");
-    } else {
-      setScrollDirection("up");
-    }
+    const newDirection = currentScroll > lastScrollTop.current ? "down" : "up";
+    setScrollDirection(newDirection);
+    
     lastScrollTop.current = currentScroll <= 0 ? 0 : currentScroll;
 
     if (scrollTimeout.current) {
@@ -106,7 +98,7 @@ function NavComponent() {
     }
     scrollTimeout.current = setTimeout(() => {
       setIsScrolling(false);
-    }, 200);
+    }, 150);
   };
 
   useEffect(() => {
@@ -125,168 +117,64 @@ function NavComponent() {
 
   return (
     <>
-      {/* Mobile Bottom Navbar */}
       <div
-        className={`navbar-container mobile-nav-container ${
-          scrollDirection === "up" || !isScrolling
+        className={`navbar-container top-nav-container ${
+          scrollDirection === "up" || !isScrolling || isMobileMenuOpen
             ? "scrolled-up"
             : "scrolled-down"
         } ${isAtTop ? "at-top" : "scrolled"}`}
       >
-        <nav className="MobileNav">
-          <Link
-            to="/#home"
-            className={`mob nav_link ${
-              activeSection === "home" ? "active" : ""
-            }`}
-          >
-            <Home className="icons" />
-            <p className="icontext">Home</p>
-          </Link>
-          <Link
-            to="/#about"
-            className={`mob nav_link ${
-              activeSection === "about" ? "active" : ""
-            }`}
-          >
-            <Info className="icons" />
-            <p className="icontext">About</p>
-          </Link>
-          <Link
-            to="/#events"
-            className={`mob nav_link ${
-              activeSection === "events" ? "active" : ""
-            }`}
-          >
-            <Calendar className="icons" />
-            <p className="icontext">Events</p>
-          </Link>
-          <Link
-            to="/icl-dashboard"
-            className={`mob nav_link nav_icl_link ${
-              activeSection === "icl-dashboard" ? "active" : ""
-            }`}
-          >
-            <Trophy className="icons" />
-            <p className="icontext">ICL</p>
-          </Link>
-          <Link
-            to="/#team"
-            className={`mob nav_link ${
-              activeSection === "team" ? "active" : ""
-            }`}
-          >
-            <Users className="icons" />
-            <p className="icontext">Team</p>
-          </Link>
-          {!isAdmin && (
-            <Link
-              to="/#contact"
-              className={`mob nav_link ${
-                activeSection === "contact" ? "active" : ""
-              }`}
+        <nav className="p-4 px-4 navbar sm:px-16 bg-transparent flex justify-between items-center">
+          <div className="flex items-center gap-3 md:gap-0">
+            <button 
+              className="mobile-menu-btn md:hidden"
+              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
             >
-              <Phone className="icons" />
-              <p className="icontext">Contact</p>
-            </Link>
-          )}
-
-          {isAdmin ? (
-            <div className="mob-dropdown-container" ref={mobileAdminDropdownRef}>
-              <button
-                onClick={() => setIsAdminDropdownOpen(!isAdminDropdownOpen)}
-                className={`mob nav_link ${
-                  isAdminDropdownOpen ? "active" : ""
-                }`}
-              >
-                <ShieldUser className="icons" />
-                <p className="icontext">Admin</p>
-              </button>
-              {isAdminDropdownOpen && (
-                <div className="mobile-admin-dropdown">
-                  <Link to="/admin-dashboard" onClick={() => setIsAdminDropdownOpen(false)}>
-                    Admin Panel
-                  </Link>
-                  <Link to="/dashboard" onClick={() => setIsAdminDropdownOpen(false)}>
-                    Dashboard
-                  </Link>
-                </div>
-              )}
+              {isMobileMenuOpen ? <X className="w-7 h-7 text-white" /> : <Menu className="w-7 h-7 text-white" />}
+            </button>
+            <div className="hidden sm:block text-2xl font-bold logo">
+              <Link to="/#home" className="transition-all duration-300 hover:opacity-90 font-light" onClick={() => setIsMobileMenuOpen(false)}>
+                ENCIDE <span className="bg-gradient-to-r from-red-500 to-rose-600 bg-clip-text text-transparent font-normal tracking-wide">MACE</span>
+              </Link>
             </div>
-          ) : user ? (
-            <Link
-              to="/dashboard"
-              className={`mob nav_link ${
-                activeSection === "dashboard" ? "active" : ""
-              }`}
-            >
-              <User className="icons" />
-              <p className="icontext">Profile</p>
-            </Link>
-          ) : (
-            <Link
-              to="/login"
-              className={`mob nav_link ${
-                activeSection === "login" ? "active" : ""
-              }`}
-            >
-              <LogIn className="icons" />
-              <p className="icontext">Login</p>
-            </Link>
-          )}
-        </nav>
-      </div>
-
-      {/* Desktop Navbar */}
-      <div
-        className={`navbar-container desktop-nav-container ${
-          scrollDirection === "up" || !isScrolling
-            ? "scrolled-up"
-            : "scrolled-down"
-        } ${isAtTop ? "at-top" : "scrolled"}`}
-      >
-        <nav className="p-4 px-4 navbar sm:px-16 bg-transparent">
-          <div className="text-2xl font-bold logo">
-            <Link to="/#home" className="transition-all duration-300 hover:opacity-90 font-light">
-              ENCIDE <span className="bg-gradient-to-r from-red-500 to-rose-600 bg-clip-text text-transparent font-normal tracking-wide">MACE</span>
-            </Link>
           </div>
-          <ul className="nav_main">
-            <li className={activeSection === "home" ? "active" : ""}>
-              <Link to="/#home">HOME</Link>
-            </li>
-            <li className={activeSection === "about" ? "active" : ""}>
-              <Link to="/#about">ABOUT</Link>
-            </li>
-            <li className={activeSection === "team" ? "active" : ""}>
-              <Link to="/#team">TEAM</Link>
-            </li>
-            {!isAdmin && (
-              <li className={activeSection === "contact" ? "active" : ""}>
-                <Link to="/#contact">CONTACT</Link>
+          
+          <div className="flex items-center gap-6">
+            <ul className={`nav_main ${isMobileMenuOpen ? "mobile-menu-open" : ""}`}>
+              <li className={activeSection === "home" ? "active" : ""}>
+                <Link to="/#home" onClick={() => setIsMobileMenuOpen(false)}>HOME</Link>
               </li>
-            )}
-            <li className="nav_btn_item">
-              <Link
-                to="/#events"
-                className={`nav_events_btn ${
-                  activeSection === "events" ? "active" : ""
-                }`}
-              >
-                EVENTS
-              </Link>
-            </li>
-            <li className="nav_btn_item">
-              <Link
-                to="/icl-dashboard"
-                className={`nav_events_btn nav_icl_btn ${
-                  activeSection === "icl-dashboard" ? "active" : ""
-                }`}
-              >
-                ICL
-              </Link>
-            </li>
-            <li className="nav_btn_item">
+              <li className={activeSection === "about" ? "active" : ""}>
+                <Link to="/#about" onClick={() => setIsMobileMenuOpen(false)}>ABOUT</Link>
+              </li>
+              <li className={activeSection === "team" ? "active" : ""}>
+                <Link to="/#team" onClick={() => setIsMobileMenuOpen(false)}>TEAM</Link>
+              </li>
+              {!isAdmin && (
+                <li className={activeSection === "contact" ? "active" : ""}>
+                  <Link to="/#contact" onClick={() => setIsMobileMenuOpen(false)}>CONTACT</Link>
+                </li>
+              )}
+              <li className="nav_btn_item">
+                <Link
+                  to="/#events"
+                  className={`nav_events_btn ${
+                    activeSection === "events" ? "active" : ""
+                  }`}
+                  onClick={() => setIsMobileMenuOpen(false)}
+                >
+                  EVENTS
+                </Link>
+              </li>
+
+              {user && (
+                <li className={`md:hidden ${activeSection === "dashboard" ? "active" : ""}`}>
+                  <Link to="/dashboard" onClick={() => setIsMobileMenuOpen(false)}>DASHBOARD</Link>
+                </li>
+              )}
+            </ul>
+
+            <div className="navbar-profile">
               {isAdmin ? (
                 <div className="desktop-dropdown-container" ref={adminDropdownRef}>
                   <button
@@ -308,16 +196,16 @@ function NavComponent() {
                   )}
                 </div>
               ) : user ? (
-                <Link to="/dashboard" className="navbar_profile_btn" title="Dashboard">
+                <Link to="/dashboard" className="navbar_profile_btn" title="Dashboard" onClick={() => setIsMobileMenuOpen(false)}>
                   <User className="w-5 h-5" />
                 </Link>
               ) : (
-                <Link to="/login" className="navbar_login_btn">
+                <Link to="/login" className="navbar_login_btn" onClick={() => setIsMobileMenuOpen(false)}>
                   <span>LOGIN</span>
                 </Link>
               )}
-            </li>
-          </ul>
+            </div>
+          </div>
         </nav>
       </div>
     </>
@@ -325,3 +213,4 @@ function NavComponent() {
 }
 
 export default NavComponent;
+

@@ -131,7 +131,7 @@ const ContactSection = () => {
           >
             <form
               onSubmit={handleSubmit}
-              className="bg-neutral-900/80 backdrop-blur-sm rounded-2xl p-8 border border-neutral-800 shadow-2xl relative overflow-hidden"
+              className="bg-neutral-900/95 md:bg-neutral-900/80 md:backdrop-blur-sm rounded-2xl p-8 border border-neutral-800 shadow-2xl relative overflow-hidden"
             >
               <div className="grid sm:grid-cols-2 gap-6 mb-6 pt-2">
                 <div>

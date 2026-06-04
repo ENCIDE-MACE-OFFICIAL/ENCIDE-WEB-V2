@@ -1,214 +1,282 @@
-import { useNavigate } from "react-router-dom";
-import { motion } from "framer-motion";
-import { ArrowLeft, Trophy, Zap, Star } from "lucide-react";
-import BarChart from "../../components/BarChart";
-import SplitText from "../../components/SplitText";
+import { useEffect, useRef } from 'react';
+import { useSearchParams, useNavigate } from 'react-router-dom';
+import { motion } from 'framer-motion';
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
+import { scoreboardData } from './scoreData';
 
-const EVENTS = [
-  "AI or Not AI?",
-  "GEOGUESSR: CAMPUS & TECH EDITION",
-  "Photo and Caption Contest",
-  "Prompt Golf",
-  "WIKIPEDIA SPEEDRUN",
-  "Typing Competition",
-  "AI Story Generator",
-  "Poster Designing",
-  "Reel Making",
-  "Debugging",
-  "Digital Marketing Challenge",
-  "Treasure Hunt",
-];
-
-const SAMPLE_DEPARTMENT_SCORES = [
-  { name: "CSE", value: 0 },
-  { name: "ECE", value: 0 },
-  { name: "MECH", value: 0 },
-  { name: "CIVIL", value: 0 },
-  { name: "EEE", value: 0 },
-  { name: "DS", value: 0 },
-  { name: "AIML", value: 0 },
-];
-
-const DEPARTMENT_COLORS = {
-  CSE: { bg: "from-blue-900/60 to-blue-800/60", border: "border-blue-500/60", text: "text-blue-300", accent: "text-blue-400", icon: "bg-blue-600/30" },
-  ECE: { bg: "from-cyan-900/60 to-cyan-800/60", border: "border-cyan-500/60", text: "text-cyan-300", accent: "text-cyan-400", icon: "bg-cyan-600/30" },
-  MECH: { bg: "from-emerald-900/60 to-emerald-800/60", border: "border-emerald-500/60", text: "text-emerald-300", accent: "text-emerald-400", icon: "bg-emerald-600/30" },
-  CIVIL: { bg: "from-orange-900/60 to-orange-800/60", border: "border-orange-500/60", text: "text-orange-300", accent: "text-orange-400", icon: "bg-orange-600/30" },
-  EEE: { bg: "from-violet-900/60 to-violet-800/60", border: "border-violet-500/60", text: "text-violet-300", accent: "text-violet-400", icon: "bg-violet-600/30" },
-  DS: { bg: "from-amber-900/60 to-amber-800/60", border: "border-amber-500/60", text: "text-amber-300", accent: "text-amber-400", icon: "bg-amber-600/30" },
-  AIML: { bg: "from-teal-900/60 to-teal-800/60", border: "border-teal-500/60", text: "text-teal-300", accent: "text-teal-400", icon: "bg-teal-600/30" },
+const CustomTooltip = ({ active, payload, label }) => {
+  if (active && payload && payload.length) {
+    return (
+      <div style={{ backgroundColor: '#121212', border: '1px solid #27272a', borderRadius: '8px', padding: '8px 12px', boxShadow: '0 10px 30px -5px rgba(0,0,0,0.5)', fontFamily: 'Outfit' }}>
+        <p style={{ color: '#71717a', marginBottom: '2px', fontSize: '10px' }}>{label}</p>
+        <p style={{ fontSize: '13px', fontWeight: 'bold' }}>
+          <span style={{ color: '#ffffff' }}>score : </span>
+          <span style={{ color: '#ff0000' }}>{payload[0].value}</span>
+        </p>
+      </div>
+    );
+  }
+  return null;
 };
 
 const IclDashboard = ({ onLoad }) => {
+  const [searchParams] = useSearchParams();
   const navigate = useNavigate();
+  const eventParam = searchParams.get('event');
+  const scrollContainerRef = useRef(null);
 
-  if (onLoad) onLoad();
+  useEffect(() => {
+    onLoad();
+  }, [onLoad]);
+
+  // Determine which data to show
+  let currentTitle = "Overall Scoreboard";
+  let chartData = scoreboardData.overall;
+  let isOverall = true;
+  let activeEventId = 'overall';
+  let eventWinners = null;
+
+  if (eventParam && eventParam !== 'overall') {
+    const foundEvent = scoreboardData.events.find(e => e.id === eventParam);
+    if (foundEvent) {
+      currentTitle = foundEvent.name;
+      chartData = foundEvent.scores;
+      isOverall = false;
+      activeEventId = eventParam;
+      eventWinners = foundEvent.winners;
+    }
+  }
+
+  const top3 = [...chartData].sort((a, b) => b.score - a.score).slice(0, 3);
+
+  // Smooth scroll active tab into view on mobile
+  useEffect(() => {
+    if (scrollContainerRef.current) {
+      const activeEl = scrollContainerRef.current.querySelector('.active-tab-btn');
+      if (activeEl) {
+        activeEl.scrollIntoView({
+          behavior: 'smooth',
+          block: 'nearest',
+          inline: 'center'
+        });
+      }
+    }
+  }, [activeEventId]);
+
+  const handleCardClick = (id) => {
+    navigate(`/icl-dashboard?event=${id}`);
+  };
 
   return (
-    <div className="min-h-screen bg-neutral-950 relative overflow-hidden font-sans selection:bg-[#cf30a1]/30 shadow-[inset_-80px_0_80px_rgba(207,48,161,0.05),inset_80px_0_80px_rgba(207,48,161,0.05),inset_0_-80px_80px_rgba(207,48,161,0.05),inset_0_80px_80px_rgba(207,48,161,0.05)]" style={{ backgroundImage: "radial-gradient(circle at 20% 50%, rgba(207,48,161,0.03) 0%, transparent 50%), radial-gradient(circle at 80% 80%, rgba(207,48,161,0.02) 0%, transparent 50%)" }}>
-      {/* Noise texture */}
-      <div className="absolute inset-0 opacity-[0.015] mix-blend-overlay pointer-events-none" style={{ backgroundImage: "url('data:image/svg+xml,%3Csvg viewBox=%220 0 400 400%22 xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cfilter id=%22noise%22%3E%3CfeTurbulence type=%22fractalNoise%22 baseFrequency=%220.9%22 numOctaves=%224%22 result=%22noise%22/%3E%3C/filter%3E%3Crect width=%22400%22 height=%22400%22 fill=%22white%22 filter=%22url(%23noise)%22/%3E%3C/svg%3E')" }} />
-      {/* Background effects */}
-      <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-[#cf30a1]/40 to-transparent pointer-events-none" />
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,rgba(207,48,161,0.08),transparent_50%)] pointer-events-none" />
-      <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-[#cf30a1]/15 rounded-full blur-[120px] pointer-events-none" />
-      <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-[#cf30a1]/12 rounded-full blur-[120px] pointer-events-none" />
-      <div className="absolute top-1/3 right-1/3 w-64 h-64 bg-[#cf30a1]/10 rounded-full blur-[100px] pointer-events-none" />
+    <div className="min-h-screen bg-[#0a0a0a] text-[#f4f4f5] antialiased selection:bg-[#ff0000]/20 pb-24 font-outfit font-sans">
+      {/* Import elegant Outfit Google font and add custom global utility styles */}
+      <style>{`
+        @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap');
+        
+        .font-outfit {
+          font-family: 'Outfit', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        }
+        
+        /* Premium custom scrollbar for horizontal tabs on mobile */
+        .no-scrollbar::-webkit-scrollbar {
+          display: none;
+        }
+        .no-scrollbar {
+          -ms-overflow-style: none;
+          scrollbar-width: none;
+        }
+      `}</style>
 
-      <div className="container mx-auto px-4 sm:px-6 md:px-8 lg:px-12 py-8 relative z-10">
-        {/* Header */}
-        <motion.div
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="flex flex-col items-center justify-center text-center mb-16 mt-12"
-        >
-          <div className="flex items-center justify-center gap-6 mb-3 w-full">
-            <div className="flex-1 h-px bg-gradient-to-r from-transparent to-[#cf30a1]/40" />
-            <div className="flex items-center justify-center gap-3">
-              <Trophy className="w-10 h-10" style={{ color: "#ffa1d2" }} />
-              <SplitText
-                text="ICL Tournament"
-                tag="h1"
-                className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black"
-                delay={80}
-                duration={0.8}
-                ease="power3.out"
-                splitType="chars"
-                from={{ opacity: 0, y: 40 }}
-                to={{ opacity: 1, y: 0 }}
-                style={{ color: "#ffa1d2" }}
-              />
-              <Trophy className="w-10 h-10" style={{ color: "#ffa1d2" }} />
+      {/* Sleek Low-Profile Header highlighting Club & Event in pure high-voltage Red (#ff0000) */}
+      <header className="w-full border-b border-zinc-900 bg-[#0a0a0a] px-4 py-8 md:px-16 font-outfit">
+        <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-start md:items-end space-y-6 md:space-y-0">
+          <div>
+            <div className="text-[10px] font-bold tracking-[0.3em] text-[#ff0000] uppercase mb-2 font-mono">
+              ENCIDE PRESENTS
             </div>
-            <div className="flex-1 h-px bg-gradient-to-l from-transparent to-[#cf30a1]/40" />
+            <h1 className="text-4xl font-black tracking-tight text-white uppercase leading-none">
+              ICL 4.0 CHAMPIONSHIP
+            </h1>
           </div>
-          <p className="text-[#ffa1d2]/60 text-base">Live Results & Rankings</p>
-        </motion.div>
-
-        {/* Overall Scoreboard & Leaderboard Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
-          {/* Overall Scores Bar Chart */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.1 }}
-            className="lg:col-span-2 p-6 rounded-2xl bg-gradient-to-br from-[#cf30a1]/20 to-[#cf30a1]/10 backdrop-blur-xl border border-[#cf30a1]/40 hover:border-[#cf30a1]/60 transition-all"
-          >
-            <div className="flex items-center justify-center gap-2 mb-6">
-              <Zap className="w-5 h-5" style={{ color: "#cf30a1" }} />
-              <h2 className="text-xl font-bold text-white">Overall Scores</h2>
-            </div>
-            <BarChart data={SAMPLE_DEPARTMENT_SCORES} />
-          </motion.div>
-
-          {/* Quick Stats */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.15 }}
-            className="space-y-3"
-          >
-            {SAMPLE_DEPARTMENT_SCORES.sort((a, b) => b.value - a.value).map((dept, index) => {
-              const colors = DEPARTMENT_COLORS[dept.name];
-              return (
-                <motion.div
-                  key={index}
-                  initial={{ opacity: 0, x: 20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: 0.2 + index * 0.04 }}
-                  className={`p-4 rounded-lg bg-gradient-to-br ${colors.bg} backdrop-blur-sm border ${colors.border} hover:border-opacity-100 transition-all cursor-pointer group`}
-                >
-                  <div className="flex items-center justify-between mb-2">
-                    <div className="flex items-center gap-2">
-                      <div className={`w-2 h-2 rounded-full ${colors.icon}`} />
-                      <h3 className="font-bold text-white text-sm">{dept.name}</h3>
-                    </div>
-                    <Star className={`w-3 h-3 ${colors.text} group-hover:scale-110 transition-transform`} />
-                  </div>
-                  <p className={`text-lg font-black ${colors.accent}`}>{dept.value}</p>
-                </motion.div>
-              );
-            })}
-          </motion.div>
+          <div className="hidden md:flex flex-col text-left md:text-right border-l-2 md:border-l-0 md:border-r-2 border-[#ff0000] pl-4 md:pl-0 md:pr-4 py-1">
+            <span className="text-[11px] font-bold tracking-widest text-zinc-300 uppercase">
+              CODE WHAT YOU CAN'T
+            </span>
+            <span className="text-[9px] font-bold tracking-widest text-zinc-500 uppercase mt-1">
+              STANDINGS & LEADERBOARD PORTAL
+            </span>
+          </div>
         </div>
+      </header>
 
-        {/* Leaderboard Table */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.25 }}
-          className="mb-12 p-6 rounded-2xl bg-gradient-to-br from-[#cf30a1]/20 to-[#cf30a1]/10 backdrop-blur-xl border border-[#cf30a1]/40"
-        >
-          <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-white mb-6 text-center">Current Leaderboard</h2>
-          <div className="space-y-2">
-            {SAMPLE_DEPARTMENT_SCORES.sort((a, b) => b.value - a.value).map((dept, index) => {
-              const colors = DEPARTMENT_COLORS[dept.name];
-              const percentage = (dept.value / Math.max(...SAMPLE_DEPARTMENT_SCORES.map(d => d.value))) * 100;
-              return (
-                <motion.div
-                  key={index}
-                  initial={{ opacity: 0, x: -20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: 0.3 + index * 0.04 }}
-                  className={`p-4 rounded-lg bg-gradient-to-r ${colors.bg} backdrop-blur-sm border ${colors.border} hover:border-opacity-100 transition-all group`}
-                >
-                  <div className="flex items-center justify-between mb-2">
-                    <div className="flex items-center gap-3 flex-1">
-                      <div className="w-8 h-8 rounded-full bg-gradient-to-br" style={{ backgroundImage: `linear-gradient(to bottom right, #cf30a1, #a01a6b)` }}>
-                        <div className="w-full h-full flex items-center justify-center font-bold text-white text-sm">
-                          {index + 1}
-                        </div>
-                      </div>
-                      <h3 className="font-bold text-white text-sm">{dept.name}</h3>
-                    </div>
-                    <span className={`text-lg font-black ${colors.accent}`}>{dept.value}</span>
-                  </div>
-                  <div className="w-full bg-neutral-800/60 rounded-full h-2 overflow-hidden">
-                    <div
-                      className={`h-full bg-gradient-to-r ${colors.bg} transition-all duration-500`}
-                      style={{ width: `${percentage}%` }}
-                    />
-                  </div>
-                </motion.div>
-              );
-            })}
-          </div>
-        </motion.div>
-
-        {/* Events Section */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.3 }}
-        >
-          <h2 className="text-4xl font-bold text-white mb-12 text-center">All Events</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {EVENTS.map((event, index) => (
-              <motion.button
-                key={index}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.35 + index * 0.02 }}
-                whileHover={{ scale: 1.05, y: -5, rotate: 1 }}
-                whileTap={{ scale: 0.98 }}
-                onClick={() => navigate(`/icl-dashboard/event/${encodeURIComponent(event)}`)}
-                className="p-6 rounded-xl bg-gradient-to-br from-[#cf30a1]/25 to-[#cf30a1]/12 backdrop-blur-sm border border-[#cf30a1]/40 hover:border-[#cf30a1]/70 hover:from-[#cf30a1]/35 hover:to-[#cf30a1]/20 transition-all cursor-pointer text-left group flex flex-col justify-between min-h-36"
-                style={{ boxShadow: "0 8px 32px rgba(207, 48, 161, 0.12), 0 0 1px rgba(207, 48, 161, 0.1)" }}
+      {/* Premium Two-Column Layout */}
+      <main className="max-w-7xl mx-auto px-4 md:px-16 py-12 font-outfit">
+        <div className="flex flex-col lg:flex-row gap-10 items-start">
+          
+          {/* Column 1: Left Navigation Catalog */}
+          <div className="w-full lg:w-1/4 flex-shrink-0 relative">
+            <h2 className="text-[10px] font-bold tracking-widest text-zinc-500 uppercase mb-4 font-mono hidden lg:block">
+              SELECT EVENT CATEGORY
+            </h2>
+            
+            {/* Elegant Fade Overlays for Horizontal Swiping on Mobile */}
+            <div className="absolute left-0 top-0 bottom-0 w-8 bg-gradient-to-r from-[#0a0a0a] to-transparent pointer-events-none z-20 lg:hidden" />
+            <div className="absolute right-0 top-0 bottom-0 w-8 bg-gradient-to-l from-[#0a0a0a] to-transparent pointer-events-none z-20 lg:hidden" />
+            
+            {/* Scrollable event list */}
+            <div 
+              ref={scrollContainerRef}
+              className="flex lg:flex-col overflow-x-auto lg:overflow-x-visible gap-1 pb-4 lg:pb-0 no-scrollbar border-b lg:border-b-0 border-zinc-900 px-4 lg:px-0"
+            >
+              
+              {/* Overall Standing Tab Button */}
+              <button
+                onClick={() => handleCardClick('overall')}
+                className={`
+                  active-tab-btn relative flex-shrink-0 flex items-center justify-start rounded-lg px-4 py-3.5 text-left transition-all duration-150 text-sm tracking-wide font-medium border border-transparent lg:w-full select-none
+                  ${isOverall ? 'text-[#030303]' : 'bg-[#121212]/40 text-zinc-400 hover:text-white'}
+                `}
               >
-                <h3 className="font-bold text-white group-hover:text-[#cf30a1] transition-colors line-clamp-3 text-lg leading-tight">
-                  {event}
-                </h3>
-                <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#cf30a1]/40 to-[#cf30a1]/25 group-hover:from-[#cf30a1]/60 group-hover:to-[#cf30a1]/40 flex items-center justify-center transition-all group-hover:translate-x-1 mt-3">
-                  <span className="text-[#cf30a1] font-bold text-lg">→</span>
+                {isOverall && (
+                  <motion.div 
+                    layoutId="activeTabOutline" 
+                    className="absolute inset-0 bg-[#ff0000] rounded-lg z-0 shadow-[0_4px_20px_rgba(255,0,0,0.15)]"
+                    transition={{ type: "spring", stiffness: 380, damping: 30 }}
+                  />
+                )}
+                <div className="relative z-10 flex items-center w-full">
+                  <span className="font-semibold uppercase tracking-wider text-white">Overall Standings</span>
                 </div>
-              </motion.button>
-            ))}
+              </button>
+
+              {/* Individual Event Tab Buttons */}
+              {scoreboardData.events.map((evt, idx) => {
+                const isActive = activeEventId === evt.id;
+                const paddedIndex = String(idx + 1).padStart(2, '0');
+                return (
+                  <button
+                    key={evt.id}
+                    onClick={() => handleCardClick(evt.id)}
+                    className={`
+                      relative flex-shrink-0 flex items-center justify-start rounded-lg px-4 py-3.5 text-left transition-all duration-150 text-sm tracking-wide font-medium border border-transparent lg:w-full select-none truncate
+                      ${isActive ? 'active-tab-btn text-white' : 'bg-[#121212]/40 text-zinc-400 hover:text-white'}
+                    `}
+                    title={evt.name}
+                  >
+                    {isActive && (
+                      <motion.div 
+                        layoutId="activeTabOutline" 
+                        className="absolute inset-0 bg-[#ff0000] rounded-lg z-0 shadow-[0_4px_20px_rgba(255,0,0,0.15)]"
+                        transition={{ type: "spring", stiffness: 380, damping: 30 }}
+                      />
+                    )}
+                    <div className="relative z-10 flex items-center w-full truncate">
+                      <span className={`truncate font-semibold uppercase tracking-wider`}>{evt.name}</span>
+                    </div>
+                  </button>
+                );
+              })}
+            </div>
           </div>
-        </motion.div>
-      </div>
+
+          {/* Column 2: Right Chart Main Window */}
+          <div className="flex-grow w-full border border-zinc-900 bg-[#121212]/80 rounded-xl p-5 md:p-10 shadow-xl relative overflow-hidden">
+            
+            {/* Chart Header Information */}
+            <div className="relative z-10 flex flex-col md:flex-row md:items-end md:justify-between border-b border-zinc-900 pb-6 mb-8">
+              <div>
+                <h3 className="text-2xl md:text-3xl font-bold tracking-tight text-white uppercase">
+                  {currentTitle}
+                </h3>
+                <p className="text-zinc-500 text-xs font-mono mt-1.5 uppercase">
+                  statistical Standing analytic metrics
+                </p>
+              </div>
+              <div className="mt-4 md:mt-0 flex items-center space-x-2 text-[10px] font-mono tracking-wider border border-zinc-800 bg-[#1e1e1e]/80 px-3 py-1.5 rounded-md text-zinc-400">
+                <span className="w-1.5 h-1.5 rounded-full bg-[#ff0000] animate-pulse" />
+                <span>FILTER:</span>
+                <span className="text-white font-bold">{isOverall ? "ALL EVENTS SUM" : "EVENT TARGETED"}</span>
+              </div>
+            </div>
+
+            {/* Top 3 Winners Cards */}
+            <div className="relative z-10 grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
+              {(isOverall ? top3 : (eventWinners || top3)).map((winner, idx) => {
+                const title = isOverall ? winner.department : winner.name;
+                const subtitle = isOverall ? "Department" : winner.department;
+                const score = isOverall ? winner.score : (chartData.find(d => d.department === winner.department)?.score || 0);
+
+                return (
+                  <div key={idx} className={`flex flex-col p-4 rounded-xl border ${idx === 0 ? 'border-[#ff0000] bg-[#ff0000]/10' : 'border-zinc-800 bg-[#1e1e1e]/50'} relative overflow-hidden transition-transform duration-300 hover:scale-[1.02]`}>
+                    {idx === 0 && <div className="absolute top-0 right-0 w-16 h-16 bg-[#ff0000] blur-[30px] rounded-full opacity-50" />}
+                    <span className={`text-[10px] font-mono font-bold tracking-widest ${idx === 0 ? 'text-[#ff0000]' : 'text-zinc-500'} mb-1`}>
+                      {idx === 0 ? "1ST PLACE" : idx === 1 ? "2ND PLACE" : "3RD PLACE"}
+                    </span>
+                    <div className="flex items-end justify-between mt-1 z-10">
+                      <div>
+                        <h4 className="text-xl font-bold text-white uppercase">{title}</h4>
+                        <p className="text-[10px] text-zinc-400 uppercase tracking-wide">{subtitle}</p>
+                      </div>
+                      <div className="text-right">
+                        <span className="text-2xl font-black text-white leading-none block">{score}</span>
+                        <span className="text-[9px] font-mono text-zinc-500 block leading-none mt-1">PTS</span>
+                      </div>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+
+            {/* Recharts Bar Graph */}
+            <div className="relative z-10 w-full h-[320px] md:h-[480px]">
+              <ResponsiveContainer width="100%" height="100%">
+                <BarChart
+                  data={chartData}
+                  margin={{ top: 15, right: 10, left: -25, bottom: 5 }}
+                >
+                  <CartesianGrid strokeDasharray="3 3" stroke="#222" vertical={false} />
+                  
+                  <XAxis 
+                    dataKey="department" 
+                    stroke="#27272a" 
+                    tick={{ fill: '#a1a1aa', fontSize: 10, fontWeight: 600, fontFamily: 'Outfit' }}
+                    tickMargin={12}
+                    axisLine={{ stroke: '#27272a' }}
+                    tickLine={false}
+                    interval={0}
+                  />
+                  
+                  <YAxis 
+                    stroke="#27272a"
+                    tick={{ fill: '#71717a', fontSize: 11, fontFamily: 'Outfit' }}
+                    axisLine={false}
+                    tickLine={false}
+                    tickMargin={8}
+                  />
+                  
+                  <Tooltip 
+                    cursor={{ fill: 'rgba(255, 0, 0, 0.02)' }}
+                    content={<CustomTooltip />}
+                  />
+                  
+                  {/* Clean flat solid pure high-voltage Red color block matching the exact registration color theme (#ff0000) */}
+                  <Bar 
+                    dataKey="score" 
+                    fill="#ff0000"
+                    radius={[3, 3, 0, 0]}
+                    maxBarSize={45}
+                    animationDuration={400}
+                  />
+                </BarChart>
+              </ResponsiveContainer>
+            </div>
+            
+          </div>
+
+        </div>
+      </main>
     </div>
   );
 };
 
 export default IclDashboard;
-
