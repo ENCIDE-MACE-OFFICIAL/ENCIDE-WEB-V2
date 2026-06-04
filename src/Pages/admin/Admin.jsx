@@ -17,6 +17,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import ContactResponsesTable from "../../components/admin/ContactResponsesTable";
 import EventsManager from "../../components/admin/EventsManager";
 import AddEventDialog from "../../components/admin/AddEventDialog";
+import ScoreboardManager from "../../components/admin/ScoreboardManager";
 import {
   collection,
   query,
@@ -26,13 +27,17 @@ import {
   updateDoc,
   deleteDoc,
   addDoc,
+  setDoc,
   Timestamp,
 } from "firebase/firestore";
 import { db } from "../../firebase";
+import { mergeScoreEvents, normalizeScoreboardEvent } from "../../lib/scoreboard";
 
 const Admin = ({ onLoad }) => {
   const [events, setEvents] = useState([]);
   const [contactResponses, setContactResponses] = useState([]);
+  const [scoreboardEvents, setScoreboardEvents] = useState([]);
+  const [isScoreboardLoading, setIsScoreboardLoading] = useState(true);
   const [isAddEventOpen, setIsAddEventOpen] = useState(false);
   const [editingEvent, setEditingEvent] = useState(null);
   const [activeTab, setActiveTab] = useState("contacts");
@@ -116,6 +121,27 @@ const Admin = ({ onLoad }) => {
     }, (error) => {
       console.error("Error fetching events:", error);
     });
+
+    return () => unsubscribe();
+  }, []);
+
+  // Real-time listener for scoreboard collection
+  useEffect(() => {
+    const q = query(collection(db, "icl-scoreboard"));
+    const unsubscribe = onSnapshot(
+      q,
+      (snapshot) => {
+        const savedEvents = snapshot.docs.map((docSnap) =>
+          normalizeScoreboardEvent({ id: docSnap.id, ...docSnap.data() })
+        );
+        setScoreboardEvents(mergeScoreEvents(savedEvents));
+        setIsScoreboardLoading(false);
+      },
+      (error) => {
+        console.error("Error fetching scoreboard data:", error);
+        setIsScoreboardLoading(false);
+      }
+    );
 
     return () => unsubscribe();
   }, []);
@@ -231,6 +257,21 @@ const Admin = ({ onLoad }) => {
       setEditingEvent(null);
     } catch (error) {
       console.error("Error updating event:", error);
+    }
+  };
+
+  const handleSaveScoreboardEvent = async (formData) => {
+    try {
+      await setDoc(doc(db, "icl-scoreboard", formData.id), {
+        id: formData.id,
+        name: formData.name,
+        scores: formData.scores,
+        winners: formData.winners,
+        updatedAt: Timestamp.now(),
+      });
+    } catch (error) {
+      console.error("Error saving scoreboard event:", error);
+      throw error;
     }
   };
 
@@ -436,6 +477,17 @@ const Admin = ({ onLoad }) => {
               <Calendar className="w-4 h-4" />
               Manage Events
             </button>
+            <button
+              onClick={() => setActiveTab("scoreboard")}
+              className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all ${
+                activeTab === "scoreboard"
+                  ? "bg-red-600 text-white shadow-lg "
+                  : "text-neutral-400 hover:text-white hover:bg-neutral-800"
+              }`}
+            >
+              <Clock className="w-4 h-4" />
+              Scoreboard
+            </button>
           </div>
           <AnimatePresence mode="wait">
             {activeTab === "contacts" ? (
@@ -448,7 +500,7 @@ const Admin = ({ onLoad }) => {
               >
                 <ContactResponsesTable responses={contactResponses} onDelete={handleDeleteContact} onToggleRead={handleToggleReadStatus} />
               </motion.div>
-            ) : (
+            ) : activeTab === "events" ? (
               <motion.div
                 key="events"
                 initial={{ opacity: 0, y: 10 }}
@@ -462,6 +514,20 @@ const Admin = ({ onLoad }) => {
                   onDelete={handleDeleteEvent}
                   onApproveRegistration={handleApproveRegistration}
                   onRejectRegistration={handleRejectRegistration}
+                />
+              </motion.div>
+            ) : (
+              <motion.div
+                key="scoreboard"
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -10 }}
+                transition={{ duration: 0.2 }}
+              >
+                <ScoreboardManager
+                  events={scoreboardEvents}
+                  onSave={handleSaveScoreboardEvent}
+                  isLoading={isScoreboardLoading}
                 />
               </motion.div>
             )}

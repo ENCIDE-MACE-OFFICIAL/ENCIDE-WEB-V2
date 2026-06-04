@@ -1,8 +1,10 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useSearchParams, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
-import { scoreboardData } from './scoreData';
+import { collection, onSnapshot, query } from 'firebase/firestore';
+import { db } from '../../firebase';
+import { buildScoreboardData, defaultScoreboardData, normalizeScoreboardEvent } from '../../lib/scoreboard';
 
 const CustomTooltip = ({ active, payload, label }) => {
   if (active && payload && payload.length) {
@@ -24,10 +26,29 @@ const IclDashboard = ({ onLoad }) => {
   const navigate = useNavigate();
   const eventParam = searchParams.get('event');
   const scrollContainerRef = useRef(null);
+  const [scoreboardData, setScoreboardData] = useState(defaultScoreboardData);
 
   useEffect(() => {
     onLoad();
   }, [onLoad]);
+
+  useEffect(() => {
+    const q = query(collection(db, 'icl-scoreboard'));
+    const unsubscribe = onSnapshot(
+      q,
+      (snapshot) => {
+        const savedEvents = snapshot.docs.map((docSnap) =>
+          normalizeScoreboardEvent({ id: docSnap.id, ...docSnap.data() })
+        );
+        setScoreboardData(buildScoreboardData(savedEvents));
+      },
+      () => {
+        setScoreboardData(defaultScoreboardData);
+      }
+    );
+
+    return () => unsubscribe();
+  }, []);
 
   // Determine which data to show
   let currentTitle = "Overall Scoreboard";
