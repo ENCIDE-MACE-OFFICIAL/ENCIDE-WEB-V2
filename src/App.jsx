@@ -19,21 +19,25 @@ const EventsSection = lazy(() => import("./Pages/events/events.jsx"));
 const Dashboard = lazy(() => import("./Pages/dashboard/Dashboard.jsx"));
 const Admin = lazy(() => import("./Pages/admin/Admin.jsx"));
 const IclDashboard = lazy(() => import("./Pages/icl-dashboard/IclDashboard.jsx"));
-const SuspenseFallback = () => (
-  <div className="w-screen h-screen flex justify-center items-center bg-[#121212] fixed top-0 left-0 z-[9999]">
-    <Loader2 className="w-28 h-28 text-red-600 animate-spin" />
-  </div>
-);
+
+const SuspenseFallback = () => <Loader />;
 
 function App() {
-  const [load, setLoad] = useState(true);
-
   const { user, isAdmin } = useContext(AuthContext);
+
+  const handleLoad = () => {
+    const loader = document.getElementById("initial-loader");
+    if (loader) {
+      loader.style.opacity = '0';
+      loader.style.visibility = 'hidden';
+      setTimeout(() => {
+        if (loader) loader.style.display = 'none';
+      }, 500);
+    }
+  };
 
   return (
     <Router>
-      {load && <Loader />}
-
       <Suspense fallback={<SuspenseFallback />}>
         <Routes>
           <Route
@@ -41,7 +45,7 @@ function App() {
             element={
               <>
                 <NavComponent />
-                <HeroSection loading={() => setLoad(false)}/>
+                <HeroSection loading={handleLoad}/>
                 <AboutComponent />
                 <EventsSection />
                 {/* <PastEventsSection /> */}
@@ -53,29 +57,29 @@ function App() {
           />
           <Route
             path="/login"
-            element={<LoginForm onLoad={() => setLoad(false)} />}
+            element={<LoginForm onLoad={handleLoad} />}
           />
           <Route
             path="/signup"
-            element={<SignUpForm onLoad={() => setLoad(false)} />}
+            element={<SignUpForm onLoad={handleLoad} />}
           />
           <Route
             path="/registration"
-            element={<RegistrationForm onLoad={() => setLoad(false)} />}
+            element={<RegistrationForm onLoad={handleLoad} />}
           />
           <Route
             path="/dashboard"
-            element={user ? <Dashboard onLoad={() => setLoad(false)} /> : <></>}
+            element={user ? <Dashboard onLoad={handleLoad} /> : <></>}
           />
 
           <Route
             path="/admin-dashboard"
-            element={isAdmin ? <Admin onLoad={() => setLoad(false)} /> : <Navigate to="/" />}
+            element={isAdmin ? <Admin onLoad={handleLoad} /> : <Navigate to="/" />}
           />
 
           <Route
             path="/icl-dashboard"
-            element={<IclDashboard onLoad={() => setLoad(false)} />}
+            element={<IclDashboard onLoad={handleLoad} />}
           />
 
       </Routes>

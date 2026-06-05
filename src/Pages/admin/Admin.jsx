@@ -427,7 +427,7 @@ const Admin = ({ onLoad }) => {
       </header>
       <main className="container mx-auto px-4 lg:px-20 py-8 mt-16 relative z-10">
         {/* Stats Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
           {stats.map((stat, index) => (
             <motion.div
               key={stat.label}
@@ -438,10 +438,10 @@ const Admin = ({ onLoad }) => {
             >
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm text-neutral-400 font-medium">
+                  <p className="text-xs sm:text-sm text-neutral-400 font-medium">
                     {stat.label}
                   </p>
-                  <p className="text-3xl font-bold text-white mt-2 group-hover:text-red-200 transition-colors">
+                  <p className="text-xl sm:text-3xl font-bold text-white mt-2 group-hover:text-red-200 transition-colors">
                     {stat.value}
                   </p>
                 </div>
@@ -457,7 +457,7 @@ const Admin = ({ onLoad }) => {
           <div className="inline-flex gap-2 p-1 rounded-xl bg-neutral-900 border border-neutral-800">
             <button
               onClick={() => setActiveTab("contacts")}
-              className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all ${
+              className={`flex items-center gap-2 px-4 py-2 rounded-lg text-xs sm:text-sm font-medium transition-all ${
                 activeTab === "contacts"
                   ? "bg-red-600 text-white shadow-lg "
                   : "text-neutral-400 hover:text-white hover:bg-neutral-800"
@@ -468,7 +468,7 @@ const Admin = ({ onLoad }) => {
             </button>
             <button
               onClick={() => setActiveTab("events")}
-              className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all ${
+              className={`flex items-center gap-2 px-4 py-2 rounded-lg text-xs sm:text-sm font-medium transition-all ${
                 activeTab === "events"
                   ? "bg-red-600 text-white shadow-lg "
                   : "text-neutral-400 hover:text-white hover:bg-neutral-800"
@@ -479,7 +479,7 @@ const Admin = ({ onLoad }) => {
             </button>
             <button
               onClick={() => setActiveTab("scoreboard")}
-              className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all ${
+              className={`flex items-center gap-2 px-4 py-2 rounded-lg text-xs sm:text-sm font-medium transition-all ${
                 activeTab === "scoreboard"
                   ? "bg-red-600 text-white shadow-lg "
                   : "text-neutral-400 hover:text-white hover:bg-neutral-800"
