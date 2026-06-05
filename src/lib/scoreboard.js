@@ -3,10 +3,14 @@ export const departments = [
   "AIML",
   "DS(A)",
   "DS(B)",
-  "EEE",
-  "ECE",
-  "CIVIL",
-  "MECH",
+  "EEE(A)",
+  "EEE(B)",
+  "ECE(A)",
+  "ECE(B)",
+  "CIVIL(A)",
+  "CIVIL(B)",
+  "MECH(A)",
+  "MECH(B)"
 ];
 
 export const createBlankScores = () =>
