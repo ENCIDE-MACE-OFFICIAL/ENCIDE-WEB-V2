@@ -238,10 +238,6 @@ const IclDashboard = ({ onLoad }) => {
                         <h4 className="text-xl font-bold text-white uppercase">{title}</h4>
                         <p className="text-[10px] text-zinc-400 uppercase tracking-wide">{subtitle}</p>
                       </div>
-                      <div className="text-right">
-                        <span className="text-2xl font-black text-white leading-none block">{score}</span>
-                        <span className="text-[9px] font-mono text-zinc-500 block leading-none mt-1">PTS</span>
-                      </div>
                     </div>
                   </div>
                 );
