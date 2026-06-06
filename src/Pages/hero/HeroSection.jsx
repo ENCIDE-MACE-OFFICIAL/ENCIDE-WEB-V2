@@ -6,7 +6,7 @@ import {
   Sparkles,
   ChevronDown,
 } from "lucide-react";
-import { useEffect, useState, lazy, Suspense } from "react";
+import { useEffect, useState, lazy, Suspense, useRef } from "react";
 import planetHorizon from "../../assets/planet-horizon.webp";
 import encideLogo from "../../assets/encideLogo.webp";
 
@@ -148,6 +148,57 @@ const TerminalWindow = () => {
     </motion.div>
   );
 };
+// Custom Lazy Loaded Logo with Text Placeholder
+const LazyLogo = ({ src }) => {
+  const [isLoaded, setIsLoaded] = useState(false);
+  const imgRef = useRef(null);
+
+  useEffect(() => {
+    // If the image is already downloaded/cached, it triggers complete
+    if (imgRef.current && imgRef.current.complete) {
+      setIsLoaded(true);
+    }
+  }, []);
+
+  return (
+    <div className="relative w-[270px] h-[80px] mx-auto lg:mx-0 flex items-center justify-center lg:justify-start">
+      {/* Loading Text Placeholder (Sized to perfectly match a 270px logo) */}
+      <motion.div
+        initial={{ opacity: 1, filter: "blur(0px)", scale: 1 }}
+        animate={{ 
+          opacity: isLoaded ? 0 : 1, 
+          filter: isLoaded ? "blur(8px)" : "blur(0px)",
+          scale: isLoaded ? 0.95 : 1
+        }}
+        transition={{ duration: 0.8, ease: "easeInOut" }}
+        className="absolute inset-0 flex items-center justify-center lg:justify-start pointer-events-none z-10 w-full"
+      >
+        {/* text-[3.5rem] (56px) + tracking-[0.2em] perfectly spans ~260px */}
+        <span className="font-display font-thin text-[3.5rem] tracking-[0.2em] text-neutral-300 leading-none">
+          ENCIDE
+        </span>
+      </motion.div>
+
+      {/* Actual Image */}
+      <motion.img
+        ref={imgRef}
+        src={src}
+        alt="ENCIDE Logo"
+        loading="lazy"
+        onLoad={() => setIsLoaded(true)}
+        initial={{ opacity: 0, filter: "blur(12px)", scale: 1.05 }}
+        animate={{ 
+          opacity: isLoaded ? 1 : 0,
+          filter: isLoaded ? "blur(0px)" : "blur(12px)",
+          scale: isLoaded ? 1 : 1.05
+        }}
+        transition={{ duration: 0.8, ease: "easeInOut" }}
+        className="w-full h-auto relative z-20 object-contain origin-center"
+      />
+    </div>
+  );
+};
+
 // Orbiting icons
 const OrbitingElement = ({ icon: Icon, delay, radius, duration }) => (
   <motion.div
@@ -285,7 +336,7 @@ const HeroSection = ({ loading }) => {
               transition={{ duration: 0.7, delay: 0.1 }}
               className="mb-4 -ml-[15px]"
             >
-              <img src={encideLogo} className="w-[270px] h-auto mx-auto lg:mx-0" />
+              <LazyLogo src={encideLogo} />
             </motion.div>
             {/* Motto */}
             <motion.div
