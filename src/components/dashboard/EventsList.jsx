@@ -7,12 +7,12 @@ const EventsList = ({ events, title, emptyMessage, isUpcomming }) => {
   const { user } = useContext(AuthContext);
 
   return (
-    <div className="bg-neutral-900/50 backdrop-blur-sm border border-neutral-800 rounded-xl h-full flex flex-col overflow-hidden">
+    <div className="bg-neutral-900/50 backdrop-blur-sm border border-neutral-800 rounded-xl lg:h-full flex flex-col overflow-hidden">
       <div className="p-5 border-b border-neutral-800 flex items-center justify-between flex-none bg-neutral-900/50 backdrop-blur-md z-10">
         <h3 className="text-lg font-semibold text-white">{title}</h3>
       </div>
       <div
-        className="p-5 flex-1 overflow-y-auto min-h-0 pr-2 
+        className="p-5 flex-1 lg:overflow-y-auto min-h-0 pr-2 
         [&::-webkit-scrollbar]:w-1.5
         [&::-webkit-scrollbar-track]:bg-transparent
         [&::-webkit-scrollbar-thumb]:bg-neutral-800
