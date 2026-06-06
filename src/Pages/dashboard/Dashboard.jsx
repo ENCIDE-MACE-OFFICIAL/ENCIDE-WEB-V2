@@ -36,7 +36,7 @@ const Dashboard = ({ onLoad }) => {
   });
 
   const { data: allEvents, isPending } = useQuery({
-    queryKey: ["registerd-events"],
+    queryKey: ["registerd-events", userData?.events],
     queryFn: () => getRegisteredEvents(userData.events),
     enabled: !!userData?.events,
     refetchOnWindowFocus: false,
