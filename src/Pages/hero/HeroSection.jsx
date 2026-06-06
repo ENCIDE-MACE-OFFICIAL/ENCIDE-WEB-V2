@@ -174,7 +174,7 @@ const LazyLogo = ({ src }) => {
         className="absolute inset-0 flex items-center justify-center lg:justify-start pointer-events-none z-10 w-full"
       >
         {/* text-[3.5rem] (56px) + tracking-[0.2em] perfectly spans ~260px */}
-        <span className="font-display font-thin text-[3.5rem] tracking-[0.2em] text-neutral-300 leading-none">
+        <span className="font-display font-thin text-[5rem] tracking-[0.07rem] text-neutral-300 leading-none">
           ENCIDE
         </span>
       </motion.div>

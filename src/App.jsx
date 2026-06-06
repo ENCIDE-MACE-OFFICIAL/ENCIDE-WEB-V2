@@ -46,12 +46,14 @@ function App() {
               <>
                 <NavComponent />
                 <HeroSection loading={handleLoad}/>
-                <AboutComponent />
-                <EventsSection />
-                {/* <PastEventsSection /> */}
-                <TeamSection />
-                <ContactSection />
-                <Footer />
+                <Suspense fallback={null}>
+                  <AboutComponent />
+                  <EventsSection />
+                  {/* <PastEventsSection /> */}
+                  <TeamSection />
+                  <ContactSection />
+                  <Footer />
+                </Suspense>
               </>
             }
           />
