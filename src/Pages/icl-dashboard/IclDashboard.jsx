@@ -68,7 +68,8 @@ const IclDashboard = ({ onLoad }) => {
     }
   }
 
-  const top3 = [...chartData].sort((a, b) => b.score - a.score).slice(0, 3);
+  const visibleChartData = chartData.filter((item) => Number(item.score) !== 0);
+  const top3 = [...visibleChartData].sort((a, b) => b.score - a.score).slice(0, 3);
 
   // Smooth scroll active tab into view on mobile
   useEffect(() => {
@@ -248,7 +249,7 @@ const IclDashboard = ({ onLoad }) => {
             <div className="relative z-10 w-full h-[320px] md:h-[480px]">
               <ResponsiveContainer width="100%" height="100%">
                 <BarChart
-                  data={chartData}
+                  data={visibleChartData}
                   margin={{ top: 15, right: 10, left: -25, bottom: 5 }}
                 >
                   <CartesianGrid strokeDasharray="3 3" stroke="#222" vertical={false} />
