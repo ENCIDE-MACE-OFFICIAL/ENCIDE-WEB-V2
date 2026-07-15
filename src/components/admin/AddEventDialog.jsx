@@ -16,6 +16,10 @@ import {
   MessageCircle,
   Link as LinkIcon,
   Users,
+  Plus,
+  AlertTriangle,
+  ListChecks,
+  Lock,
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { uploadToCloudinary, getEventFolder } from "../../lib/cloudinary";
@@ -201,7 +205,10 @@ const AddEventDialog = ({
     is_over: false,
     isIndividualEvent: false,
     whatsappRedirectUrl: "",
+    customQuestions: [],
   });
+
+  const [questionError, setQuestionError] = useState("");
 
   const [posterFile, setPosterFile] = useState(null);
   const [qrFile, setQrFile] = useState(null);
@@ -228,6 +235,7 @@ const AddEventDialog = ({
         is_over: initialData.is_over || false,
         isIndividualEvent: initialData.isIndividualEvent || false,
         whatsappRedirectUrl: initialData.whatsappRedirectUrl || "",
+        customQuestions: initialData.customQuestions || [],
       });
     } else {
       setWhatsappEnabled(false);
@@ -244,8 +252,10 @@ const AddEventDialog = ({
         is_over: false,
         isIndividualEvent: false,
         whatsappRedirectUrl: "",
+        customQuestions: [],
       });
     }
+    setQuestionError("");
     // Reset file selections when dialog opens/closes
     setPosterFile(null);
     setQrFile(null);
@@ -254,11 +264,43 @@ const AddEventDialog = ({
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    // Questions are locked after creation — only sanitize on create
+    let sanitizedQuestions = formData.customQuestions || [];
+    if (!isEditing) {
+      // Sanitize custom questions: drop blank prompts and blank options
+      sanitizedQuestions = sanitizedQuestions
+        .map((q) => ({
+          id: q.id,
+          type: q.type,
+          question: (q.question || "").trim(),
+          options:
+            q.type === "mcq"
+              ? (q.options || [])
+                  .map((o) => o.trim())
+                  .filter((o) => o.length > 0)
+              : [],
+          required: !!q.required,
+        }))
+        .filter((q) => q.question.length > 0);
+
+      const mcqWithoutOptions = sanitizedQuestions.find(
+        (q) => q.type === "mcq" && q.options.length === 0
+      );
+      if (mcqWithoutOptions) {
+        setQuestionError(
+          `Multiple-choice question "${mcqWithoutOptions.question}" needs at least one option.`
+        );
+        return;
+      }
+    }
+    setQuestionError("");
+
     setIsSubmitting(true);
 
     try {
       const folder = getEventFolder(formData.title);
-      const finalData = { ...formData };
+      const finalData = { ...formData, customQuestions: sanitizedQuestions };
 
       // Upload poster if a new file was selected
       if (posterFile) {
@@ -300,6 +342,7 @@ const AddEventDialog = ({
         is_over: false,
         isIndividualEvent: false,
         whatsappRedirectUrl: "",
+        customQuestions: [],
       });
       setPosterFile(null);
       setQrFile(null);
@@ -313,6 +356,58 @@ const AddEventDialog = ({
 
   const handleChange = (field, value) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
+  };
+
+  const addQuestion = () => {
+    setQuestionError("");
+    handleChange("customQuestions", [
+      ...(formData.customQuestions || []),
+      {
+        id: crypto.randomUUID(),
+        type: "mcq",
+        question: "",
+        options: [""],
+        required: false,
+      },
+    ]);
+  };
+
+  const updateQuestion = (id, patch) => {
+    handleChange(
+      "customQuestions",
+      (formData.customQuestions || []).map((q) =>
+        q.id === id ? { ...q, ...patch } : q
+      )
+    );
+  };
+
+  const removeQuestion = (id) => {
+    handleChange(
+      "customQuestions",
+      (formData.customQuestions || []).filter((q) => q.id !== id)
+    );
+  };
+
+  const addOption = (id) => {
+    const q = (formData.customQuestions || []).find((x) => x.id === id);
+    if (!q) return;
+    updateQuestion(id, { options: [...(q.options || []), ""] });
+  };
+
+  const updateOption = (id, idx, value) => {
+    const q = (formData.customQuestions || []).find((x) => x.id === id);
+    if (!q) return;
+    const options = [...(q.options || [])];
+    options[idx] = value;
+    updateQuestion(id, { options });
+  };
+
+  const removeOption = (id, idx) => {
+    const q = (formData.customQuestions || []).find((x) => x.id === id);
+    if (!q) return;
+    updateQuestion(id, {
+      options: (q.options || []).filter((_, i) => i !== idx),
+    });
   };
 
   const tagOptions = [
@@ -626,6 +721,230 @@ const AddEventDialog = ({
                       </motion.div>
                     )}
                   </AnimatePresence>
+                </div>
+
+                {/* Custom Registration Questions */}
+                <div className="space-y-3">
+                  <div className="flex items-center justify-between">
+                    <label className="text-sm font-medium text-neutral-300 flex items-center gap-2">
+                      <ListChecks className="w-4 h-4 text-red-400" />
+                      Custom Registration Questions
+                    </label>
+                    {!isEditing && (
+                      <button
+                        type="button"
+                        onClick={addQuestion}
+                        className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-neutral-600 hover:border-red-500/50 hover:bg-neutral-800 text-neutral-300 text-xs font-medium transition-colors"
+                      >
+                        <Plus className="w-3.5 h-3.5" />
+                        Add Question
+                      </button>
+                    )}
+                  </div>
+
+                  {isEditing && (
+                    <div className="flex items-start gap-3 p-3 rounded-lg border border-neutral-700 bg-neutral-950/30">
+                      <Lock className="w-4 h-4 text-neutral-500 shrink-0 mt-0.5" />
+                      <p className="text-xs text-neutral-400">
+                        Custom questions are locked once an event is created
+                        and cannot be changed.
+                      </p>
+                    </div>
+                  )}
+
+                  {!isEditing &&
+                    (formData.customQuestions || []).length > 0 && (
+                      <div className="flex items-start gap-3 p-3 rounded-lg border border-amber-500/20 bg-amber-500/10">
+                        <AlertTriangle className="w-4 h-4 text-amber-400 shrink-0 mt-0.5" />
+                        <p className="text-xs text-amber-300/90">
+                          Custom questions cannot be changed after the event is
+                          created. Review them carefully before creating the
+                          event.
+                        </p>
+                      </div>
+                    )}
+
+                  {questionError && (
+                    <p className="text-xs text-red-400">{questionError}</p>
+                  )}
+
+                  {(formData.customQuestions || []).length === 0 ? (
+                    <p className="text-xs text-neutral-500">
+                      No custom questions. Registrants will only fill the
+                      standard fields.
+                    </p>
+                  ) : isEditing ? (
+                    <div className="space-y-3">
+                      {(formData.customQuestions || []).map((q, qIdx) => (
+                        <div
+                          key={q.id}
+                          className="border border-neutral-700 rounded-xl p-4 bg-neutral-950/30 space-y-2"
+                        >
+                          <div className="flex items-center justify-between">
+                            <span className="text-xs font-medium text-neutral-500">
+                              Question {qIdx + 1}
+                            </span>
+                            <div className="flex items-center gap-2">
+                              <span className="text-[10px] px-1.5 py-0.5 rounded border border-neutral-700 text-neutral-400">
+                                {{
+                                  mcq: "Multiple choice",
+                                  long_text: "Long answer",
+                                  short_text: "Short answer",
+                                  checkbox: "Checkbox",
+                                }[q.type] || q.type}
+                              </span>
+                              {q.required && (
+                                <span className="text-[10px] px-1.5 py-0.5 rounded border border-red-500/20 bg-red-500/10 text-red-400 font-semibold">
+                                  Required
+                                </span>
+                              )}
+                            </div>
+                          </div>
+                          <p className="text-sm text-white">{q.question}</p>
+                          {q.type === "mcq" && (
+                            <ul className="space-y-1">
+                              {(q.options || []).map((opt, oIdx) => (
+                                <li
+                                  key={oIdx}
+                                  className="text-xs text-neutral-400"
+                                >
+                                  • {opt}
+                                </li>
+                              ))}
+                            </ul>
+                          )}
+                        </div>
+                      ))}
+                    </div>
+                  ) : (
+                    <div className="space-y-4">
+                      {(formData.customQuestions || []).map((q, qIdx) => (
+                        <div
+                          key={q.id}
+                          className="border border-neutral-700 rounded-xl p-4 bg-neutral-950/30 space-y-3"
+                        >
+                          <div className="flex items-center justify-between">
+                            <span className="text-xs font-medium text-neutral-500">
+                              Question {qIdx + 1}
+                            </span>
+                            <button
+                              type="button"
+                              onClick={() => removeQuestion(q.id)}
+                              className="p-1.5 rounded-lg text-neutral-500 hover:text-red-400 hover:bg-red-500/10 transition-colors"
+                            >
+                              <Trash2 className="w-4 h-4" />
+                            </button>
+                          </div>
+
+                          <input
+                            value={q.question}
+                            onChange={(e) =>
+                              updateQuestion(q.id, { question: e.target.value })
+                            }
+                            placeholder="Enter your question"
+                            className="w-full bg-neutral-950/30 border border-neutral-700 rounded-lg px-4 py-2.5 text-white placeholder-neutral-600 focus:outline-none focus:border-red-500/50 focus:ring-1 focus:ring-red-500/50 transition-all text-sm"
+                          />
+
+                          <div className="flex flex-wrap items-center gap-4">
+                            <div className="relative flex-1 min-w-[160px]">
+                              <select
+                                value={q.type}
+                                onChange={(e) =>
+                                  updateQuestion(q.id, {
+                                    type: e.target.value,
+                                    options:
+                                      e.target.value === "mcq"
+                                        ? q.options && q.options.length > 0
+                                          ? q.options
+                                          : [""]
+                                        : [],
+                                  })
+                                }
+                                className="w-full bg-neutral-950/30 border border-neutral-700 rounded-lg px-4 py-2.5 text-white focus:outline-none focus:border-red-500/50 focus:ring-1 focus:ring-red-500/50 transition-all appearance-none text-sm cursor-pointer"
+                              >
+                                <option value="mcq">Multiple choice</option>
+                                <option value="long_text">Long answer</option>
+                                <option value="short_text">Short answer</option>
+                                <option value="checkbox">
+                                  Checkbox (confirmation)
+                                </option>
+                              </select>
+                              <div className="absolute inset-y-0 right-0 flex items-center px-4 pointer-events-none text-neutral-500">
+                                <svg
+                                  className="w-4 h-4 fill-current"
+                                  viewBox="0 0 20 20"
+                                >
+                                  <path
+                                    d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                                    clipRule="evenodd"
+                                    fillRule="evenodd"
+                                  ></path>
+                                </svg>
+                              </div>
+                            </div>
+
+                            <label className="flex items-center gap-2 cursor-pointer select-none">
+                              <div className="relative">
+                                <input
+                                  type="checkbox"
+                                  checked={q.required}
+                                  onChange={(e) =>
+                                    updateQuestion(q.id, {
+                                      required: e.target.checked,
+                                    })
+                                  }
+                                  className="sr-only peer"
+                                />
+                                <div className="w-9 h-5 bg-neutral-700 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-neutral-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-red-500 transition-colors"></div>
+                              </div>
+                              <span className="text-xs text-neutral-300">
+                                Required
+                              </span>
+                            </label>
+                          </div>
+
+                          {q.type === "mcq" && (
+                            <div className="space-y-2 pt-1">
+                              <span className="text-xs font-medium text-neutral-500">
+                                Options
+                              </span>
+                              {(q.options || []).map((opt, oIdx) => (
+                                <div
+                                  key={oIdx}
+                                  className="flex items-center gap-2"
+                                >
+                                  <input
+                                    value={opt}
+                                    onChange={(e) =>
+                                      updateOption(q.id, oIdx, e.target.value)
+                                    }
+                                    placeholder={`Option ${oIdx + 1}`}
+                                    className="flex-1 bg-neutral-950/30 border border-neutral-700 rounded-lg px-3 py-2 text-white placeholder-neutral-600 focus:outline-none focus:border-red-500/50 focus:ring-1 focus:ring-red-500/50 transition-all text-sm"
+                                  />
+                                  <button
+                                    type="button"
+                                    onClick={() => removeOption(q.id, oIdx)}
+                                    disabled={(q.options || []).length <= 1}
+                                    className="p-1.5 rounded-lg text-neutral-500 hover:text-red-400 hover:bg-red-500/10 transition-colors disabled:opacity-30 disabled:cursor-not-allowed disabled:hover:bg-transparent disabled:hover:text-neutral-500"
+                                  >
+                                    <X className="w-4 h-4" />
+                                  </button>
+                                </div>
+                              ))}
+                              <button
+                                type="button"
+                                onClick={() => addOption(q.id)}
+                                className="flex items-center gap-1.5 text-xs text-neutral-400 hover:text-red-400 transition-colors"
+                              >
+                                <Plus className="w-3.5 h-3.5" />
+                                Add option
+                              </button>
+                            </div>
+                          )}
+                        </div>
+                      ))}
+                    </div>
+                  )}
                 </div>
               </form>
             </div>

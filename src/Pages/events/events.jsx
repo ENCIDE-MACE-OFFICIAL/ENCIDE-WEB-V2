@@ -46,6 +46,7 @@ const EventsSection = () => {
     const [memberCount, setMemberCount] = useState(1);
     const [teamName, setTeamName] = useState("");
     const [paymentFile, setPaymentFile] = useState(null);
+    const [customAnswers, setCustomAnswers] = useState({});
 
     const { data: userData, isLoading } = useQuery({
       queryKey: ["user-data"],
@@ -139,6 +140,11 @@ const EventsSection = () => {
           count: memberCount,
           status: isPaidEvent ? "pending" : "approved",
           payment_proof: "",
+          custom_answers: (event.customQuestions || []).map((q) => ({
+            questionId: q.id,
+            question: q.question,
+            answer: (customAnswers[q.id] || "").trim(),
+          })),
         };
 
         // Upload payment screenshot for paid events
@@ -190,6 +196,8 @@ const EventsSection = () => {
         setMembers={setMembers}
         paymentFile={paymentFile}
         setPaymentFile={setPaymentFile}
+        customAnswers={customAnswers}
+        setCustomAnswers={setCustomAnswers}
       />
     );
   };

@@ -110,6 +110,7 @@ const Admin = ({ onLoad }) => {
           is_over: data.is_over || false,
           isIndividualEvent: data.isIndividualEvent || false,
           whatsappRedirectUrl: data.whatsappRedirectUrl || "",
+          customQuestions: data.customQuestions || [],
           participants: data.participants || [],
           participants_count: data.participants_count || 0,
           // Keep raw Timestamps for Firestore operations, convert for display
@@ -212,6 +213,7 @@ const Admin = ({ onLoad }) => {
         is_over: formData.is_over,
         isIndividualEvent: formData.isIndividualEvent,
         whatsappRedirectUrl: (formData.whatsappRedirectUrl || "").trim(),
+        customQuestions: formData.customQuestions || [],
         date: eventDate,
         deadline: eventDeadline,
         participants: [],
@@ -251,6 +253,7 @@ const Admin = ({ onLoad }) => {
         is_over: formData.is_over,
         isIndividualEvent: formData.isIndividualEvent,
         whatsappRedirectUrl: (formData.whatsappRedirectUrl || "").trim(),
+        // customQuestions intentionally omitted — questions are locked after creation
         date: eventDate,
         deadline: eventDeadline,
       });
