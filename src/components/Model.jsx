@@ -30,6 +30,8 @@ function Model({
   setMembers,
   paymentFile,
   setPaymentFile,
+  customAnswers,
+  setCustomAnswers,
 }) {
   const isChecking = status === "checking";
   const isSubmitting = status === "submitting";
@@ -59,7 +61,17 @@ function Model({
   // For paid events, payment screenshot is required
   const isPaymentValid = !isPaidEvent || !!paymentFile;
 
-  const isFormValid = isTeamNameValid && areMembersValid && isPaymentValid;
+  const customQuestions = event.customQuestions || [];
+
+  const areCustomAnswersValid = customQuestions.every(
+    (q) => !q.required || ((customAnswers?.[q.id] || "").trim().length > 0)
+  );
+
+  const isFormValid =
+    isTeamNameValid &&
+    areMembersValid &&
+    isPaymentValid &&
+    areCustomAnswersValid;
 
   const handleDrop = (e) => {
     e.preventDefault();
@@ -341,6 +353,109 @@ function Model({
                         </div>
                       </div>
                     ))}
+
+                    {/* Custom Questions */}
+                    {customQuestions.length > 0 && (
+                      <div className="space-y-4">
+                        <p className="text-sm text-neutral-400 font-medium">
+                          Additional Questions
+                        </p>
+                        {customQuestions.map((q) => (
+                          <div
+                            key={q.id}
+                            className="space-y-3 border border-neutral-800 p-4 rounded-lg"
+                          >
+                            {q.type === "checkbox" ? (
+                              <label className="flex items-start gap-3 cursor-pointer text-sm text-neutral-300">
+                                <input
+                                  type="checkbox"
+                                  checked={customAnswers?.[q.id] === "Yes"}
+                                  disabled={isSubmitting}
+                                  onChange={(e) =>
+                                    setCustomAnswers((prev) => ({
+                                      ...prev,
+                                      [q.id]: e.target.checked ? "Yes" : "",
+                                    }))
+                                  }
+                                  className="accent-red-500 mt-0.5 shrink-0"
+                                />
+                                <span>
+                                  {q.question}
+                                  {q.required && (
+                                    <span className="text-red-400"> *</span>
+                                  )}
+                                </span>
+                              </label>
+                            ) : (
+                              <>
+                                <label className="text-sm text-neutral-300">
+                                  {q.question}
+                                  {q.required && (
+                                    <span className="text-red-400"> *</span>
+                                  )}
+                                </label>
+
+                                {q.type === "mcq" ? (
+                                  <div className="space-y-2">
+                                    {(q.options || []).map((opt, oIdx) => (
+                                      <label
+                                        key={oIdx}
+                                        className="flex items-center gap-3 cursor-pointer text-sm text-neutral-200"
+                                      >
+                                        <input
+                                          type="radio"
+                                          name={q.id}
+                                          value={opt}
+                                          checked={
+                                            customAnswers?.[q.id] === opt
+                                          }
+                                          disabled={isSubmitting}
+                                          onChange={() =>
+                                            setCustomAnswers((prev) => ({
+                                              ...prev,
+                                              [q.id]: opt,
+                                            }))
+                                          }
+                                          className="accent-red-500"
+                                        />
+                                        {opt}
+                                      </label>
+                                    ))}
+                                  </div>
+                                ) : q.type === "short_text" ? (
+                                  <input
+                                    type="text"
+                                    value={customAnswers?.[q.id] || ""}
+                                    disabled={isSubmitting}
+                                    onChange={(e) =>
+                                      setCustomAnswers((prev) => ({
+                                        ...prev,
+                                        [q.id]: e.target.value,
+                                      }))
+                                    }
+                                    placeholder="Your answer"
+                                    className="w-full bg-neutral-800 border border-neutral-700 rounded-lg px-3 py-2 text-white focus:outline-none focus:border-red-500"
+                                  />
+                                ) : (
+                                  <textarea
+                                    value={customAnswers?.[q.id] || ""}
+                                    disabled={isSubmitting}
+                                    onChange={(e) =>
+                                      setCustomAnswers((prev) => ({
+                                        ...prev,
+                                        [q.id]: e.target.value,
+                                      }))
+                                    }
+                                    placeholder="Your answer"
+                                    className="w-full bg-neutral-800 border border-neutral-700 rounded-lg px-3 py-2 text-white focus:outline-none focus:border-red-500 min-h-[90px] resize-none"
+                                  />
+                                )}
+                              </>
+                            )}
+                          </div>
+                        ))}
+                      </div>
+                    )}
 
                     {/* Payment Section — only for paid events */}
                     {isPaidEvent && (

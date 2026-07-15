@@ -290,6 +290,7 @@ const EventsManager = ({
     members: team.members || [],
     status: team.status || "approved", // fallback default approved for older entries
     payment_proof: team.payment_proof || "",
+    custom_answers: team.custom_answers || [],
   }));
 
   const handleExportCSV = () => {
@@ -300,12 +301,17 @@ const EventsManager = ({
       const leadDepartment = lead.department || "";
       const leadSemester = lead.semester || "";
 
+      const answerColumns = Object.fromEntries(
+        (team.custom_answers || []).map((a) => [`Q: ${a.question}`, a.answer])
+      );
+
       return team.members.map((m) => ({
         team_name: team.team_name,
         status: team.status,
         ...m,
         department: m.department || leadDepartment,
         semester: m.semester || leadSemester,
+        ...answerColumns,
       }));
     });
 
@@ -633,6 +639,27 @@ const EventsManager = ({
                             </div>
                           ))}
                         </div>
+
+                        {/* Custom question responses */}
+                        {team.custom_answers.length > 0 && (
+                          <div className="px-5 py-3 border-t border-neutral-800/50 space-y-2">
+                            <p className="text-xs font-medium text-neutral-500">
+                              Responses
+                            </p>
+                            {team.custom_answers.map((a, aIdx) => (
+                              <div key={aIdx} className="text-xs">
+                                <span className="text-neutral-500">
+                                  {a.question}
+                                </span>
+                                <p className="text-white mt-0.5">
+                                  {a.answer && a.answer.trim().length > 0
+                                    ? a.answer
+                                    : "—"}
+                                </p>
+                              </div>
+                            ))}
+                          </div>
+                        )}
                       </div>
                     ))}
                   </div>
