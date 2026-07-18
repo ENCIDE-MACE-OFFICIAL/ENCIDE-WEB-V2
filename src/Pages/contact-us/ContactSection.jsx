@@ -42,14 +42,14 @@ const ContactSection = () => {
     {
       icon: Mail,
       label: "Email",
-      value: "encide@encidemace.xyz",
-      href: "mailto:encide@encidemace.xyz",
+      value: "encide@mace.ac.in",
+      href: "mailto:encide@mace.ac.in",
     },
     {
       icon: Phone,
       label: "Phone",
-      value: "+91 9827390384",
-      href: "tel:+919827390384",
+      value: "+91 70341 47924",
+      href: "tel:+917034147924",
     },
     {
       icon: MapPin,
