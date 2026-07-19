@@ -53,6 +53,7 @@ function Model({
       m.name?.trim().length > 0 &&
       m.email?.trim().length > 0 &&
       m.phone?.trim().length > 0 &&
+      m.college?.trim().length > 0 &&
       m.department?.trim().length > 0 &&
       m.semester?.trim().length > 0
     );
@@ -313,6 +314,19 @@ function Model({
                           onChange={(e) => {
                             const updated = [...members];
                             updated[index].phone = e.target.value;
+                            setMembers(updated);
+                          }}
+                          className="w-full bg-neutral-800 border border-neutral-700 rounded-lg px-3 py-2 text-white focus:outline-none focus:border-red-500"
+                        />
+
+                        <input
+                          type="text"
+                          placeholder="College"
+                          value={member.college || ""}
+                          disabled={index === 0 || isSubmitting}
+                          onChange={(e) => {
+                            const updated = [...members];
+                            updated[index].college = e.target.value;
                             setMembers(updated);
                           }}
                           className="w-full bg-neutral-800 border border-neutral-700 rounded-lg px-3 py-2 text-white focus:outline-none focus:border-red-500"

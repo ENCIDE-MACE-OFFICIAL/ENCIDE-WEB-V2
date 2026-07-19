@@ -298,6 +298,7 @@ const EventsManager = ({
 
     const rows = allTeamsWithMembers.flatMap((team) => {
       const lead = team.members[0] || {};
+      const leadCollege = lead.college || "";
       const leadDepartment = lead.department || "";
       const leadSemester = lead.semester || "";
 
@@ -309,6 +310,7 @@ const EventsManager = ({
         team_name: team.team_name,
         status: team.status,
         ...m,
+        college: m.college || leadCollege,
         department: m.department || leadDepartment,
         semester: m.semester || leadSemester,
         ...answerColumns,
