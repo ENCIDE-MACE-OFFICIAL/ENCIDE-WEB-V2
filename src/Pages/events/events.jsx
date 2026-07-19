@@ -65,6 +65,7 @@ const EventsSection = () => {
             name: userData.name || "",
             email: userData.email || "",
             phone: userData.phone || "",
+            college: userData.college || "",
             department: userData.department || "",
             semester: userData.semester || "",
           },
@@ -80,7 +81,7 @@ const EventsSection = () => {
         const updated = [...prev];
 
         while (updated.length < memberCount) {
-          updated.push({ name: "", email: "", phone: "", department: "", semester: "" });
+          updated.push({ name: "", email: "", phone: "", college: "", department: "", semester: "" });
         }
 
         return updated.slice(0, memberCount);
