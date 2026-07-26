@@ -233,12 +233,12 @@ const EventsSection = () => {
           transition={{ duration: 0.6 }}
           className="text-center mb-12 md:mb-16"
         >
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-red-500/10 border border-red-500/20 mb-4 shadow-[0_0_15px_-3px_rgba(220, 38, 38,0.3)]">
+          {/* <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-red-500/10 border border-red-500/20 mb-4 shadow-[0_0_15px_-3px_rgba(220, 38, 38,0.3)]">
             <Zap className="w-3.5 h-3.5 text-red-400" />
             <span className="text-red-100 font-medium text-sm">
               Upcoming Events
             </span>
-          </div>
+          </div> */}
           <h2 className="font-display text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-4">
             Don't Miss{" "}
             <span className="bg-gradient-to-r from-red-400 to-red-500 bg-clip-text text-transparent">
