@@ -231,7 +231,7 @@ const EventsSection = () => {
           initial={{ opacity: 0, y: 30 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.6 }}
-          className="text-center mb-12 md:mb-16"
+          className="text-center mb-12 md:mb-20"
         >
           {/* <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-red-500/10 border border-red-500/20 mb-4 shadow-[0_0_15px_-3px_rgba(220, 38, 38,0.3)]">
             <Zap className="w-3.5 h-3.5 text-red-400" />
@@ -245,7 +245,7 @@ const EventsSection = () => {
               What's Next
             </span>
           </h2>
-          <p className="text-neutral-400 max-w-2xl mx-auto">
+          <p className="text-neutral-400 max-w-2xl mx-auto text-md">
             From hackathons to workshops, our events challenge and connect you
             with like-minded individuals.
           </p>

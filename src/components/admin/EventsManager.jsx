@@ -50,8 +50,16 @@ const EventsManager = ({
   const [statusFilter, setStatusFilter] = useState("all");
   const [activeLightboxImage, setActiveLightboxImage] = useState(null);
 
+  const getEventTime = (ts) => {
+    if (!ts) return 0;
+    const d = typeof ts.toDate === "function" ? ts.toDate() : new Date(ts);
+    return isNaN(d.getTime()) ? 0 : d.getTime();
+  };
+
   const upcomingEvents = events.filter((e) => !e.is_over);
-  const pastEvents = events.filter((e) => e.is_over);
+  const pastEvents = events
+    .filter((e) => e.is_over)
+    .sort((a, b) => getEventTime(b.date) - getEventTime(a.date));
 
   const handleDeleteClick = (id) => {
     setEventToDelete(id);
