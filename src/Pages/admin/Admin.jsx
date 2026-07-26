@@ -109,6 +109,7 @@ const Admin = ({ onLoad }) => {
           highlighted: data.highlighted || false,
           is_over: data.is_over || false,
           isIndividualEvent: data.isIndividualEvent || false,
+          showInPastEvents: data.showInPastEvents !== false,
           whatsappRedirectUrl: data.whatsappRedirectUrl || "",
           customQuestions: data.customQuestions || [],
           participants: data.participants || [],
@@ -212,6 +213,7 @@ const Admin = ({ onLoad }) => {
         highlighted: formData.highlighted,
         is_over: formData.is_over,
         isIndividualEvent: formData.isIndividualEvent,
+        showInPastEvents: formData.showInPastEvents,
         whatsappRedirectUrl: (formData.whatsappRedirectUrl || "").trim(),
         customQuestions: formData.customQuestions || [],
         date: eventDate,
@@ -252,6 +254,7 @@ const Admin = ({ onLoad }) => {
         highlighted: formData.highlighted,
         is_over: formData.is_over,
         isIndividualEvent: formData.isIndividualEvent,
+        showInPastEvents: formData.showInPastEvents,
         whatsappRedirectUrl: (formData.whatsappRedirectUrl || "").trim(),
         // customQuestions intentionally omitted — questions are locked after creation
         date: eventDate,

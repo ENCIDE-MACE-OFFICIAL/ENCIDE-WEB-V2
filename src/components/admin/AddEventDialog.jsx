@@ -204,6 +204,7 @@ const AddEventDialog = ({
     highlighted: false,
     is_over: false,
     isIndividualEvent: false,
+    showInPastEvents: true,
     whatsappRedirectUrl: "",
     customQuestions: [],
   });
@@ -234,6 +235,7 @@ const AddEventDialog = ({
         highlighted: initialData.highlighted || false,
         is_over: initialData.is_over || false,
         isIndividualEvent: initialData.isIndividualEvent || false,
+        showInPastEvents: initialData.showInPastEvents !== false,
         whatsappRedirectUrl: initialData.whatsappRedirectUrl || "",
         customQuestions: initialData.customQuestions || [],
       });
@@ -251,6 +253,7 @@ const AddEventDialog = ({
         highlighted: false,
         is_over: false,
         isIndividualEvent: false,
+        showInPastEvents: true,
         whatsappRedirectUrl: "",
         customQuestions: [],
       });
@@ -341,6 +344,7 @@ const AddEventDialog = ({
         highlighted: false,
         is_over: false,
         isIndividualEvent: false,
+        showInPastEvents: true,
         whatsappRedirectUrl: "",
         customQuestions: [],
       });
@@ -669,6 +673,28 @@ const AddEventDialog = ({
                         className="sr-only peer"
                       />
                       <div className="w-11 h-6 bg-neutral-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-neutral-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-500 transition-colors"></div>
+                    </div>
+                  </label>
+
+                  {/* Show in Past Events toggle */}
+                  <label className="flex items-center justify-between p-4 rounded-xl border border-neutral-700 bg-neutral-950/30 cursor-pointer hover:border-red-500/30 transition-colors group">
+                    <div className="flex items-center gap-3">
+                      <div className={`p-2 rounded-lg ${formData.showInPastEvents ? 'bg-indigo-500/10' : 'bg-neutral-800'} transition-colors`}>
+                        <Star className={`w-4 h-4 ${formData.showInPastEvents ? 'text-indigo-400' : 'text-neutral-500'} transition-colors`} />
+                      </div>
+                      <div>
+                        <p className="text-sm font-medium text-white">Show in Past Events</p>
+                        <p className="text-xs text-neutral-500">Display when event is over</p>
+                      </div>
+                    </div>
+                    <div className="relative">
+                      <input
+                        type="checkbox"
+                        checked={formData.showInPastEvents}
+                        onChange={(e) => handleChange("showInPastEvents", e.target.checked)}
+                        className="sr-only peer"
+                      />
+                      <div className="w-11 h-6 bg-neutral-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-neutral-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-indigo-500 transition-colors"></div>
                     </div>
                   </label>
                 </div>

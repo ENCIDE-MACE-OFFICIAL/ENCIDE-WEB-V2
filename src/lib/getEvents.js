@@ -49,5 +49,5 @@ export const fetchPastEvents = async () => {
     id: doc.id,
     ...doc.data(),
     date: normalizeDate(doc.data().date),
-  }));
+  })).filter(event => event.showInPastEvents !== false);
 };
