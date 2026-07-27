@@ -91,7 +91,7 @@ const PastEventsSection = () => {
       <AnimatePresence>
         {selectedEvent && (
           <div 
-            className="fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-6 bg-black/80 backdrop-blur-md" 
+            className="fixed inset-0 z-[9999] flex items-center justify-center p-4 sm:p-6 bg-black/80 backdrop-blur-md" 
             onClick={() => setSelectedEvent(null)}
           >
             <motion.div
