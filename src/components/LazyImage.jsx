@@ -1,6 +1,6 @@
 import { useState, useMemo } from 'react';
 
-const LazyImage = ({ src, alt, className, containerClassName }) => {
+const LazyImage = ({ src, alt, className, containerClassName, objectFit = "object-cover", duration = "duration-1000", skeletonDuration = "duration-700" }) => {
   const [isLoaded, setIsLoaded] = useState(false);
 
   // Automatically optimize Cloudinary URLs to serve compressed WebP/AVIF at max 800px width
@@ -17,7 +17,7 @@ const LazyImage = ({ src, alt, className, containerClassName }) => {
     <div className={`relative overflow-hidden bg-neutral-900 ${containerClassName || ''}`}>
       {/* Skeleton Overlay - Fades out smoothly on load */}
       <div 
-        className={`absolute inset-0 bg-neutral-800 z-10 transition-opacity duration-700 ease-in-out ${
+        className={`absolute inset-0 bg-neutral-800 z-10 transition-opacity ease-in-out ${skeletonDuration} ${
           isLoaded ? 'opacity-0 pointer-events-none' : 'opacity-100 animate-pulse'
         }`}
       />
@@ -29,7 +29,7 @@ const LazyImage = ({ src, alt, className, containerClassName }) => {
         loading="lazy"
         decoding="async"
         onLoad={() => setIsLoaded(true)}
-        className={`w-full h-full object-cover transition-opacity duration-1000 ease-in-out ${
+        className={`w-full h-full transition-opacity ease-in-out ${objectFit} ${duration} ${
           isLoaded ? 'opacity-100' : 'opacity-0'
         } ${className || ''}`}
       />

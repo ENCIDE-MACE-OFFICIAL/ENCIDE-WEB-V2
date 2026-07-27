@@ -21,8 +21,9 @@ export const EventsColumn = (props) => {
           <React.Fragment key={index}>
             {props.events.map((event, i) => (
               <div 
-                className="group rounded-lg border border-neutral-800/80 bg-neutral-900/60 backdrop-blur-md shadow-xl shadow-red-500/5 w-full md:w-72 lg:w-[340px] xl:w-[380px] overflow-hidden hover:border-red-500/40 hover:bg-neutral-900/80  transition-all duration-300" 
+                className="group rounded-lg border border-neutral-800/80 bg-neutral-900/60 backdrop-blur-md shadow-xl shadow-red-500/5 w-full md:w-72 lg:w-[340px] xl:w-[380px] overflow-hidden hover:border-red-500/40 hover:bg-neutral-900/80 transition-all duration-300 cursor-pointer" 
                 key={`${index}-${i}`}
+                onClick={() => props.onEventClick && props.onEventClick(event)}
               >
                 <div className="relative aspect-square w-full overflow-hidden shrink-0">
                   <LazyImage
@@ -31,7 +32,7 @@ export const EventsColumn = (props) => {
                     containerClassName="w-full h-full"
                   />
                 </div>
-                <div className="p-5 flex flex-col h-full">
+                <div className="p-2 md:p-5 flex flex-col h-full">
                   <h3 className="font-display text-sm lg:text-xl font-bold text-white mb-2 transition-colors">
                     {event.title}
                   </h3>
