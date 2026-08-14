@@ -373,8 +373,9 @@ const HeroSection = ({ loading }) => {
               <button
                 onClick={() =>
                   document
-                    .getElementById("contact")
-                    ?.scrollIntoView({ behavior: "smooth" })
+                    //.getElementById("contact")
+                    //?.scrollIntoView({ behavior: "smooth" })
+                  window.open("https://chat.whatsapp.com/DyC8oDo8ugMGawJMOmCDqt?s=cl&p=a&ilr=4", '_blank', 'noopener,noreferrer');
                 }
                 className="group relative inline-flex items-center justify-center gap-2 px-8 py-4 text-sm font-semibold text-white bg-gradient-to-br from-red-600 to-red-700 rounded-lg transition-all duration-300 shadow-[0_8px_16px_-4px_rgba(220,38,38,0.4)] hover:shadow-[0_12px_24px_-4px_rgba(220,38,38,0.6)] hover:scale-105 overflow-hidden border border-red-500/20"
               >
