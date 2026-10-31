@@ -150,6 +150,9 @@ function NavComponent() {
               <li className={activeSection === "team" ? "active" : ""}>
                 <Link to="/#team" onClick={() => setIsMobileMenuOpen(false)}>TEAM</Link>
               </li>
+              <li className={activeSection === "join-us" ? "active" : ""}>
+                <Link to="/#join-us" onClick={() => setIsMobileMenuOpen(false)}>JOIN US</Link>
+              </li>
               {!isAdmin && (
                 <li className={activeSection === "contact" ? "active" : ""}>
                   <Link to="/#contact" onClick={() => setIsMobileMenuOpen(false)}>CONTACT</Link>
@@ -213,4 +216,3 @@ function NavComponent() {
 }
 
 export default NavComponent;
-

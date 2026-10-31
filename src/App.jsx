@@ -11,6 +11,7 @@ const LoginForm = lazy(() => import("./Pages/login/Login.jsx"));
 const SignUpForm = lazy(() => import("./Pages/signup/SignUp.jsx"));
 const RegistrationForm = lazy(() => import("./Pages/Execom/execom.jsx"));
 const ContactSection = lazy(() => import("./Pages/contact-us/ContactSection.jsx"));
+const JoinUsSection = lazy(() => import("./Pages/join-us/JoinUsSection.jsx"));
 const TeamSection = lazy(() => import("./Pages/Teams/TeamSection.jsx"));
 const AboutComponent = lazy(() => import("./Pages/about/About.jsx"));
 const Footer = lazy(() => import("./Pages/Footer/Footer.jsx"));
@@ -51,6 +52,7 @@ function App() {
                   <EventsSection />
                   <PastEventsSection />
                   <TeamSection />
+                  <JoinUsSection />
                   <ContactSection />
                   <Footer />
                 </Suspense>
@@ -91,4 +93,3 @@ function App() {
 }
 
 export default App;
-
