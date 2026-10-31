@@ -10,6 +10,7 @@ const Footer = () => {
     about: [
       { label: "Our Story", href: "#about" },
       { label: "Team", href: "#team" },
+      { label: "Join Us", href: "#join-us" },
     ],
     resources: [
       { label: "Events", href: "#events" },

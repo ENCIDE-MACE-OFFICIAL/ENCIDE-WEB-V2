@@ -11,6 +11,7 @@ import {
   LogOut,
   Settings,
   AlertCircle,
+  ClipboardList,
 } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
@@ -18,6 +19,7 @@ import ContactResponsesTable from "../../components/admin/ContactResponsesTable"
 import EventsManager from "../../components/admin/EventsManager";
 import AddEventDialog from "../../components/admin/AddEventDialog";
 import ScoreboardManager from "../../components/admin/ScoreboardManager";
+import ExecomApplicationsTable from "../../components/admin/ExecomApplicationsTable";
 import {
   collection,
   query,
@@ -36,6 +38,7 @@ import { mergeScoreEvents, normalizeScoreboardEvent } from "../../lib/scoreboard
 const Admin = ({ onLoad }) => {
   const [events, setEvents] = useState([]);
   const [contactResponses, setContactResponses] = useState([]);
+  const [execomApplications, setExecomApplications] = useState([]);
   const [scoreboardEvents, setScoreboardEvents] = useState([]);
   const [isScoreboardLoading, setIsScoreboardLoading] = useState(true);
   const [isAddEventOpen, setIsAddEventOpen] = useState(false);
@@ -46,6 +49,45 @@ const Admin = ({ onLoad }) => {
 
   useEffect(() => {
     if (onLoad) onLoad();
+  }, []);
+
+  // Real-time listener for ExeCom applications
+  useEffect(() => {
+    const q = query(collection(db, "execom-applications"));
+    const unsubscribe = onSnapshot(q, (snapshot) => {
+      const applications = snapshot.docs.map((docSnap) => {
+        const data = docSnap.data();
+        const dateObj = data.createdAt?.toDate
+          ? data.createdAt.toDate()
+          : data.createdAt
+            ? new Date(data.createdAt)
+            : new Date(0);
+
+        return {
+          id: docSnap.id,
+          ...data,
+          fullName: data.fullName || "Anonymous",
+          email: data.email || "",
+          submittedAt: dateObj.getTime()
+            ? dateObj.toLocaleString("en-US", {
+              year: "numeric",
+              month: "short",
+              day: "numeric",
+              hour: "2-digit",
+              minute: "2-digit",
+              hour12: true,
+            })
+            : "Just now",
+          rawCreatedAt: dateObj,
+        };
+      });
+      applications.sort((a, b) => b.rawCreatedAt - a.rawCreatedAt);
+      setExecomApplications(applications);
+    }, (error) => {
+      console.error("Error fetching ExeCom applications:", error);
+    });
+
+    return () => unsubscribe();
   }, []);
 
   // Real-time listener for contact-us collection
@@ -191,6 +233,14 @@ const Admin = ({ onLoad }) => {
       bgColor: "bg-orange-500/10",
       borderColor: "border-orange-500/20",
     },
+    {
+      label: "ExeCom Applications",
+      value: execomApplications.length,
+      icon: ClipboardList,
+      color: "text-red-400",
+      bgColor: "bg-red-500/10",
+      borderColor: "border-red-500/20",
+    },
   ];
 
   const handleAddEvent = async (formData) => {
@@ -304,6 +354,14 @@ const Admin = ({ onLoad }) => {
       await deleteDoc(doc(db, "contact-us", id));
     } catch (error) {
       console.error("Error deleting contact response:", error);
+    }
+  };
+
+  const handleDeleteApplication = async (id) => {
+    try {
+      await deleteDoc(doc(db, "execom-applications", id));
+    } catch (error) {
+      console.error("Error deleting ExeCom application:", error);
     }
   };
 
@@ -433,7 +491,7 @@ const Admin = ({ onLoad }) => {
       </header>
       <main className="container mx-auto px-4 lg:px-20 py-8 mt-16 relative z-10">
         {/* Stats Grid */}
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+        <div className="grid grid-cols-2 lg:grid-cols-5 gap-4 mb-8">
           {stats.map((stat, index) => (
             <motion.div
               key={stat.label}
@@ -484,6 +542,17 @@ const Admin = ({ onLoad }) => {
               Manage Events
             </button>
             <button
+              onClick={() => setActiveTab("applications")}
+              className={`flex items-center gap-2 px-4 py-2 rounded-lg text-xs sm:text-sm font-medium transition-all ${
+                activeTab === "applications"
+                  ? "bg-red-600 text-white shadow-lg "
+                  : "text-neutral-400 hover:text-white hover:bg-neutral-800"
+              }`}
+            >
+              <ClipboardList className="w-4 h-4" />
+              ExeCom Applications
+            </button>
+            <button
               onClick={() => setActiveTab("scoreboard")}
               className={`flex items-center gap-2 px-4 py-2 rounded-lg text-xs sm:text-sm font-medium transition-all ${
                 activeTab === "scoreboard"
@@ -520,6 +589,19 @@ const Admin = ({ onLoad }) => {
                   onDelete={handleDeleteEvent}
                   onApproveRegistration={handleApproveRegistration}
                   onRejectRegistration={handleRejectRegistration}
+                />
+              </motion.div>
+            ) : activeTab === "applications" ? (
+              <motion.div
+                key="applications"
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -10 }}
+                transition={{ duration: 0.2 }}
+              >
+                <ExecomApplicationsTable
+                  applications={execomApplications}
+                  onDelete={handleDeleteApplication}
                 />
               </motion.div>
             ) : (
