@@ -54,6 +54,8 @@ function NavComponent() {
       setActiveSection("admin-dashboard");
     } else if (location.pathname.startsWith("/icl-dashboard")) {
       setActiveSection("icl-dashboard");
+    } else if (location.pathname === "/join-us") {
+      setActiveSection("join-us");
     } else if (location.pathname === "/") {
       const sections = document.querySelectorAll("section");
       const observerOptions = {
@@ -151,7 +153,7 @@ function NavComponent() {
                 <Link to="/#team" onClick={() => setIsMobileMenuOpen(false)}>TEAM</Link>
               </li>
               <li className={activeSection === "join-us" ? "active" : ""}>
-                <Link to="/#join-us" onClick={() => setIsMobileMenuOpen(false)}>JOIN US</Link>
+                <Link to="/join-us" onClick={() => setIsMobileMenuOpen(false)}>JOIN US</Link>
               </li>
               {!isAdmin && (
                 <li className={activeSection === "contact" ? "active" : ""}>

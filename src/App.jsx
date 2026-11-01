@@ -1,4 +1,4 @@
-import React, { useContext, useState, Suspense, lazy } from "react";
+import React, { useContext, useEffect, Suspense, lazy } from "react";
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import "./App.css";
 import Loader from "./Pages/loader/page";
@@ -22,6 +22,20 @@ const Admin = lazy(() => import("./Pages/admin/Admin.jsx"));
 const IclDashboard = lazy(() => import("./Pages/icl-dashboard/IclDashboard.jsx"));
 
 const SuspenseFallback = () => <Loader />;
+
+const JoinUsPage = ({ onLoad }) => {
+  useEffect(() => {
+    onLoad();
+  }, [onLoad]);
+
+  return (
+    <>
+      <NavComponent />
+      <JoinUsSection />
+      <Footer />
+    </>
+  );
+};
 
 function App() {
   const { user, isAdmin } = useContext(AuthContext);
@@ -52,12 +66,15 @@ function App() {
                   <EventsSection />
                   <PastEventsSection />
                   <TeamSection />
-                  <JoinUsSection />
                   <ContactSection />
                   <Footer />
                 </Suspense>
               </>
             }
+          />
+          <Route
+            path="/join-us"
+            element={<JoinUsPage onLoad={handleLoad} />}
           />
           <Route
             path="/login"
