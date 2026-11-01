@@ -4,19 +4,20 @@ import {
   Linkedin,
   Youtube,
 } from "lucide-react";
+import { Link } from "react-router-dom";
 const Footer = () => {
   const currentYear = new Date().getFullYear();
   const footerLinks = {
     about: [
-      { label: "Our Story", href: "#about" },
-      { label: "Team", href: "#team" },
-      { label: "Join Us", href: "#join-us" },
+      { label: "Our Story", href: "/#about" },
+      { label: "Team", href: "/#team" },
+      { label: "Join Us", href: "/join-us" },
     ],
     resources: [
-      { label: "Events", href: "#events" },
+      { label: "Events", href: "/#events" },
     ],
     connect: [
-      { label: "Contact", href: "#contact" },
+      { label: "Contact", href: "/#contact" },
     ],
   };
   const socialLinks = [
@@ -29,8 +30,8 @@ const Footer = () => {
         <div className="grid md:grid-cols-2 lg:grid-cols-5 gap-12 mb-16">
           {/* Brand */}
           <div className="lg:col-span-2">
-            <a
-              href="#home"
+            <Link
+              to="/#home"
               className="inline-flex items-center gap-2 mb-6 group"
             >
               <span className="font-display font-bold text-2xl text-white">
@@ -39,7 +40,7 @@ const Footer = () => {
                 </span>{" "}
                 Club
               </span>
-            </a>
+            </Link>
             <p className="text-neutral-400 max-w-sm mb-8 leading-relaxed">
               Building tomorrow's leaders through innovation, collaboration, and
               a passion for excellence. Join our community today.
@@ -65,12 +66,12 @@ const Footer = () => {
             <ul className="space-y-4">
               {footerLinks.about.map((link) => (
                 <li key={link.label}>
-                  <a
-                    href={link.href}
+                  <Link
+                    to={link.href}
                     className="text-neutral-400 hover:text-red-400 transition-colors text-sm"
                   >
                     {link.label}
-                  </a>
+                  </Link>
                 </li>
               ))}
             </ul>
@@ -82,12 +83,12 @@ const Footer = () => {
             <ul className="space-y-4">
               {footerLinks.resources.map((link) => (
                 <li key={link.label}>
-                  <a
-                    href={link.href}
+                  <Link
+                    to={link.href}
                     className="text-neutral-400 hover:text-red-400 transition-colors text-sm"
                   >
                     {link.label}
-                  </a>
+                  </Link>
                 </li>
               ))}
             </ul>
@@ -99,12 +100,12 @@ const Footer = () => {
             <ul className="space-y-4">
               {footerLinks.connect.map((link) => (
                 <li key={link.label}>
-                  <a
-                    href={link.href}
+                  <Link
+                    to={link.href}
                     className="text-neutral-400 hover:text-red-400 transition-colors text-sm"
                   >
                     {link.label}
-                  </a>
+                  </Link>
                 </li>
               ))}
             </ul>
