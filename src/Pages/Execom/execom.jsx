@@ -66,7 +66,7 @@ function RegistrationForm({ onLoad }) {
   };
 
   return (
-    <form className="registration-form" >
+    <form className="registration-form" onSubmit={handleSubmit}>
       <h2>Execom Application Form</h2>
 
       <section>
@@ -325,7 +325,7 @@ function RegistrationForm({ onLoad }) {
         </label>
       </section>
 
-      <button onClick={handleSubmit}>Submit Application</button>
+      <button type="submit">Submit Application</button>
 
       {showLink && (
         <p style={{ marginTop: "20px", textAlign: "center" }}>
