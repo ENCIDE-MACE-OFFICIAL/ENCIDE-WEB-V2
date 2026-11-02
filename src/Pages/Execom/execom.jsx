@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "./RegistrationForm.css";
+import { addDoc, collection, serverTimestamp } from "firebase/firestore";
+import { db } from "../../firebase";
 
 function RegistrationForm({ onLoad }) {
   useEffect(() => {
@@ -44,24 +46,17 @@ function RegistrationForm({ onLoad }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch(
-        "https://script.google.com/macros/s/AKfycbwtYJ3conKnhZmrsladaUw19s_nDz18hDrR90I-tL3mlXvX2-00p_zmdToMD3Gc4Y7qzQ/exec",
-        {
-          method: "POST",
-          body: new URLSearchParams(formData),
-        }
-      );
+      await addDoc(collection(db, "execom-applications"), {
+        ...formData,
+        status: "new",
+        createdAt: serverTimestamp(),
+      });
 
-      if (response.ok) {
-        alert("Application Submitted!");
-        setShowLink(true);
-        console.log(await response.text());
-      } else {
-        alert("There was an error submitting your application.");
-      }
+      alert("Application Submitted!");
+      setShowLink(true);
     } catch (error) {
-      console.error("Error:", error);
-      alert("Submission failed.");
+      console.error("Error submitting ExeCom application:", error);
+      alert("Unable to submit your application. Please try again.");
     }
   };
 
