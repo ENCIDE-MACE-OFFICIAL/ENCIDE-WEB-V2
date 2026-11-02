@@ -9,7 +9,6 @@ import { Loader2 } from "lucide-react";
 
 const LoginForm = lazy(() => import("./Pages/login/Login.jsx"));
 const SignUpForm = lazy(() => import("./Pages/signup/SignUp.jsx"));
-const RegistrationForm = lazy(() => import("./Pages/Execom/execom.jsx"));
 const ContactSection = lazy(() => import("./Pages/contact-us/ContactSection.jsx"));
 const JoinUsSection = lazy(() => import("./Pages/join-us/JoinUsSection.jsx"));
 const TeamSection = lazy(() => import("./Pages/Teams/TeamSection.jsx"));
@@ -83,10 +82,6 @@ function App() {
           <Route
             path="/signup"
             element={<SignUpForm onLoad={handleLoad} />}
-          />
-          <Route
-            path="/registration"
-            element={<RegistrationForm onLoad={handleLoad} />}
           />
           <Route
             path="/dashboard"
